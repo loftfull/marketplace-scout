@@ -1,0 +1,8 @@
+import type {Connector} from "../connectors.js";import type {Offer,ProductProfile} from "../domain.js";
+type ToolResult={offers?:Offer[];offer?:Offer};
+export class HttpMcpConnector implements Connector{
+ constructor(public name:string,private endpoint:string,private searchTool="search_products",private verifyTool="get_product"){}
+ private async call(tool:string,args:unknown){const r=await fetch(this.endpoint,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({jsonrpc:"2.0",id:Date.now(),method:"tools/call",params:{name:tool,arguments:args}})});if(!r.ok)throw new Error(this.name+"_http_"+r.status);const j:any=await r.json();if(j.error)throw new Error(j.error.message||"mcp_error");const text=j.result?.content?.find((x:any)=>x.type==="text")?.text;return (text?JSON.parse(text):j.result) as ToolResult}
+ async search(p:ProductProfile){try{return (await this.call(this.searchTool,{query:[p.brand,p.model,p.year,p.cpu,p.ramGb&&p.ramGb+"GB",p.ssdGb&&p.ssdGb+"GB"].filter(Boolean).join(" ")})).offers??[]}catch(e){return [{marketplace:this.name,title:"connector error",url:"",priceRub:null,specs:{},status:"UNVERIFIED",reasons:[String(e)]}]}}
+ async verify(o:Offer,p:ProductProfile){try{const v=(await this.call(this.verifyTool,{url:o.url,sku:o.sku})).offer;if(!v)return {...o,status:"UNVERIFIED",reasons:[...o.reasons,"empty_verification"]};return {...v,marketplace:this.name,status:"VERIFIED",verifiedAt:new Date().toISOString()}}catch(e){return {...o,status:"UNVERIFIED",reasons:[...o.reasons,String(e)]}}}
+}
