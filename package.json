@@ -1,1 +1,22 @@
-{"name":"marketplace-scout","version":"0.1.0","private":true,"type":"module","scripts":{"dev":"tsx watch src/server.ts","start":"tsx src/server.ts","test":"node --import tsx --test tests/*.test.ts"},"dependencies":{"@fastify/cors":"latest","fastify":"latest","zod":"latest"},"devDependencies":{"tsx":"latest","typescript":"latest","@types/node":"latest"}}
+{
+  "name": "marketplace-scout",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "start": "tsx src/server.ts",
+    "test": "node --import tsx --test tests/*.test.ts"
+  },
+  "dependencies": {
+    "@fastify/cors": "latest",
+    "fastify": "latest",
+    "zod": "latest",
+    "@fastify/static": "latest"
+  },
+  "devDependencies": {
+    "tsx": "latest",
+    "typescript": "latest",
+    "@types/node": "latest"
+  }
+}
