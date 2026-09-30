@@ -1,0 +1,2 @@
+import type {Offer} from "./domain.js";export type Landed={item:number|null;shipping:number;duty:number;total:number|null;currency:"RUB"};
+export function landed(o:Offer,shipping=0,duty=0):Landed{return {item:o.priceRub,shipping,duty,total:o.priceRub==null?null:o.priceRub+shipping+duty,currency:"RUB"}}
