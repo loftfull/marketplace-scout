@@ -1,0 +1,4 @@
+import type {Offer,ProductProfile} from "./domain.js";import {mkdir,readFile,writeFile} from "node:fs/promises";import {dirname} from "node:path";
+type Row={profile:ProductProfile;offer:Offer;seenAt:string}; const path=process.env.SCOUT_DB||".data/history.json";
+export async function append(profile:ProductProfile,offers:Offer[]){let rows:Row[]=[];try{rows=JSON.parse(await readFile(path,"utf8"))}catch{};const seenAt=new Date().toISOString();rows.push(...offers.map(offer=>({profile,offer,seenAt})));await mkdir(dirname(path),{recursive:true});await writeFile(path,JSON.stringify(rows.slice(-10000),null,2))}
+export async function history(){try{return JSON.parse(await readFile(path,"utf8")) as Row[]}catch{return []}}
