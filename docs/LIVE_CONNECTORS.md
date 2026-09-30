@@ -7,4 +7,3 @@ All candidates undergo a separate browser-card read of the discovered canonical 
 Chrome: dedicated .runtime/chrome-profile, port9337 loopback, headless/no-sync, mandatory local public-HTTPS tunnel. No sensitive account. Optional RU_MARKETPLACE_MCP_URL selects a separately managed loopback HTTP MCP; it must honor the same dedicated-profile policy. External or authenticated multi-tenant endpoints are unsupported.
 
 The old MARKET_MCP_URL/OZON_MCP_URL/AVITO_MCP_URL raw JSON-RPC shape was not a real initialized MCP connection. The current runtime uses the real compare tool contract. Unsupported AliExpress/Taobao remain outside the approved live scope. To roll back, stop Scout and revert this PR's continuation commits; do not revert security patches while operating an exposed runtime.
-
