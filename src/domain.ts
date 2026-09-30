@@ -38,6 +38,8 @@ export type Offer = {
   dutyRub?: number | null;
   region?: string;
   discoveryPriceRub?: number | null;
+  imageUrl?: string;
+  imageSource?: "discovery" | "card";
 };
 const norm = (v: unknown) =>
   String(v ?? "")

@@ -2,6 +2,7 @@ import { type ChildProcess, spawn } from "node:child_process";
 import { mkdir, readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { type Browser, chromium, type Page } from "playwright";
+import { safeImage } from "../public/offer-view.js";
 import type { Offer, ProductProfile } from "./domain.js";
 import { BrowserEgress } from "./egress.js";
 import { queryFor } from "./parse.js";
@@ -127,6 +128,7 @@ export async function browserDiscovery(
       elements.map((el) => ({
         url: (el as HTMLAnchorElement).href,
         title: (el.textContent || "").trim().slice(0, 500),
+        image: el.querySelector("img")?.currentSrc || "",
       })),
     );
     const unique = new Map<string, Offer>();
@@ -144,6 +146,8 @@ export async function browserDiscovery(
         specs: {},
         status: "UNVERIFIED",
         reasons: [],
+        imageUrl: safeImage(link.image, marketplace) ?? undefined,
+        imageSource: "discovery",
         discoveredAt: new Date().toISOString(),
       });
     }
@@ -277,6 +281,14 @@ export function observation(
     title: products.length === 1 ? title : discovered.title,
     url: discovered.url,
     priceRub,
+    imageUrl:
+      live && !reasons.includes("sku_or_marketplace_changed")
+        ? (safeImage(
+            Array.isArray(product.image) ? product.image[0] : product.image,
+            discovered.marketplace,
+          ) ?? undefined)
+        : undefined,
+    imageSource: "card",
     seller,
     sku: observedSku,
     variantId: discovered.marketplace === "yandex-market" ? sku : undefined,

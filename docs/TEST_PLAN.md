@@ -12,3 +12,5 @@
 Run npm run lint, npm run typecheck, npm test, npm run build. Browser security: stop running Scout then npm run test:browser. Live acceptance: npm start then npm run acceptance. Fixture server/HTML and synthetic prices are confined to tests/security harness; they never write application history.
 
 CI runs deterministic checks on Windows and Linux, Node 24. Live marketplace checks are manual because website access restrictions and prices vary. Passing CI does not imply a live VERIFIED offer.
+
+Image/filter continuation: tests/presentation.test.ts covers unsafe image URLs, ambiguous/missing variant joins, retained provenance, inclusive ranges, unknown/conditional/stale prices and invalid input. Protocol tests cover deadline cancellation during initialization and tool execution. Browser fixture: node tests/fixtures/ui-server.mjs serves isolated synthetic history on127.0.0.1:8898; observe VERIFIED becoming STALE without refresh and image fallback. Never use fixture server as normal Scout. Real UI evidence: docs/evidence/2026-10-01-images-ui.md.

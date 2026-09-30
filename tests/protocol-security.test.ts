@@ -186,3 +186,30 @@ test("shortlist prefers exact identity over cheap incompatible discovery rows", 
   assert.equal(selected.offers[0].sku, "103");
   assert.equal(selected.offers.length, 3);
 });
+
+test("MCP deadline cancels initialization and tool work before returning", async () => {
+  for (const delayedInit of [true, false]) {
+    const client = new McpClient({
+      command: process.execPath,
+      args: [resolve("tests/fixtures/mcp-server.mjs"), ...(delayedInit ? ["--slow-init"] : [])],
+      cwd: process.cwd(),
+    });
+    let childPid: number | undefined;
+    try {
+      if (!delayedInit) childPid = ((await client.call("probe", {})) as { pid: number }).pid;
+      const started = Date.now();
+      await assert.rejects(
+        client.call(delayedInit ? "probe" : "slow", {}, 10000, AbortSignal.timeout(300)),
+      );
+      assert.ok(Date.now() - started < 3000, "deadline includes awaited transport shutdown");
+      const stoppedPid = childPid;
+      if (stoppedPid)
+        assert.throws(
+          () => process.kill(stoppedPid, 0),
+          "timed-out subprocess must be gone before verification resumes",
+        );
+    } finally {
+      await client.close();
+    }
+  }
+});

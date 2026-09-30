@@ -2,6 +2,7 @@ import { fileURLToPath } from "node:url";
 import fastifyStatic from "@fastify/static";
 import Fastify from "fastify";
 import { z } from "zod";
+import { imageHosts } from "../public/offer-view.js";
 import type { Connector } from "./connectors.js";
 import { landed } from "./cost.js";
 import { freshness } from "./freshness.js";
@@ -43,7 +44,12 @@ export async function buildApp(
     reply.header("X-Content-Type-Options", "nosniff");
     reply.header(
       "Content-Security-Policy",
-      "default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; img-src 'self' data:; frame-ancestors 'none'; base-uri 'none'; form-action 'self'",
+      `default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; img-src 'self' ${Object.values(
+        imageHosts,
+      )
+        .flat()
+        .map((host) => `https://${host}`)
+        .join(" ")}; frame-ancestors 'none'; base-uri 'none'; form-action 'self'`,
     );
     reply.header("Cache-Control", "no-store");
   });

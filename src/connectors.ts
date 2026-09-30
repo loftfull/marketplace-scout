@@ -3,6 +3,7 @@ import { McpClient } from "./adapters/http-mcp.js";
 import { validateOzon } from "./adapters/ozon-validator.js";
 import { browserDiscovery, browserRuntime, readCard } from "./browser.js";
 import { match, type Offer, type ProductProfile } from "./domain.js";
+import { enrichImages } from "./images.js";
 import { parseQuery, queryFor } from "./parse.js";
 import { canonicalUrl, skuFromUrl } from "./urls.js";
 export type SourceOutcome = {
@@ -118,6 +119,8 @@ export class MarketplaceConnector implements Connector {
         },
       };
     }
+    if (result.offers.length && this.name === "yandex-market")
+      result.offers = await enrichImages(result.offers, queryFor(profile));
     if (result.offers.length || result.outcome.status === "blocked") return result;
     try {
       const browser = await browserDiscovery(this.name, profile);

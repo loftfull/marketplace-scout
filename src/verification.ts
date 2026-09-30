@@ -64,6 +64,8 @@ export function assess(discovered: Offer, observed: Offer, profile: ProductProfi
     sku: observed.sku ?? discovered.sku,
     discoveredAt: discovered.discoveredAt,
     discoveryPriceRub: discovered.priceRub,
+    imageUrl: observed.imageUrl ?? discovered.imageUrl,
+    imageSource: observed.imageUrl ? observed.imageSource : discovered.imageSource,
     status,
     verifiedAt: status === "VERIFIED" ? observed.evidence?.observedAt : undefined,
     reasons: [...new Set(reasons)],

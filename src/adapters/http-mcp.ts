@@ -8,16 +8,17 @@ export class McpClient {
   private client?: Client;
   private connection?: Promise<Client>;
   constructor(private executable?: { command: string; args: string[]; cwd: string }) {}
-  async connect(): Promise<Client> {
+  async connect(signal?: AbortSignal): Promise<Client> {
+    signal?.throwIfAborted();
     if (this.client) return this.client;
     if (this.connection) return this.connection;
-    this.connection = this.open().catch((error) => {
+    this.connection = this.open(signal).catch((error) => {
       this.connection = undefined;
       throw error;
     });
     return this.connection;
   }
-  private async open() {
+  private async open(signal?: AbortSignal) {
     const client = new Client({ name: "marketplace-scout", version: "0.3.0" });
     client.onclose = () => {
       if (this.client === client) {
@@ -25,7 +26,7 @@ export class McpClient {
         this.connection = undefined;
       }
     };
-    const endpoint = process.env.RU_MARKETPLACE_MCP_URL;
+    const endpoint = this.executable ? undefined : process.env.RU_MARKETPLACE_MCP_URL;
     if (endpoint) {
       const url = new URL(endpoint);
       if (
@@ -35,7 +36,12 @@ export class McpClient {
         url.password
       )
         throw new Error("MCP must use loopback HTTP");
-      await client.connect(new StreamableHTTPClientTransport(url), { timeout: 15000 });
+      try {
+        await client.connect(new StreamableHTTPClientTransport(url), { timeout: 15000, signal });
+      } catch (error) {
+        await client.close();
+        throw error;
+      }
     } else {
       const runtime = resolve(".runtime/ru-marketplace-mcp");
       const command = resolve(
@@ -76,7 +82,8 @@ export class McpClient {
       const log = createWriteStream(".runtime/logs/mcp.log", { flags: "a" });
       transport.stderr?.pipe(log);
       try {
-        await client.connect(transport, { timeout: 20000 });
+        signal?.throwIfAborted();
+        await client.connect(transport, { timeout: 20000, signal });
       } catch (error) {
         await transport.close();
         log.end();
@@ -86,11 +93,20 @@ export class McpClient {
     this.client = client;
     return client;
   }
-  async call(name: string, args: Record<string, unknown>): Promise<unknown> {
-    const client = await this.connect();
+  async call(
+    name: string,
+    args: Record<string, unknown>,
+    timeoutMs = 65000,
+    signal?: AbortSignal,
+  ): Promise<unknown> {
+    const client = await this.connect(signal);
     let result: Awaited<ReturnType<Client["callTool"]>>;
     try {
-      result = await client.callTool({ name, arguments: args }, undefined, { timeout: 65000 });
+      signal?.throwIfAborted();
+      result = await client.callTool({ name, arguments: args }, undefined, {
+        timeout: timeoutMs,
+        signal,
+      });
     } catch (error) {
       await client.close().catch(() => undefined);
       if (this.client === client) {

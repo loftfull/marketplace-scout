@@ -1,3 +1,12 @@
+import {
+  filterOffers,
+  parseBounds,
+  priceFor,
+  reasonSummary,
+  safeImage,
+  statusNow,
+} from "./offer-view.js";
+
 function reasonText(reason) {
   const fields = {
     brand: "бренд",
@@ -36,6 +45,10 @@ function reasonText(reason) {
 const $ = (selector) => document.querySelector(selector);
 const names = { "yandex-market": "Яндекс Маркет", ozon: "Ozon", avito: "Avito" };
 let currentOffers = [];
+let historyRows = [];
+let renderedOfferStatuses = "";
+let renderedHistoryStatuses = "";
+const statusSignature = (offers) => offers.map((offer) => statusNow(offer)).join(",");
 const money = (value) =>
   typeof value === "number" && Number.isFinite(value)
     ? new Intl.NumberFormat("ru-RU", {
@@ -53,12 +66,6 @@ function element(tag, className, text) {
   if (className) el.className = className;
   if (text !== undefined) el.textContent = text;
   return el;
-}
-function statusNow(offer) {
-  if (offer.evidence?.live === false) return "UNVERIFIED";
-  if (offer.status !== "VERIFIED") return offer.status;
-  const age = Date.now() - Date.parse(offer.verifiedAt || "");
-  return !Number.isFinite(age) || age < 0 ? "UNVERIFIED" : age >= 900000 ? "STALE" : "VERIFIED";
 }
 function safeLink(offer) {
   try {
@@ -81,6 +88,33 @@ function safeLink(offer) {
 }
 function card(offer, seenAt) {
   const article = element("article", "card");
+  const photo = element("figure", "product-photo");
+  const imageUrl = safeImage(offer.imageUrl, offer.marketplace);
+  if (imageUrl) {
+    const img = element("img");
+    img.alt = `Фото: ${offer.title || "товар"}`;
+    img.width = 144;
+    img.height = 112;
+    img.loading = "lazy";
+    img.decoding = "async";
+    img.referrerPolicy = "no-referrer";
+    img.addEventListener(
+      "error",
+      () => photo.replaceChildren(element("span", "photo-empty", "Фото недоступно")),
+      { once: true },
+    );
+    img.src = imageUrl;
+    photo.append(
+      img,
+      element(
+        "figcaption",
+        "meta",
+        offer.imageSource === "card"
+          ? "Фото из карточки"
+          : "Фото из поиска · комплектация не подтверждена",
+      ),
+    );
+  } else photo.append(element("span", "photo-empty", "Нет фото от площадки"));
   const info = element("div");
   info.append(element("strong", "", offer.title || "Карточка без названия"));
   info.append(
@@ -105,7 +139,16 @@ function card(offer, seenAt) {
   if (seenAt) info.append(element("div", "meta", `Наблюдение: ${date(seenAt)}`));
   const cost = offer.landed || {};
   const price = element("div");
-  price.append(element("div", "price", money(offer.priceRub)));
+  const currentPrice = priceFor(offer, "current");
+  price.append(element("div", "meta", "Подтверждённая цена"));
+  price.append(
+    element("div", "price", currentPrice === null ? "Не подтверждена" : money(currentPrice)),
+  );
+  const discoveryPrice = priceFor(offer, "discovery");
+  if (discoveryPrice !== null) {
+    price.append(element("div", "search-price", `${money(discoveryPrice)} в поиске`));
+    price.append(element("div", "meta", `Не подтверждено · ${date(offer.discoveredAt)}`));
+  }
   price.append(
     element("div", "meta", `Доставка: ${money(cost.shipping)} · Пошлина: ${money(cost.duty)}`),
   );
@@ -124,18 +167,49 @@ function card(offer, seenAt) {
     link.rel = "noopener noreferrer";
     actions.append(link);
   }
-  article.append(info, price, actions);
+  article.append(photo, info, price, actions);
   const reasons = [...(offer.reasons || [])];
   if (status === "STALE") reasons.push("Срок подтверждения истёк — повторите поиск.");
-  if (reasons.length)
-    article.append(element("div", "reasons", [...new Set(reasons.map(reasonText))].join(" · ")));
+  const verification = element("div", "verification");
+  verification.append(element("p", "verification-summary", reasonSummary(offer)));
+  if (reasons.length) {
+    const details = element("details", "reasons");
+    details.append(element("summary", "", "Подробности проверки"));
+    const list = element("ul");
+    for (const reason of new Set(reasons.map(reasonText))) list.append(element("li", "", reason));
+    details.append(list);
+    verification.append(details);
+  }
+  article.append(verification);
   return article;
 }
 function renderOffers() {
+  renderedOfferStatuses = statusSignature(currentOffers);
   const results = $("#results");
   results.replaceChildren();
   const verified = currentOffers.filter((offer) => statusNow(offer) === "VERIFIED").length;
-  $("#count").textContent = `${currentOffers.length} найдено · ${verified} подтверждено`;
+  const bounds = parseBounds($("#price-min").value, $("#price-max").value);
+  const invalid = !$("#price-min").validity.valid || !$("#price-max").validity.valid;
+  const error = bounds.error || (invalid ? "Введите неотрицательную цену в рублях." : "");
+  $("#filter-error").textContent = error;
+  $("#price-min").setAttribute("aria-invalid", String(Boolean(error)));
+  $("#price-max").setAttribute("aria-invalid", String(Boolean(error)));
+  if (error) {
+    $("#count").textContent = "Проверьте диапазон цены";
+    return;
+  }
+  const basis = $("#price-basis").value;
+  const filtered = filterOffers(currentOffers, {
+    ...bounds,
+    basis,
+    includeUnknown: $("#include-unknown").checked,
+  });
+  $("#filter-note").textContent =
+    basis === "discovery"
+      ? "Отбор по цене из поисковой выдачи. Цена и точная комплектация могут отличаться; статус проверки не меняется."
+      : "Отбор по актуальной подтверждённой цене товара, без доставки и пошлины. Фильтр применяется к загруженным предложениям.";
+  $("#count").textContent =
+    `${filtered.length} из ${currentOffers.length} показано · ${verified} подтверждено всего`;
   if (!currentOffers.length)
     results.append(
       element(
@@ -144,7 +218,15 @@ function renderOffers() {
         "Подтверждённых предложений нет. Состояние каждой площадки указано выше; отсутствие результата не означает отсутствие товара.",
       ),
     );
-  for (const offer of currentOffers) results.append(card(offer));
+  else if (!filtered.length)
+    results.append(
+      element(
+        "div",
+        "empty",
+        "Нет предложений в этом диапазоне. Измените границы, выберите цены из поиска или включите товары без цены.",
+      ),
+    );
+  for (const offer of filtered) results.append(card(offer));
 }
 async function history() {
   const box = $("#history");
@@ -152,21 +234,31 @@ async function history() {
     const response = await fetch("/api/history");
     if (!response.ok) throw new Error("История недоступна");
     const { rows } = await response.json();
-    box.replaceChildren();
-    if (!rows.length)
-      box.append(
-        element("div", "empty", "История пока пуста. Здесь появятся реальные найденные карточки."),
-      );
-    for (const row of rows) box.append(card({ ...row.offer, landed: row.landed }, row.seenAt));
+    historyRows = rows;
+    renderHistory();
   } catch {
     box.replaceChildren(
       element("div", "empty", "Не удалось прочитать историю. Попробуйте обновить."),
     );
   }
 }
+function renderHistory() {
+  renderedHistoryStatuses = statusSignature(historyRows.map((row) => row.offer));
+  const box = $("#history");
+  const scrollTop = box.scrollTop;
+  box.replaceChildren();
+  if (!historyRows.length)
+    box.append(
+      element("div", "empty", "История пока пуста. Здесь появятся реальные найденные карточки."),
+    );
+  for (const row of historyRows) box.append(card({ ...row.offer, landed: row.landed }, row.seenAt));
+  box.scrollTop = scrollTop;
+}
 $("#f").addEventListener("submit", async (event) => {
   event.preventDefault();
   $("#search").disabled = true;
+  $("#price-filters").disabled = true;
+  currentOffers = [];
   $("#results").setAttribute("aria-busy", "true");
   $("#results").replaceChildren(
     element("div", "empty", "Ищу предложения и повторно открываю карточки…"),
@@ -221,10 +313,19 @@ $("#f").addEventListener("submit", async (event) => {
     );
   } finally {
     $("#search").disabled = false;
+    $("#price-filters").disabled = false;
     $("#results").removeAttribute("aria-busy");
   }
 });
 $("#refresh-history").addEventListener("click", history);
+$("#price-filters").addEventListener("input", renderOffers);
+$("#reset-filter").addEventListener("click", () => {
+  $("#price-min").value = "";
+  $("#price-max").value = "";
+  $("#price-basis").value = "current";
+  $("#include-unknown").checked = false;
+  renderOffers();
+});
 fetch("/health")
   .then((response) => {
     if (!response.ok) throw new Error();
@@ -235,5 +336,8 @@ fetch("/health")
   });
 void history();
 setInterval(() => {
-  if (!$("#search").disabled && currentOffers.length) renderOffers();
+  if (!$("#search").disabled && statusSignature(currentOffers) !== renderedOfferStatuses)
+    renderOffers();
+  if (statusSignature(historyRows.map((row) => row.offer)) !== renderedHistoryStatuses)
+    renderHistory();
 }, 30000);
