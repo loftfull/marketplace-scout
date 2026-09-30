@@ -1,0 +1,2 @@
+import {connectors} from "./connectors.js"; import {match,type ProductProfile,type Offer} from "./domain.js";
+export async function searchVerified(p:ProductProfile){const found=(await Promise.all(connectors.map(c=>c.search(p)))).flat(); const out:Offer[]=[]; for(const o of found){const m=match(p,o); if(!m.ok){out.push({...o,status:"MISMATCH",reasons:[...o.reasons,...m.reasons]});continue} const c=connectors.find(x=>x.name===o.marketplace); out.push(c?await c.verify(o,p):o)} return out.sort((a,b)=>(a.priceRub??Infinity)-(b.priceRub??Infinity));}
