@@ -1,2 +1,18 @@
-import type {Offer} from "./domain.js";import {risk} from "./risk.js";
-export function rank(offers:Offer[]){const prices=offers.map(x=>x.priceRub).filter((x):x is number=>x!=null).sort((a,b)=>a-b);const median=prices.length?prices[Math.floor(prices.length/2)]:null;return offers.map(o=>({offer:o,risk:risk(o,median)})).sort((a,b)=>{const av=a.offer.status==="VERIFIED"?0:1,bv=b.offer.status==="VERIFIED"?0:1;return av-bv||a.risk.score-b.risk.score||(a.offer.priceRub??Infinity)-(b.offer.priceRub??Infinity)})}
+import { landed } from "./cost.js";
+import type { Offer } from "./domain.js";
+import { risk } from "./risk.js";
+export function rank(offers: Offer[]) {
+  const prices = offers
+    .map((offer) => offer.priceRub)
+    .filter((price): price is number => price !== null && Number.isFinite(price) && price > 0)
+    .sort((a, b) => a - b);
+  const median = prices.length ? prices[Math.floor(prices.length / 2)] : null;
+  return offers
+    .map((offer) => ({ offer, risk: risk(offer, median) }))
+    .sort(
+      (a, b) =>
+        Number(b.offer.status === "VERIFIED") - Number(a.offer.status === "VERIFIED") ||
+        a.risk.score - b.risk.score ||
+        (landed(a.offer).total ?? Infinity) - (landed(b.offer).total ?? Infinity),
+    );
+}

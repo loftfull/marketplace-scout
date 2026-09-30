@@ -1,1 +1,24 @@
-import type {Offer} from "./domain.js";export const MAX_VERIFIED_AGE_MS=15*60*1000;export function freshness(o:Offer,now=Date.now()){if(o.status!=="VERIFIED"||!o.verifiedAt)return {...o,status:o.status==="VERIFIED"?"UNVERIFIED" as const:o.status,reasons:o.status==="VERIFIED"?[...o.reasons,"verified_at_missing"]:o.reasons};if(now-Date.parse(o.verifiedAt)>MAX_VERIFIED_AGE_MS)return {...o,status:"STALE" as const,reasons:[...o.reasons,"verification_expired"]};return o}
+import type { Offer } from "./domain.js";
+export const MAX_VERIFIED_AGE_MS = 15 * 60 * 1000;
+export function freshness(offer: Offer, now = Date.now()): Offer {
+  if (offer.status === "MISMATCH" && offer.evidence?.live === false)
+    return {
+      ...offer,
+      status: "UNVERIFIED",
+      reasons: [
+        ...offer.reasons.filter((reason) => !reason.startsWith("mismatch_")),
+        "live_card_not_confirmed",
+      ],
+    };
+  if (offer.status !== "VERIFIED") return offer;
+  const timestamp = Date.parse(offer.verifiedAt ?? "");
+  if (!Number.isFinite(timestamp) || timestamp > now)
+    return {
+      ...offer,
+      status: "UNVERIFIED",
+      reasons: [...offer.reasons, "verification_time_invalid"],
+    };
+  if (now - timestamp >= MAX_VERIFIED_AGE_MS)
+    return { ...offer, status: "STALE", reasons: [...offer.reasons, "verification_expired"] };
+  return offer;
+}
