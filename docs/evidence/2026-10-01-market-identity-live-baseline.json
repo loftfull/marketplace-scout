@@ -1,0 +1,278 @@
+{
+  "runAt": "2026-10-01T19:48:22.076Z",
+  "mode": "LIVE_NO_FIXTURES",
+  "query": "RedmiBook Pro 16 2026 Ultra 5 338H 32GB 1TB",
+  "profile": {
+    "brand": "Xiaomi",
+    "model": "RedmiBook Pro 16",
+    "year": 2026,
+    "cpu": "Ultra 5 338H",
+    "ramGb": 32,
+    "ssdGb": 1024
+  },
+  "checkedAt": "2026-10-01T19:48:22.074Z",
+  "offers": [
+    {
+      "marketplace": "yandex-market",
+      "sku": "4926159786",
+      "variantId": "4926159786",
+      "title": "Ноутбук Xiaomi Redmi Book Pro 16, 16″ IPS 3072×1920 165 Гц, Intel Core Ultra 7 255H, 32 ГБ LPDDR5X, SSD 1 ТБ, Intel Arc 140T, Windows 11 Pro + MS Office, серый, RU",
+      "url": "https://market.yandex.ru/card/x/4926159786?sku=4926159786",
+      "priceRub": null,
+      "discoveryPriceKind": "ordinary",
+      "discoveryConditionalRub": 138306,
+      "discoveryReferenceRub": 176496,
+      "discoveryProvider": "SZhukovWork/yandex-market-mcp",
+      "discoveryRegion": "Москва",
+      "specs": {},
+      "status": "UNVERIFIED",
+      "reasons": [
+        "card_unavailable_or_challenged",
+        "region_not_confirmed",
+        "region_conflict",
+        "discovery_specs_conflict",
+        "missing_brand",
+        "missing_model",
+        "missing_year",
+        "missing_cpu",
+        "missing_ramGb",
+        "missing_ssdGb",
+        "live_card_not_confirmed",
+        "seller_missing",
+        "current_price_missing",
+        "unconditional_price_not_confirmed",
+        "availability_not_confirmed"
+      ],
+      "discoveredAt": "2026-10-01T19:47:23.326Z",
+      "imageUrl": "https://avatars.mds.yandex.net/get-mpic/20122754/2a0000019fa826c9cf2e4f15cc07b15b7fe2/orig",
+      "imageSource": "discovery",
+      "requestedCity": "Воронеж",
+      "requestedCityId": "voronezh",
+      "native": {
+        "provider": "SZhukovWork/yandex-market-mcp",
+        "tool": "get_product",
+        "status": "blocked",
+        "observedAt": "2026-10-01T19:47:28.499Z"
+      },
+      "discoveryPriceRub": 142583,
+      "risk": {
+        "flags": [
+          "seller_missing",
+          "not_verified"
+        ],
+        "score": 50
+      },
+      "landed": {
+        "item": null,
+        "shipping": null,
+        "duty": null,
+        "total": null,
+        "currency": "RUB",
+        "region": null
+      }
+    },
+    {
+      "marketplace": "yandex-market",
+      "sku": "6154107740",
+      "variantId": "6154107740",
+      "title": "Ноутбук Xiaomi REDMI Book Pro 16 2025, Core Ultra 5 225H, 32 ГБ/1 ТБ SSD, 16″ 3.1K 165 Гц, русская клавиатура",
+      "url": "https://market.yandex.ru/card/x/6154107740?sku=6154107740",
+      "priceRub": null,
+      "discoveryPriceKind": "ordinary",
+      "discoveryConditionalRub": 119890,
+      "discoveryReferenceRub": 187098,
+      "discoveryProvider": "SZhukovWork/yandex-market-mcp",
+      "discoveryRegion": "Москва",
+      "specs": {},
+      "status": "UNVERIFIED",
+      "reasons": [
+        "card_unavailable_or_challenged",
+        "region_not_confirmed",
+        "region_conflict",
+        "discovery_specs_conflict",
+        "missing_brand",
+        "missing_model",
+        "missing_year",
+        "missing_cpu",
+        "missing_ramGb",
+        "missing_ssdGb",
+        "live_card_not_confirmed",
+        "seller_missing",
+        "current_price_missing",
+        "unconditional_price_not_confirmed",
+        "availability_not_confirmed"
+      ],
+      "discoveredAt": "2026-10-01T19:47:23.326Z",
+      "imageUrl": "https://avatars.mds.yandex.net/get-mpic/17649863/pic4a357cd6079d2bf759985b944c1c8a96/orig",
+      "imageSource": "discovery",
+      "requestedCity": "Воронеж",
+      "requestedCityId": "voronezh",
+      "discoveryPriceRub": 123598,
+      "risk": {
+        "flags": [
+          "seller_missing",
+          "not_verified"
+        ],
+        "score": 50
+      },
+      "landed": {
+        "item": null,
+        "shipping": null,
+        "duty": null,
+        "total": null,
+        "currency": "RUB",
+        "region": null
+      }
+    },
+    {
+      "marketplace": "yandex-market",
+      "sku": "5829975147",
+      "variantId": "5829975147",
+      "title": "Xiaomi Redmi Book Pro 16 2025 Intel Core Ultra 5 225H, SSD 1024 ГБ, подарок \"Наклейки на русском языке +мышь+ коврик для мыши\" Ноутбук 16\", RAM 32 ГБ, SSD 1024 ГБ, Intel Arc Graphics, Windows Home, серый, Английская раскладка",
+      "url": "https://market.yandex.ru/card/x/5829975147?sku=5829975147",
+      "priceRub": null,
+      "discoveryPriceKind": "ordinary",
+      "discoveryConditionalRub": 186186,
+      "discoveryReferenceRub": 441546,
+      "discoveryProvider": "SZhukovWork/yandex-market-mcp",
+      "discoveryRegion": "Москва",
+      "specs": {},
+      "status": "UNVERIFIED",
+      "reasons": [
+        "card_unavailable_or_challenged",
+        "region_not_confirmed",
+        "region_conflict",
+        "discovery_specs_conflict",
+        "missing_brand",
+        "missing_model",
+        "missing_year",
+        "missing_cpu",
+        "missing_ramGb",
+        "missing_ssdGb",
+        "live_card_not_confirmed",
+        "seller_missing",
+        "current_price_missing",
+        "unconditional_price_not_confirmed",
+        "availability_not_confirmed"
+      ],
+      "discoveredAt": "2026-10-01T19:47:23.327Z",
+      "imageUrl": "https://avatars.mds.yandex.net/get-mpic/18430270/2a0000019eaa3f3e81ee4f9849d1426d320a/orig",
+      "imageSource": "discovery",
+      "requestedCity": "Воронеж",
+      "requestedCityId": "voronezh",
+      "discoveryPriceRub": 191944,
+      "risk": {
+        "flags": [
+          "seller_missing",
+          "not_verified"
+        ],
+        "score": 50
+      },
+      "landed": {
+        "item": null,
+        "shipping": null,
+        "duty": null,
+        "total": null,
+        "currency": "RUB",
+        "region": null
+      }
+    }
+  ],
+  "sourceOutcomes": [
+    {
+      "marketplace": "yandex-market",
+      "status": "ok",
+      "stage": "native-discovery",
+      "detail": "ordinary/Pay/reference separated; city from page",
+      "offersReturned": 3,
+      "tools": [
+        {
+          "provider": "SZhukovWork/yandex-market-mcp",
+          "tool": "search_products",
+          "status": "ok",
+          "at": "2026-10-01T19:47:23.320Z",
+          "durationMs": 2200
+        },
+        {
+          "provider": "ru-marketplace-mcp",
+          "tool": "yandex_search",
+          "status": "ok",
+          "at": "2026-10-01T19:47:24.859Z",
+          "durationMs": 1532
+        },
+        {
+          "provider": "SZhukovWork/yandex-market-mcp",
+          "tool": "get_product",
+          "status": "blocked",
+          "at": "2026-10-01T19:47:28.499Z",
+          "durationMs": 3640
+        }
+      ]
+    },
+    {
+      "marketplace": "ozon",
+      "status": "blocked",
+      "stage": "mcp-discovery",
+      "detail": "Tier-1 (curl_cffi) blocked AND Tier-2 (CDP) unreachable. Start Chrome (run scripts/start_chrome_cdp.ps1 (PowerShell)) and ensure the CDP port is open. Last error: CDP timeout after 20.0s",
+      "offersReturned": 0,
+      "tools": [
+        {
+          "provider": "ru-marketplace-mcp",
+          "tool": "compare_prices",
+          "status": "ok",
+          "at": "2026-10-01T19:48:09.258Z",
+          "durationMs": 40754
+        }
+      ]
+    },
+    {
+      "marketplace": "avito",
+      "status": "blocked",
+      "stage": "city-browser-discovery",
+      "detail": "Доступ ограничен: проблема с IP",
+      "discoveryUrl": "https://www.avito.ru/voronezh/noutbuki?q=Xiaomi%20RedmiBook%20Pro%2016%202026%20Ultra%205%20338H%2032GB%201024GB",
+      "offersReturned": 0,
+      "tools": []
+    },
+    {
+      "marketplace": "wildberries",
+      "status": "timeout",
+      "stage": "region-resolution",
+      "detail": "city_mapping_unconfirmed; no default Moscow fallback",
+      "offersReturned": 0,
+      "tools": [
+        {
+          "provider": "Wildberries public geo",
+          "tool": "get-geo-info",
+          "status": "timeout",
+          "at": "2026-10-01T19:48:22.062Z",
+          "durationMs": 12024
+        }
+      ]
+    }
+  ],
+  "complete": false,
+  "requestedCity": {
+    "id": "voronezh",
+    "name": "Воронеж",
+    "latitude": 51.6608,
+    "longitude": 39.2003
+  },
+  "region": null,
+  "acceptance": {
+    "discoveryAttempted": true,
+    "candidatesDiscovered": 3,
+    "browserResponses": 0,
+    "liveCardResponses": 0,
+    "verified": 0,
+    "outcome": "UNVERIFIED",
+    "counterDefinitions": "browserResponses includes blocked/challenge responses; liveCardResponses requires browser-card, live=true and HTTP 2xx. Neither proves matching identity, region, price or seller. Missing evidence cannot count browser attempts.",
+    "limitation": "Read each offer's evidence and reasons."
+  },
+  "executionScope": {
+    "runningServerPid": 15552,
+    "identityFixLoaded": false,
+    "acceptanceSummary": "new counters from this slice",
+    "limitation": "Runtime restart was rejected by automatic approval policy. This is baseline live availability evidence, not an end-to-end run of the identity fix. No other app or browser profile was used."
+  }
+}

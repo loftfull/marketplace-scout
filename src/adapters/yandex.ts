@@ -29,7 +29,12 @@ const record = (value: unknown): Record<string, unknown> =>
     : {};
 const str = (value: unknown): string | undefined =>
   typeof value === "string" && value.trim() ? value.trim().slice(0, 500) : undefined;
-const id = (value: unknown) => (/^\d{1,20}$/.test(String(value)) ? String(value) : undefined);
+const id = (value: unknown): string | undefined => {
+  if (typeof value === "string" && /^[1-9]\d{0,19}$/.test(value)) return value;
+  return typeof value === "number" && Number.isSafeInteger(value) && value > 0
+    ? String(value)
+    : undefined;
+};
 const money = (value: unknown) =>
   typeof value === "number" && Number.isFinite(value) && value > 0 ? value : undefined;
 function variantMatches(value: unknown, variant: string | undefined): boolean {
@@ -163,12 +168,27 @@ export function normalizeMarketCard(offer: Offer, raw: unknown): NativeEvidence 
   };
 }
 export async function marketCard(offer: Offer): Promise<NativeEvidence> {
+  const url = canonicalUrl(offer.url, "yandex-market");
+  const cardId = url ? new URL(url).pathname.match(/^\/card\/[^/]+\/(\d+)\/?$/)?.[1] : undefined;
+  if (
+    !cardId ||
+    !id(offer.sku) ||
+    cardId !== offer.sku ||
+    !variantMatches(offer.url, offer.variantId)
+  )
+    return {
+      provider: "SZhukovWork/yandex-market-mcp",
+      tool: "get_product",
+      status: "invalid",
+      observedAt: new Date().toISOString(),
+    };
   try {
     return normalizeMarketCard(
       offer,
       await yandexMcp.call(
         "get_product",
-        { product: offer.url, include_seller_legal: false },
+        // Upstream full-matches numeric IDs; its URL parser can truncate long IDs.
+        { product: cardId, include_seller_legal: false },
         25000,
         AbortSignal.timeout(30000),
       ),

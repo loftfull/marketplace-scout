@@ -18,7 +18,9 @@ Implementation review: GO. Positive live verification / public release: HOLD.
 | Avito | MCP browser discovery IP-firewall block (439 in runtime log); no card candidate |
 | Verdict | 3 UNVERIFIED, 0 VERIFIED; incomplete source coverage |
 
-Xiaomi Book in a search title is not silently treated as RedmiBook. A wrong-generation candidate also remains UNVERIFIED when the reopened card is blocked; MISMATCH requires actual observed card data. The response field cardsReopened counts attempts, not readable cards.
+Xiaomi Book in a search title is not silently treated as RedmiBook. A wrong-generation candidate also remains UNVERIFIED when the reopened card is blocked; MISMATCH requires actual observed card data. The historical field cardsReopened counts evidence-bearing browser responses, not readable cards or every attempted navigation.
+
+Current acceptance summaries (2026-10-01 identity correction) replace that ambiguous field with browserResponses and liveCardResponses. The first counts browser-card evidence, including errors/challenges; the second requires live=true and HTTP 2xx. Neither establishes correct SKU, selected city, ordinary price or seller; VERIFIED remains the independent full gate. Timeout/skipped attempts without evidence are not inferable from these counters. Historical JSON evidence is retained unchanged.
 
 The later UI-triggered run completed at 20:34:11 UTC with the same three candidates and zero confirmed offers. Search button loading/re-enable, source failures, canonical links, unknown landed cost, history append and history refresh were inspected. Desktop width1280 and mobile390 had no horizontal overflow. Browser console contained no warning/error entries. Screenshots retained in the task outputs.
 

@@ -16,6 +16,16 @@ spec.loader.exec_module(bridge)
 
 
 class AdapterTests(unittest.TestCase):
+    def test_exact_id_branch_rejects_long_id_before_fetch(self):
+        # Exercise the pinned tool, not a replacement Scout parser.
+        with patch.object(bridge.server, "_card_page", side_effect=bridge.MarketError("fetch sentinel")) as fetch:
+            with self.assertRaisesRegex(Exception, "not a Market card id"):
+                bridge.server.get_product("227753481523236864")
+            fetch.assert_not_called()
+            with self.assertRaisesRegex(Exception, "fetch sentinel"):
+                bridge.server.get_product("6013745409")
+            fetch.assert_called_once_with("6013745409")
+
     def test_private_dns_rejected(self):
         with patch.object(bridge.socket, "getaddrinfo", return_value=[(2, 1, 6, "", ("127.0.0.1", 443))]):
             with self.assertRaisesRegex(bridge.MarketError, "destination_denied"):
