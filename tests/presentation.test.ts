@@ -13,6 +13,9 @@ import { joinImages } from "../src/images.js";
 import { assess } from "../src/verification.js";
 
 const candidate: Offer = {
+  requestedCityId: "voronezh",
+  requestedCity: "Воронеж",
+  discoveryPriceKind: "ordinary",
   marketplace: "yandex-market",
   title: "Fixture laptop",
   url: "https://market.yandex.ru/card/laptop/123?sku=456",
@@ -68,6 +71,7 @@ test("blocked verification retains search photo without promoting discovery pric
     imageUrl: undefined,
     reasons: ["card_unavailable_or_challenged"],
     evidence: {
+      region: "Воронеж",
       method: "browser-card",
       observedAt: new Date().toISOString(),
       requestedUrl: candidate.url,
@@ -127,6 +131,7 @@ test("current-price basis excludes stale, conditional, invalid and unverified va
     status: "VERIFIED",
     verifiedAt: new Date().toISOString(),
     evidence: {
+      region: "Воронеж",
       method: "browser-card",
       observedAt: new Date().toISOString(),
       requestedUrl: candidate.url,

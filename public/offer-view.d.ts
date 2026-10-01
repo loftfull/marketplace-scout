@@ -12,3 +12,8 @@ export function filterOffers<T extends Offer>(
   filter: { min: number | null; max: number | null; basis: string; includeUnknown: boolean },
 ): T[];
 export function reasonSummary(offer: Offer): string;
+export function requestSelection(): {
+  change(): number;
+  capture(): number;
+  accepts(token: number): boolean;
+};

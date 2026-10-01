@@ -4,9 +4,11 @@ import { McpClient, toolFailure } from "./adapters/http-mcp.js";
 import { attachNative, nativeCard, normalizeOzonSearch } from "./adapters/native-cards.js";
 import { callOzon } from "./adapters/ozon-runtime.js";
 import { validateOzon } from "./adapters/ozon-validator.js";
+import { searchWb, wbCard } from "./adapters/wildberries.js";
+import { marketCard, searchMarket } from "./adapters/yandex.js";
 import { browserDiscovery, browserRuntime, readCard } from "./browser.js";
+import { type City, cities } from "./cities.js";
 import { match, type Offer, type ProductProfile } from "./domain.js";
-import { enrichImages } from "./images.js";
 import { parseQuery, queryFor } from "./parse.js";
 import { canonicalUrl, skuFromUrl } from "./urls.js";
 export type SourceOutcome = {
@@ -21,7 +23,7 @@ export type SourceOutcome = {
 export type Discovery = { offers: Offer[]; outcome: SourceOutcome };
 export interface Connector {
   name: string;
-  search(profile: ProductProfile): Promise<Discovery>;
+  search(profile: ProductProfile, city?: City): Promise<Discovery>;
   verify(offer: Offer, profile: ProductProfile): Promise<Offer>;
 }
 const responseSchema = z.object({
@@ -63,6 +65,8 @@ export function normalizeDiscovery(
       variantId: row.variant_id || undefined,
       seller: row.seller || undefined,
       priceRub: row.price_rub ?? null,
+      discoveryPriceKind: "unknown",
+      discoveryProvider: "ru-marketplace-mcp/compare_prices",
       specs: parseQuery(row.title),
       status: "UNVERIFIED",
       reasons: [],
@@ -97,7 +101,37 @@ export class MarketplaceConnector implements Connector {
     public name: string,
     private source: string,
   ) {}
-  async search(profile: ProductProfile): Promise<Discovery> {
+  async search(profile: ProductProfile, city: City = cities[0]): Promise<Discovery> {
+    // Routes are selected before any request; never switch provider after a source block.
+    if (this.name === "yandex-market") return searchMarket(profile);
+    if (this.name === "wildberries") return searchWb(profile, city);
+    if (this.name === "avito") {
+      try {
+        const result = await browserDiscovery(this.name, profile, city);
+        return {
+          offers: result.offers,
+          outcome: {
+            marketplace: this.name,
+            status: result.status,
+            stage: "city-browser-discovery",
+            detail: result.detail,
+            discoveryUrl: result.url,
+            offersReturned: result.offers.length,
+          },
+        };
+      } catch (error) {
+        return {
+          offers: [],
+          outcome: {
+            marketplace: this.name,
+            status: toolFailure(error),
+            stage: "city-browser-discovery",
+            detail: "city_search_failed",
+            offersReturned: 0,
+          },
+        };
+      }
+    }
     let result: Discovery;
     try {
       await browserRuntime.ensure();
@@ -123,8 +157,6 @@ export class MarketplaceConnector implements Connector {
         },
       };
     }
-    if (result.offers.length && this.name === "yandex-market")
-      result.offers = await enrichImages(result.offers, queryFor(profile));
     if (result.offers.length || result.outcome.status === "blocked") return result;
     if (this.name === "ozon") {
       try {
@@ -155,7 +187,7 @@ export class MarketplaceConnector implements Connector {
       }
     }
     try {
-      const browser = await browserDiscovery(this.name, profile);
+      const browser = await browserDiscovery(this.name, profile, city);
       return {
         offers: browser.offers,
         outcome: {
@@ -174,7 +206,17 @@ export class MarketplaceConnector implements Connector {
   }
   async verify(offer: Offer, _profile: ProductProfile) {
     if (this.name === "ozon") return validateOzon(offer);
-    const native = await nativeCard(offer);
+    const native =
+      this.name === "yandex-market"
+        ? await marketCard(offer)
+        : this.name === "wildberries"
+          ? await wbCard(offer)
+          : await nativeCard(offer);
+    if (native.status === "blocked")
+      return attachNative(
+        { ...offer, priceRub: null, specs: {}, reasons: ["card_unavailable_or_challenged"] },
+        native,
+      );
     try {
       return attachNative(await readCard(offer), native);
     } catch {
@@ -195,4 +237,5 @@ export const connectors: Connector[] = [
   new MarketplaceConnector("yandex-market", "yandex_market"),
   new MarketplaceConnector("ozon", "ozon"),
   new MarketplaceConnector("avito", "avito"),
+  new MarketplaceConnector("wildberries", "wildberries"),
 ];

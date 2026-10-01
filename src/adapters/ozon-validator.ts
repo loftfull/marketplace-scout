@@ -5,6 +5,11 @@ import { attachNative, nativeCard } from "./native-cards.js";
 export async function validateOzon(offer: Offer) {
   if (offer.marketplace !== "ozon") throw new Error("ozon_validator_marketplace_mismatch");
   const native = await nativeCard(offer);
+  if (native.status === "blocked")
+    return attachNative(
+      { ...offer, priceRub: null, specs: {}, reasons: ["card_unavailable_or_challenged"] },
+      native,
+    );
   try {
     return attachNative(await readCard(offer), native);
   } catch {

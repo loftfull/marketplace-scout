@@ -1,8 +1,17 @@
+import { cityById, sameCity } from "./cities.js";
 import { match, type Offer, type ProductProfile } from "./domain.js";
 import { freshness } from "./freshness.js";
 import { marketplaceUrl, skuFromUrl } from "./urls.js";
 export function assess(discovered: Offer, observed: Offer, profile: ProductProfile): Offer {
   const reasons = [...observed.reasons];
+  const city = cityById(discovered.requestedCityId);
+  if (!discovered.requestedCityId || !city || !sameCity(observed.evidence?.region, city))
+    reasons.push("region_not_confirmed");
+  if (city && observed.native?.region && !sameCity(observed.native.region, city))
+    reasons.push("region_conflict");
+  if (city && discovered.discoveryRegion && !sameCity(discovered.discoveryRegion, city))
+    reasons.push("region_conflict");
+  if (match(profile, discovered).reasons.length) reasons.push("discovery_specs_conflict");
   const identity = match(profile, observed);
   const requested = marketplaceUrl(discovered.url, discovered.marketplace);
   const final = marketplaceUrl(observed.evidence?.finalUrl ?? "", discovered.marketplace);
@@ -60,6 +69,15 @@ export function assess(discovered: Offer, observed: Offer, profile: ProductProfi
     mismatch && observed.evidence?.live ? "MISMATCH" : reasons.length ? "UNVERIFIED" : "VERIFIED";
   return freshness({
     ...observed,
+    requestedCity: discovered.requestedCity,
+    requestedCityId: discovered.requestedCityId,
+    region: observed.evidence?.region,
+    discoveryPriceKind: discovered.discoveryPriceKind ?? "unknown",
+    discoveryConditionalRub: discovered.discoveryConditionalRub,
+    discoveryReferenceRub: discovered.discoveryReferenceRub,
+    discoveryProvider: discovered.discoveryProvider,
+    discoveryRegion: discovered.discoveryRegion,
+    destinationId: discovered.destinationId,
     url: discovered.url,
     sku: observed.sku ?? discovered.sku,
     discoveredAt: discovered.discoveredAt,

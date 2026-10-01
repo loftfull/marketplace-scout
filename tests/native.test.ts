@@ -14,6 +14,8 @@ import { assess } from "../src/verification.js";
 const title = "RedmiBook Pro 16 2026 Ultra 5 338H 32GB 1TB";
 const profile = parseQuery(title);
 const offer: Offer = {
+  requestedCityId: "voronezh",
+  requestedCity: "Воронеж",
   marketplace: "ozon",
   sku: "123456",
   url: "https://www.ozon.ru/product/123456/",
@@ -74,8 +76,11 @@ test("native SKU, URL identity, currency and Yandex default variant must match",
     "mismatch",
   );
   assert.equal(normalizeNative(offer, { ...raw, currency: "USD" }).status, "invalid");
-  const market = {
+  const market: Offer = {
     ...offer,
+    requestedCityId: "voronezh",
+    requestedCity: "Воронеж",
+    discoveryPriceKind: "ordinary",
     marketplace: "yandex-market",
     variantId: "11",
     url: "https://market.yandex.ru/card/laptop/123456?sku=11",
@@ -89,6 +94,7 @@ test("native conflicts veto otherwise complete browser verification", () => {
   const observed: Offer = {
     ...offer,
     evidence: {
+      region: "Воронеж",
       method: "browser-card",
       requestedUrl: offer.url,
       finalUrl: offer.url,

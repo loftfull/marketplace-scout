@@ -13,7 +13,7 @@ const evidence = {
   query,
   ...result,
   acceptance: {
-    discoveryAttempted: result.sourceOutcomes.length === 3,
+    discoveryAttempted: result.sourceOutcomes.length === 4,
     candidatesDiscovered: result.offers.length,
     cardsReopened: result.offers.filter((offer) => offer.evidence).length,
     verified: result.offers.filter((offer) => offer.status === "VERIFIED").length,

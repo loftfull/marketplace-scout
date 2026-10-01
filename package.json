@@ -15,7 +15,8 @@
     "runtime:setup": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/runtime-setup.ps1",
     "runtime:ozon": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/ozon-runtime-setup.ps1",
     "probe:ozon": "node --import tsx scripts/ozon-probe.mjs",
-    "test:browser": "node --import tsx scripts/browser-security.mjs"
+    "test:browser": "node --import tsx scripts/browser-security.mjs",
+    "runtime:yandex": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/yandex-runtime-setup.ps1"
   },
   "dependencies": {
     "@fastify/static": "10.1.5",

@@ -1,3 +1,4 @@
+import { cityById, sameCity } from "./cities.js";
 import type { Offer } from "./domain.js";
 export const MAX_VERIFIED_AGE_MS = 15 * 60 * 1000;
 export function freshness(offer: Offer, now = Date.now()): Offer {
@@ -20,5 +21,12 @@ export function freshness(offer: Offer, now = Date.now()): Offer {
     };
   if (now - timestamp >= MAX_VERIFIED_AGE_MS)
     return { ...offer, status: "STALE", reasons: [...offer.reasons, "verification_expired"] };
+  const city = offer.requestedCityId ? cityById(offer.requestedCityId) : undefined;
+  if (
+    !city ||
+    !sameCity(offer.evidence?.region, city) ||
+    (offer.native?.region && !sameCity(offer.native.region, city))
+  )
+    return { ...offer, status: "UNVERIFIED", reasons: [...offer.reasons, "region_not_confirmed"] };
   return offer;
 }

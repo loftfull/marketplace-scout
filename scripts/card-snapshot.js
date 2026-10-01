@@ -24,6 +24,9 @@
     }
   }
   return {
+    regionText: text(
+      '[data-auto="region-form-opener"], [data-widget="addressBookBarWeb"], [data-marker="delivery-location/title"], .simple-menu__link--address',
+    ),
     title: document.title,
     heading:
       document.querySelectorAll("h1").length === 1
@@ -31,7 +34,7 @@
         : "",
     products,
     priceText: text(
-      '[data-widget="webPrice"], [data-auto="price-block"], [data-marker="item-view/item-price"]',
+      '[data-widget="webPrice"], [data-auto="price-block"], [data-marker="item-view/item-price"], .product-page__price-block',
     ),
     sellerText: text(
       '[data-widget="webCurrentSeller"], [data-auto="shop-name"], [data-marker="seller-info/name"]',

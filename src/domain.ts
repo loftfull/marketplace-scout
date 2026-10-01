@@ -9,6 +9,7 @@ export type ProductProfile = {
   gpu?: string;
 };
 export type Evidence = {
+  region?: string;
   observedAt: string;
   requestedUrl: string;
   finalUrl: string;
@@ -21,6 +22,14 @@ export type Evidence = {
   available: boolean | null;
 };
 export type Offer = {
+  requestedCity?: string;
+  requestedCityId?: string;
+  discoveryPriceKind?: "ordinary" | "conditional" | "unknown";
+  discoveryConditionalRub?: number;
+  discoveryReferenceRub?: number;
+  discoveryProvider?: string;
+  discoveryRegion?: string;
+  destinationId?: string;
   native?: NativeEvidence;
   marketplace: string;
   title: string;
@@ -43,6 +52,7 @@ export type Offer = {
   imageSource?: "discovery" | "card";
 };
 export type NativeEvidence = {
+  destinationId?: string;
   provider: string;
   tool: string;
   status: "ok" | "mismatch" | "invalid" | "blocked" | "timeout" | "error";

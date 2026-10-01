@@ -14,7 +14,11 @@ export type ToolCall = {
 export const toolCalls: ToolCall[] = [];
 export function toolFailure(error: unknown): string {
   const message = String(error);
-  if (/scout_source_blocked|\b403\b|\b429\b|blocked|challenge|TransportDown/i.test(message))
+  if (
+    /scout_source_blocked|\b403\b|\b429\b|blocked|challenge|TransportDown|rate limiting|pauses until/i.test(
+      message,
+    )
+  )
     return "blocked";
   if (/timeout|timed out|abort/i.test(message)) return "timeout";
   return "error";

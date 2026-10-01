@@ -3,6 +3,7 @@ import { mkdir, readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { type Browser, chromium, type Page } from "playwright";
 import { safeImage } from "../public/offer-view.js";
+import { type City, cities, sameCity } from "./cities.js";
 import type { Offer, ProductProfile } from "./domain.js";
 import { BrowserEgress } from "./egress.js";
 import { queryFor } from "./parse.js";
@@ -110,11 +111,12 @@ export type BrowserDiscovery = { offers: Offer[]; detail: string; url: string; s
 export async function browserDiscovery(
   marketplace: string,
   profile: ProductProfile,
+  city: City = cities[0],
 ): Promise<BrowserDiscovery> {
   const roots: Record<string, string> = {
     "yandex-market": "https://market.yandex.ru/search?text=",
     ozon: "https://www.ozon.ru/search/?text=",
-    avito: "https://www.avito.ru/all/noutbuki?q=",
+    avito: `https://www.avito.ru/${city.id}/noutbuki?q=`,
   };
   const url = roots[marketplace] + encodeURIComponent(queryFor(profile));
   const page = await browserRuntime.page(marketplace);
@@ -170,6 +172,7 @@ type RecordValue = Record<string, unknown>;
 const record = (value: unknown): RecordValue =>
   value && typeof value === "object" && !Array.isArray(value) ? (value as RecordValue) : {};
 export type CardSnapshot = {
+  regionText?: string;
   title: string;
   heading: string;
   products: unknown[];
@@ -296,6 +299,7 @@ export function observation(
     status: "UNVERIFIED",
     reasons,
     evidence: {
+      region: cities.find((city) => sameCity(snapshot.regionText, city))?.name,
       method: "browser-card",
       observedAt: new Date().toISOString(),
       requestedUrl: discovered.url,

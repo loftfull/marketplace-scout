@@ -10,6 +10,7 @@ Requires Node 24 (22+ supported), Git, Python for the installer, and installed G
 npm ci
 npm run runtime:setup
 npm run runtime:ozon
+npm run runtime:yandex
 npm run build
 npm start
 ```
@@ -43,7 +44,9 @@ See `docs/ARCHITECTURE.md`, `docs/TEST_PLAN.md`, `docs/RUNBOOK.md`, `docs/RELEAS
 
 ## Native collectors
 
-ru-marketplace-mcp remains the primary discovery provider. Candidates call native `yandex_card`, `avito_card` and, when a trustworthy seller ID exists, `avito_seller`. Ozon candidates call the separately pinned SZhukovWork/ozon-mcp `get_product`. Its `search_products` is a fallback only for empty/unavailable discovery, never for a blocked source. The specialized runtime uses a separate hash-locked Python environment and a lifecycle adapter attached to Scout-owned Chrome; it cannot launch its upstream stealth browser or import saved accounts.
+Market uses the pinned SZhukovWork/yandex-market-mcp search/card tools through guarded ordinary HTTPS. ru-marketplace-mcp supplies Ozon discovery, Avito cards/sellers, WB search/cards and optional exact-variant Market images. Ozon candidates call the separately pinned SZhukovWork/ozon-mcp validator; its search is a fallback only for empty/unavailable discovery, never for a blocked source. See [repository pins, licenses and research](docs/CONNECTORS.md).
+
+City defaults to Voronezh; Moscow and Saint Petersburg are selectable. Selection is a verification requirement, not proof that a marketplace accepted the address. Requested, discovery and card regions remain distinct. Wrong-city prices, unrelated products, Pay-card prices and crossed-out prices cannot become ordinary current prices. WB resolves the selected city's destination before calls; missing mapping stops WB without a Moscow fallback. Its installed search schema omits destination, so search supplies IDs only; regional prices must be reread with wb_card and the validated destination.
 
 Native observations carry provider/tool/time, exact-identity checks, separately named ordinary/conditional/reference prices and seller facts. They do not fill independent browser evidence or grant VERIFIED. Contradictory native facts veto verification. Expand “Данные коннектора” or “Вызовы коннекторов” for actual execution diagnostics. Some tools remain uncalled when discovery or seller identification fails; installation does not imply successful live extraction.
 

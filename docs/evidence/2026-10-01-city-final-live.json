@@ -1,0 +1,263 @@
+{
+  "runAt": "2026-10-01T06:34:01.485Z",
+  "mode": "LIVE_NO_FIXTURES",
+  "query": "RedmiBook Pro 16 2026 Ultra 5 338H 32GB 1TB",
+  "profile": {
+    "brand": "Xiaomi",
+    "model": "RedmiBook Pro 16",
+    "year": 2026,
+    "cpu": "Ultra 5 338H",
+    "ramGb": 32,
+    "ssdGb": 1024
+  },
+  "checkedAt": "2026-10-01T06:34:01.457Z",
+  "offers": [
+    {
+      "marketplace": "yandex-market",
+      "sku": "6013745409",
+      "variantId": "6013745409",
+      "title": "Ноутбук Xiaomi Redmi Book Pro 16\" (2026), 3200x2000 165Hz, Ultra 5 338H, 32 ГБ/1 ТБ, Windows 11 Home, русская клавиатура",
+      "url": "https://market.yandex.ru/card/x/6013745409?sku=6013745409",
+      "priceRub": null,
+      "discoveryPriceKind": "ordinary",
+      "discoveryConditionalRub": 156381,
+      "discoveryReferenceRub": 379999,
+      "discoveryProvider": "SZhukovWork/yandex-market-mcp",
+      "discoveryRegion": "Москва",
+      "seller": "Gray Devices",
+      "specs": {},
+      "status": "UNVERIFIED",
+      "reasons": [
+        "card_unavailable_or_challenged",
+        "region_not_confirmed",
+        "region_conflict",
+        "missing_brand",
+        "missing_model",
+        "missing_year",
+        "missing_cpu",
+        "missing_ramGb",
+        "missing_ssdGb",
+        "live_card_not_confirmed",
+        "current_price_missing",
+        "unconditional_price_not_confirmed",
+        "availability_not_confirmed"
+      ],
+      "discoveredAt": "2026-10-01T06:32:42.622Z",
+      "requestedCity": "Воронеж",
+      "requestedCityId": "voronezh",
+      "native": {
+        "provider": "SZhukovWork/yandex-market-mcp",
+        "tool": "get_product",
+        "status": "blocked",
+        "observedAt": "2026-10-01T06:32:53.433Z"
+      },
+      "discoveryPriceRub": 161218,
+      "risk": {
+        "flags": [
+          "not_verified"
+        ],
+        "score": 25
+      },
+      "landed": {
+        "item": null,
+        "shipping": null,
+        "duty": null,
+        "total": null,
+        "currency": "RUB",
+        "region": null
+      }
+    },
+    {
+      "marketplace": "yandex-market",
+      "sku": "6103250888",
+      "variantId": "6103250888",
+      "title": "Ноутбук Xiaomi Redmi Book Pro 16\" (2026), 3200x2000 165Hz, Ultra X7 358H, 32 ГБ/1 ТБ, Windows 11 Home, русская клавиатура",
+      "url": "https://market.yandex.ru/card/x/6103250888?sku=6103250888",
+      "priceRub": null,
+      "discoveryPriceKind": "ordinary",
+      "discoveryConditionalRub": 165102,
+      "discoveryReferenceRub": 399999,
+      "discoveryProvider": "SZhukovWork/yandex-market-mcp",
+      "discoveryRegion": "Москва",
+      "seller": "Gray Devices",
+      "specs": {},
+      "status": "UNVERIFIED",
+      "reasons": [
+        "card_unavailable_or_challenged",
+        "region_not_confirmed",
+        "region_conflict",
+        "discovery_specs_conflict",
+        "missing_brand",
+        "missing_model",
+        "missing_year",
+        "missing_cpu",
+        "missing_ramGb",
+        "missing_ssdGb",
+        "live_card_not_confirmed",
+        "current_price_missing",
+        "unconditional_price_not_confirmed",
+        "availability_not_confirmed"
+      ],
+      "discoveredAt": "2026-10-01T06:32:42.623Z",
+      "imageUrl": "https://avatars.mds.yandex.net/get-mpic/20240442/2a0000019febc6b1f16e5322c96e6fa4da73/orig",
+      "imageSource": "discovery",
+      "requestedCity": "Воронеж",
+      "requestedCityId": "voronezh",
+      "discoveryPriceRub": 170208,
+      "risk": {
+        "flags": [
+          "not_verified"
+        ],
+        "score": 25
+      },
+      "landed": {
+        "item": null,
+        "shipping": null,
+        "duty": null,
+        "total": null,
+        "currency": "RUB",
+        "region": null
+      }
+    },
+    {
+      "marketplace": "yandex-market",
+      "sku": "4926159786",
+      "variantId": "4926159786",
+      "title": "Ноутбук Xiaomi Redmi Book Pro 16, 16″ IPS 3072×1920 165 Гц, Intel Core Ultra 7 255H, 32 ГБ LPDDR5X, SSD 1 ТБ, Intel Arc 140T, Windows 11 Pro + MS Office, серый, RU",
+      "url": "https://market.yandex.ru/card/x/4926159786?sku=4926159786",
+      "priceRub": null,
+      "discoveryPriceKind": "ordinary",
+      "discoveryConditionalRub": 138015,
+      "discoveryReferenceRub": 176496,
+      "discoveryProvider": "SZhukovWork/yandex-market-mcp",
+      "discoveryRegion": "Москва",
+      "specs": {},
+      "status": "UNVERIFIED",
+      "reasons": [
+        "card_unavailable_or_challenged",
+        "region_not_confirmed",
+        "region_conflict",
+        "discovery_specs_conflict",
+        "missing_brand",
+        "missing_model",
+        "missing_year",
+        "missing_cpu",
+        "missing_ramGb",
+        "missing_ssdGb",
+        "live_card_not_confirmed",
+        "seller_missing",
+        "current_price_missing",
+        "unconditional_price_not_confirmed",
+        "availability_not_confirmed"
+      ],
+      "discoveredAt": "2026-10-01T06:32:42.623Z",
+      "requestedCity": "Воронеж",
+      "requestedCityId": "voronezh",
+      "discoveryPriceRub": 142283,
+      "risk": {
+        "flags": [
+          "seller_missing",
+          "not_verified"
+        ],
+        "score": 50
+      },
+      "landed": {
+        "item": null,
+        "shipping": null,
+        "duty": null,
+        "total": null,
+        "currency": "RUB",
+        "region": null
+      }
+    }
+  ],
+  "sourceOutcomes": [
+    {
+      "marketplace": "yandex-market",
+      "status": "ok",
+      "stage": "native-discovery",
+      "detail": "ordinary/Pay/reference separated; city from page",
+      "offersReturned": 3,
+      "tools": [
+        {
+          "provider": "SZhukovWork/yandex-market-mcp",
+          "tool": "search_products",
+          "status": "ok",
+          "at": "2026-10-01T06:32:42.616Z",
+          "durationMs": 6783
+        },
+        {
+          "provider": "ru-marketplace-mcp",
+          "tool": "yandex_search",
+          "status": "ok",
+          "at": "2026-10-01T06:32:52.746Z",
+          "durationMs": 10120
+        },
+        {
+          "provider": "SZhukovWork/yandex-market-mcp",
+          "tool": "get_product",
+          "status": "blocked",
+          "at": "2026-10-01T06:32:53.433Z",
+          "durationMs": 679
+        }
+      ]
+    },
+    {
+      "marketplace": "ozon",
+      "status": "blocked",
+      "stage": "mcp-discovery",
+      "detail": "Tier-1 (curl_cffi) blocked AND Tier-2 (CDP) unreachable. Start Chrome (run scripts/start_chrome_cdp.ps1 (PowerShell)) and ensure the CDP port is open. Last error: CDP timeout after 20.0s",
+      "offersReturned": 0,
+      "tools": [
+        {
+          "provider": "ru-marketplace-mcp",
+          "tool": "compare_prices",
+          "status": "ok",
+          "at": "2026-10-01T06:33:47.478Z",
+          "durationMs": 51637
+        }
+      ]
+    },
+    {
+      "marketplace": "avito",
+      "status": "blocked",
+      "stage": "city-browser-discovery",
+      "detail": "Доступ ограничен: проблема с IP",
+      "discoveryUrl": "https://www.avito.ru/voronezh/noutbuki?q=Xiaomi%20RedmiBook%20Pro%2016%202026%20Ultra%205%20338H%2032GB%201024GB",
+      "offersReturned": 0,
+      "tools": []
+    },
+    {
+      "marketplace": "wildberries",
+      "status": "timeout",
+      "stage": "region-resolution",
+      "detail": "city_mapping_unconfirmed; no default Moscow fallback",
+      "offersReturned": 0,
+      "tools": [
+        {
+          "provider": "Wildberries public geo",
+          "tool": "get-geo-info",
+          "status": "timeout",
+          "at": "2026-10-01T06:34:01.418Z",
+          "durationMs": 12018
+        }
+      ]
+    }
+  ],
+  "complete": false,
+  "requestedCity": {
+    "id": "voronezh",
+    "name": "Воронеж",
+    "latitude": 51.6608,
+    "longitude": 39.2003
+  },
+  "region": null,
+  "acceptance": {
+    "discoveryAttempted": true,
+    "candidatesDiscovered": 3,
+    "cardsReopened": 0,
+    "verified": 0,
+    "outcome": "UNVERIFIED",
+    "limitation": "Read each offer's evidence and reasons."
+  }
+}

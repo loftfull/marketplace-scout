@@ -3,10 +3,12 @@ import fastifyStatic from "@fastify/static";
 import Fastify from "fastify";
 import { z } from "zod";
 import { imageHosts } from "../public/offer-view.js";
+import { cities, cityById } from "./cities.js";
 import type { Connector } from "./connectors.js";
 import { landed } from "./cost.js";
 import { freshness } from "./freshness.js";
 import { parseQuery } from "./parse.js";
+import { providerCatalog } from "./providers.js";
 import { rank } from "./rank.js";
 import { searchVerified } from "./service.js";
 import { HistoryStore } from "./store.js";
@@ -59,11 +61,18 @@ export async function buildApp(
     name: "Marketplace Scout",
     version: "0.3.0",
     searching,
-    sources: ["yandex-market", "ozon", "avito"],
+    sources: ["yandex-market", "ozon", "avito", "wildberries"],
     priceVerification: "live-card-required",
+  }));
+  app.get("/api/connectors", async () => ({
+    providers: providerCatalog,
+    cities,
+    defaultCity: "voronezh",
   }));
   app.get("/api/search", async (request, reply) => {
     const input = request.query as Record<string, unknown>;
+    const city = cityById(input.city);
+    if (!city) return reply.code(400).send({ error: "invalid_city" });
     if (
       input.q !== undefined &&
       (typeof input.q !== "string" || input.q.trim().length < 3 || input.q.length > 200)
@@ -77,7 +86,7 @@ export async function buildApp(
     searching = true;
     lastSearch = Date.now();
     try {
-      const result = await searchVerified(parsed.data, options.sources);
+      const result = await searchVerified(parsed.data, options.sources, city);
       await store.append(parsed.data, result.offers);
       return {
         profile: parsed.data,
@@ -89,6 +98,7 @@ export async function buildApp(
         })),
         sourceOutcomes: result.sourceOutcomes,
         complete: result.sourceOutcomes.every((outcome) => outcome.status === "ok"),
+        requestedCity: city,
         region: null,
       };
     } finally {

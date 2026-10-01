@@ -2,6 +2,7 @@ export const imageHosts = {
   "yandex-market": ["avatars.mds.yandex.net", "avatars.mds.yandex.ru"],
   ozon: ["ir.ozone.ru", "cdn1.ozone.ru"],
   avito: ["img.avito.st", "00.img.avito.st", "01.img.avito.st", "02.img.avito.st"],
+  wildberries: [],
 };
 export function safeImage(value, marketplace) {
   if (typeof value !== "string" || value.length > 2048) return null;
@@ -21,13 +22,23 @@ export function safeImage(value, marketplace) {
 export function statusNow(offer, now = Date.now()) {
   if (offer.evidence?.live === false) return "UNVERIFIED";
   if (offer.status !== "VERIFIED") return offer.status;
+  if (
+    !offer.requestedCity ||
+    offer.evidence?.region !== offer.requestedCity ||
+    (offer.native?.region && offer.native.region !== offer.requestedCity)
+  )
+    return "UNVERIFIED";
   const age = now - Date.parse(offer.verifiedAt || "");
   return !Number.isFinite(age) || age < 0 ? "UNVERIFIED" : age >= 900000 ? "STALE" : "VERIFIED";
 }
 export function priceFor(offer, basis) {
   const value =
     basis === "discovery"
-      ? offer.discoveryPriceRub
+      ? offer.discoveryPriceKind === "ordinary" &&
+        !offer.reasons?.includes("discovery_specs_conflict") &&
+        !offer.reasons?.includes("region_conflict")
+        ? offer.discoveryPriceRub
+        : null
       : statusNow(offer) === "VERIFIED" && offer.evidence?.priceKind === "ordinary"
         ? offer.priceRub
         : null;
@@ -53,6 +64,10 @@ export function filterOffers(offers, { min, max, basis, includeUnknown }) {
 }
 export function reasonSummary(offer) {
   const status = statusNow(offer);
+  if (offer.reasons?.includes("discovery_specs_conflict"))
+    return "Название найденного товара противоречит запросу. Его цена исключена из сравнения.";
+  if (offer.reasons?.includes("region_conflict"))
+    return "Площадка показала другой город. Цена для выбранного города не подтверждена.";
   if (status === "STALE") return "Проверка устарела. Повторите поиск для актуальной цены.";
   if (
     offer.reasons?.includes("card_unavailable_or_challenged") ||
@@ -65,4 +80,13 @@ export function reasonSummary(offer) {
   if (status === "MISMATCH") return "Товар или его характеристики не совпадают с запросом.";
   if (status === "VERIFIED") return "Цена и характеристики подтверждены при открытии карточки.";
   return "Данных карточки недостаточно для подтверждения цены и комплектации.";
+}
+// A city change invalidates even an earlier request for the same city (A → B → A).
+export function requestSelection() {
+  let generation = 0;
+  return {
+    change: () => ++generation,
+    capture: () => generation,
+    accepts: (token) => token === generation,
+  };
 }

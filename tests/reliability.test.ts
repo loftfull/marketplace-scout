@@ -18,6 +18,8 @@ import { assess } from "../src/verification.js";
 const profile = parseQuery("RedmiBook Pro 16 2026 Ultra 5 338H 32GB 1TB");
 // Synthetic fixtures only: these prices never enter the application/runtime history.
 const offer: Offer = {
+  requestedCityId: "voronezh",
+  requestedCity: "Воронеж",
   marketplace: "ozon",
   title: "RedmiBook Pro 16 2026 Ultra 5 338H 32GB 1TB",
   url: "https://www.ozon.ru/product/test-123456/",
@@ -31,6 +33,7 @@ const offer: Offer = {
 const observed = (): Offer => ({
   ...offer,
   evidence: {
+    region: "Воронеж",
     method: "browser-card",
     observedAt: new Date().toISOString(),
     requestedUrl: offer.url,
@@ -189,6 +192,8 @@ test("service isolates source failures and always rechecks verification", async 
     search: async () => ({
       offers: [offer],
       outcome: {
+        requestedCityId: "voronezh",
+        requestedCity: "Воронеж",
         marketplace: "ozon",
         status: "ok",
         stage: "discovery",

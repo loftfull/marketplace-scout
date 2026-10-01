@@ -50,6 +50,20 @@ form {
   gap: 10px;
   margin-top: 28px;
 }
+.city-field {
+  display: grid;
+  gap: 4px;
+  font-size: 12px;
+  min-width: 160px;
+}
+.city-field select {
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  background: white;
+  color: #141619;
+  font: inherit;
+}
 input {
   flex: 1;
   padding: 17px 18px;

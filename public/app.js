@@ -3,6 +3,7 @@ import {
   parseBounds,
   priceFor,
   reasonSummary,
+  requestSelection,
   safeImage,
   statusNow,
 } from "./offer-view.js";
@@ -41,11 +42,20 @@ function reasonText(reason) {
     verification_expired: "Срок проверки истёк",
     native_identity_unmatched: "Нативный коннектор вернул другой товар или вариант",
     native_card_conflict: "Данные коннектора и повторно открытой карточки расходятся",
+    region_not_confirmed: "Город на открытой карточке не подтверждён",
+    region_conflict: "Площадка показала другой город",
+    discovery_specs_conflict: "Название товара в поиске противоречит запросу",
   };
   return labels[reason] || reason;
 }
 const $ = (selector) => document.querySelector(selector);
-const names = { "yandex-market": "Яндекс Маркет", ozon: "Ozon", avito: "Avito" };
+const names = {
+  "yandex-market": "Яндекс Маркет",
+  ozon: "Ozon",
+  avito: "Avito",
+  wildberries: "Wildberries",
+};
+const selection = requestSelection();
 let currentOffers = [];
 let historyRows = [];
 let renderedOfferStatuses = "";
@@ -76,6 +86,7 @@ function safeLink(offer) {
       "yandex-market": ["market.yandex.ru"],
       ozon: ["ozon.ru", "www.ozon.ru"],
       avito: ["avito.ru", "www.avito.ru"],
+      wildberries: ["wildberries.ru", "www.wildberries.ru"],
     };
     return url.protocol === "https:" &&
       !url.username &&
@@ -148,14 +159,44 @@ function card(offer, seenAt) {
   );
   const discoveryPrice = priceFor(offer, "discovery");
   if (discoveryPrice !== null) {
-    price.append(element("div", "search-price", `${money(discoveryPrice)} в поиске`));
+    price.append(element("div", "search-price", `${money(discoveryPrice)} без карты в поиске`));
     price.append(element("div", "meta", `Не подтверждено · ${date(offer.discoveredAt)}`));
   }
+  if (offer.discoveryPriceRub != null && discoveryPrice === null)
+    price.append(
+      element(
+        "div",
+        "meta",
+        `Архив/поиск: ${money(offer.discoveryPriceRub)} · условия или соответствие не подтверждены; вне сравнения`,
+      ),
+    );
+  if (offer.discoveryConditionalRub != null)
+    price.append(
+      element(
+        "div",
+        "meta",
+        `С картой / спецусловием: ${money(offer.discoveryConditionalRub)} · не подтверждено`,
+      ),
+    );
+  if (offer.discoveryReferenceRub != null)
+    price.append(
+      element(
+        "div",
+        "meta",
+        `Зачёркнутая цена: ${money(offer.discoveryReferenceRub)} · не цена покупки`,
+      ),
+    );
+  price.append(element("div", "meta", `Выбран: ${offer.requestedCity || "не был задан"}`));
+  price.append(
+    element("div", "meta", `Город в поиске: ${offer.discoveryRegion || "не подтверждён"}`),
+  );
   price.append(
     element("div", "meta", `Доставка: ${money(cost.shipping)} · Пошлина: ${money(cost.duty)}`),
   );
   price.append(element("div", "meta", `Итого: ${money(cost.total)}`));
-  price.append(element("div", "meta", `Регион: ${cost.region || "не задан"}`));
+  price.append(
+    element("div", "meta", `Город в карточке: ${offer.evidence?.region || "не подтверждён"}`),
+  );
   if (offer.evidence?.priceKind !== "ordinary")
     price.append(element("div", "meta", "Условия цены не подтверждены"));
   const actions = element("div");
@@ -310,6 +351,8 @@ function renderHistory() {
 }
 $("#f").addEventListener("submit", async (event) => {
   event.preventDefault();
+  const city = $("#city").value;
+  const token = selection.capture();
   $("#search").disabled = true;
   $("#price-filters").disabled = true;
   currentOffers = [];
@@ -320,10 +363,14 @@ $("#f").addEventListener("submit", async (event) => {
   $("#sources").replaceChildren();
   $("#count").textContent = "";
   try {
-    const response = await fetch(`/api/search?q=${encodeURIComponent($("#q").value)}`, {
-      signal: AbortSignal.timeout(600000),
-    });
+    const response = await fetch(
+      `/api/search?q=${encodeURIComponent($("#q").value)}&city=${encodeURIComponent(city)}`,
+      {
+        signal: AbortSignal.timeout(600000),
+      },
+    );
     const data = await response.json();
+    if (!selection.accepts(token)) return;
     if (!response.ok)
       throw new Error(
         response.status === 429
@@ -340,6 +387,14 @@ $("#f").addEventListener("submit", async (event) => {
           `${names[source.marketplace] || source.marketplace}: ${source.status}`,
         ),
       );
+      if (source.stage === "region-resolution")
+        el.append(
+          element(
+            "p",
+            "meta",
+            "Не удалось подтвердить регион Wildberries. Московские цены не подставляются.",
+          ),
+        );
       el.append(
         element(
           "div",
@@ -378,6 +433,7 @@ $("#f").addEventListener("submit", async (event) => {
     renderOffers();
     await history();
   } catch (error) {
+    if (!selection.accepts(token)) return;
     $("#results").replaceChildren(
       element(
         "div",
@@ -393,6 +449,46 @@ $("#f").addEventListener("submit", async (event) => {
     $("#results").removeAttribute("aria-busy");
   }
 });
+$("#city").addEventListener("change", () => {
+  selection.change();
+  currentOffers = [];
+  $("#sources").replaceChildren();
+  $("#count").textContent = "";
+  $("#results").replaceChildren(
+    element(
+      "div",
+      "empty",
+      "Город изменён. Запустите новую проверку; предыдущие результаты убраны.",
+    ),
+  );
+});
+fetch("/api/connectors")
+  .then(async (response) => {
+    if (!response.ok) throw Error();
+    const data = await response.json();
+    const box = $("#connector-catalog");
+    box.replaceChildren();
+    for (const provider of data.providers || []) {
+      const section = element("div", "source");
+      const link = element("a", "", provider.name);
+      const url = new URL(provider.repository);
+      if (url.protocol !== "https:" || url.hostname !== "github.com") continue;
+      link.href = url.href;
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      section.append(
+        link,
+        element("p", "meta", `${provider.license} · версия кода ${provider.pin}`),
+        element("p", "", provider.role),
+        element("p", "meta", provider.limitations),
+      );
+      box.append(section);
+    }
+  })
+  .catch(() => {
+    $("#connector-catalog").textContent =
+      "Сведения о коннекторах недоступны. Проверьте подключение к приложению.";
+  });
 $("#refresh-history").addEventListener("click", history);
 $("#price-filters").addEventListener("input", renderOffers);
 $("#reset-filter").addEventListener("click", () => {

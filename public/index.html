@@ -3,13 +3,14 @@
 <body><main>
 <header><div><b>Marketplace Scout</b><span>LIVE OFFER INTELLIGENCE</span></div><span id="health" role="status">Проверка API…</span></header>
 <section class="hero"><h1>Проверенные цены.<br>Без устаревших ссылок.</h1><p>Поиск → точный SKU → повторное открытие карточки → только затем VERIFIED.</p>
-<form id="f"><label class="sr-only" for="q">Модель и характеристики</label><input id="q" maxlength="200" required value="RedmiBook Pro 16 2026 Ultra 5 338H 32GB 1TB"><button id="search" type="submit">Проверить рынок</button></form>
-<p class="hint">Проверка трёх площадок может занять несколько минут. Цена требует повторной проверки через 15 минут. Регион доставки не задан.</p></section>
+<form id="f"><label class="sr-only" for="q">Модель и характеристики</label><input id="q" maxlength="200" required value="RedmiBook Pro 16 2026 Ultra 5 338H 32GB 1TB"><label class="city-field">Город<select id="city" name="city"><option value="voronezh">Воронеж</option><option value="moskva">Москва</option><option value="sankt-peterburg">Санкт-Петербург</option></select></label><button id="search" type="submit">Проверить рынок</button></form>
+<p id="city-note" class="hint">По умолчанию — Воронеж. Город должен быть подтверждён самой площадкой; выбор здесь не меняет адрес в вашем аккаунте. Проверка четырёх площадок может занять несколько минут.</p></section>
+<section aria-labelledby="connectors-heading"><details class="source"><summary id="connectors-heading">Источники и сторонние репозитории</summary><div id="connector-catalog">Загрузка сведений о коннекторах…</div></details></section>
 <section aria-labelledby="offers-heading"><div class="bar"><h2 id="offers-heading">Предложения</h2><span id="count" role="status"></span></div>
 <fieldset id="price-filters"><legend>Фильтр по цене, ₽</legend><div class="filter-row">
 <label>От<input id="price-min" type="number" min="0" step="any" inputmode="decimal" placeholder="0" aria-describedby="filter-error"></label>
 <label>До<input id="price-max" type="number" min="0" step="any" inputmode="decimal" placeholder="Без ограничения" aria-describedby="filter-error"></label>
-<label>Какая цена<select id="price-basis"><option value="current">Подтверждённая цена</option><option value="discovery">Цена из поиска (не подтверждена)</option></select></label>
+<label>Какая цена<select id="price-basis"><option value="current">Подтверждённая цена</option><option value="discovery">Без карты из поиска (не подтверждена)</option></select></label>
 <button id="reset-filter" type="button">Сбросить</button></div>
 <label class="unknown-price"><input id="include-unknown" type="checkbox">Включать товары без выбранной цены при фильтрации</label>
 <p id="filter-note" class="hint">Фильтр применяется к загруженным предложениям. Без границ цены показаны все товары.</p><p id="filter-error" role="alert"></p></fieldset>

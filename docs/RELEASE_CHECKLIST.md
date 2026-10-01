@@ -12,4 +12,4 @@
 
 Engineering implementation GO; positive live verification and public release HOLD. PR stays unmerged. Follow docs/RUNBOOK.md for restart/rollback. Product identity or provider changes require a new approved plan.
 
-Native connector slice2026-10-01: local40 Node/3 Python tests and dependency audits pass; actual tool calls and negative live acceptance saved. Final independent review remains pending (critic usage limit), as does positive target verification. Prior checked critic item applies to the earlier slice only. Do not promote this PR to production based on installed collectors or tools/list success.
+City/provider continuation2026-10-01: independent critic returned GO after closing variant/destination/error-path findings and independently passing9 city tests. Local checks and real negative acceptance are recorded in docs/evidence/2026-10-01-city-connectors.md. Installed tools and API health do not prove live prices. Positive target verification and successful WB geo/card extraction remain HOLD. The previous critic usage-limit blocker is superseded for the reviewed city/provider slice.
