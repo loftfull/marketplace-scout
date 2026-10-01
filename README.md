@@ -9,6 +9,7 @@ Requires Node 24 (22+ supported), Git, Python for the installer, and installed G
 ```powershell
 npm ci
 npm run runtime:setup
+npm run runtime:ozon
 npm run build
 npm start
 ```
@@ -39,3 +40,11 @@ Shipping/duty/region remain unknown until supported by evidence. An unknown comp
 Live checks reached Market discovery and canonical-card HTTP responses; marketplace access restrictions prevented positive price/seller verification. Ozon and Avito also blocked this environment. Passing local tests does not prove positive extraction on these live sites. See `docs/ACCEPTANCE.md` and the committed acceptance evidence. No production release or PR merge is claimed. Headless Chrome may be rejected; the app does not bypass challenges or change IPs.
 
 See `docs/ARCHITECTURE.md`, `docs/TEST_PLAN.md`, `docs/RUNBOOK.md`, `docs/RELEASE_CHECKLIST.md` and `docs/SECURITY.md`.
+
+## Native collectors
+
+ru-marketplace-mcp remains the primary discovery provider. Candidates call native `yandex_card`, `avito_card` and, when a trustworthy seller ID exists, `avito_seller`. Ozon candidates call the separately pinned SZhukovWork/ozon-mcp `get_product`. Its `search_products` is a fallback only for empty/unavailable discovery, never for a blocked source. The specialized runtime uses a separate hash-locked Python environment and a lifecycle adapter attached to Scout-owned Chrome; it cannot launch its upstream stealth browser or import saved accounts.
+
+Native observations carry provider/tool/time, exact-identity checks, separately named ordinary/conditional/reference prices and seller facts. They do not fill independent browser evidence or grant VERIFIED. Contradictory native facts veto verification. Expand “Данные коннектора” or “Вызовы коннекторов” for actual execution diagnostics. Some tools remain uncalled when discovery or seller identification fails; installation does not imply successful live extraction.
+
+With Scout stopped, `npm run probe:ozon` checks the actual specialized MCP tool contract, makes a separate live search attempt and verifies context cleanup. Evidence and limitations: `docs/evidence/2026-10-01-native-connectors.md`.

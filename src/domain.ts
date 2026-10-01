@@ -21,6 +21,7 @@ export type Evidence = {
   available: boolean | null;
 };
 export type Offer = {
+  native?: NativeEvidence;
   marketplace: string;
   title: string;
   url: string;
@@ -40,6 +41,30 @@ export type Offer = {
   discoveryPriceRub?: number | null;
   imageUrl?: string;
   imageSource?: "discovery" | "card";
+};
+export type NativeEvidence = {
+  provider: string;
+  tool: string;
+  status: "ok" | "mismatch" | "invalid" | "blocked" | "timeout" | "error";
+  observedAt: string;
+  sku?: string;
+  variantId?: string;
+  ordinaryRub?: number;
+  conditionalRub?: number;
+  referenceRub?: number;
+  conditionalLabel?: string;
+  seller?: string;
+  sellerId?: string;
+  sellerRating?: number;
+  sellerReviews?: number;
+  sellerCheck?: string;
+  productRating?: number;
+  productRatingScope?: string;
+  available?: boolean;
+  imageUrl?: string;
+  region?: string;
+  specs?: Partial<ProductProfile>;
+  specReasons?: string[];
 };
 const norm = (v: unknown) =>
   String(v ?? "")

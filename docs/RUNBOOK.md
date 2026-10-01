@@ -1,6 +1,6 @@
 # Local runbook
 
-1. Enter D:\\Projects\\marketplace-scout. npm ci; npm run runtime:setup; npm run build; npm start.
+1. Enter D:\\Projects\\marketplace-scout. npm ci; npm run runtime:setup; npm run runtime:ozon; npm run build; npm start.
 2. Open http://127.0.0.1:8787. /health proves API readiness only. Search proves runtime startup and source readiness; every source has an outcome.
 3. npm run acceptance writes work/live-acceptance.json. Save this before changing runtime versions. No web-search prices count as confirmation.
 4. Runtime diagnostics: .runtime/logs/mcp.log plus server stdout. HTTP403, CAPTCHA/IP-firewall => UNVERIFIED. Do not auto-retry challenges, change IP, import personal sessions or invent a price.
@@ -12,3 +12,5 @@ Configuration is environment-based (PORT, SCOUT_DB, optional SCOUT_CHROME_PATH/R
 Monitoring: watch API /health, per-source errors, verification freshness, log errors, history write failures and disk space. Alerting/hosted deployment requires a separately approved service setup. No recurring task is installed.
 
 Rollback: stop owned processes, preserve history/profile, git revert the continuation commit(s), npm ci for the reverted lock. Restore a history backup only by explicit operator choice. For forward recovery, rerun pinned runtime setup and its security overlay, checks and acceptance; successful installation alone does not prove marketplace access.
+
+Specialized runtime: `.runtime/ozon-mcp` is separate from `.runtime/ru-marketplace-mcp` (whose own ozon-mcp executable is a different provider). Do not substitute one executable for the other. `npm run runtime:ozon` refuses a dirty source checkout. The adapter uses scripts/ozon-cdp.py and the dedicated loopback browser; no OZON_PROXY/OZON_LOCATION/account settings are imported. Source errors are shown as diagnostic status, never zero prices. For local dependency auditing: `uv tool run pip-audit -r scripts/ozon-runtime.txt --no-deps --disable-pip`; use the bundled `.runtime/uv-bootstrap/bin/uv.exe` if uv is not on PATH.

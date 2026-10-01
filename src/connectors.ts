@@ -1,5 +1,8 @@
 import { z } from "zod";
-import { McpClient } from "./adapters/http-mcp.js";
+import type { ToolCall } from "./adapters/http-mcp.js";
+import { McpClient, toolFailure } from "./adapters/http-mcp.js";
+import { attachNative, nativeCard, normalizeOzonSearch } from "./adapters/native-cards.js";
+import { callOzon } from "./adapters/ozon-runtime.js";
 import { validateOzon } from "./adapters/ozon-validator.js";
 import { browserDiscovery, browserRuntime, readCard } from "./browser.js";
 import { match, type Offer, type ProductProfile } from "./domain.js";
@@ -13,6 +16,7 @@ export type SourceOutcome = {
   detail: string;
   offersReturned: number;
   discoveryUrl?: string;
+  tools?: ToolCall[];
 };
 export type Discovery = { offers: Offer[]; outcome: SourceOutcome };
 export interface Connector {
@@ -107,12 +111,12 @@ export class MarketplaceConnector implements Connector {
         this.source,
         profile,
       );
-    } catch {
+    } catch (error) {
       result = {
         offers: [],
         outcome: {
           marketplace: this.name,
-          status: "error",
+          status: toolFailure(error),
           stage: "mcp-discovery",
           detail: "mcp_unavailable_or_invalid_response; see local runtime log",
           offersReturned: 0,
@@ -122,6 +126,34 @@ export class MarketplaceConnector implements Connector {
     if (result.offers.length && this.name === "yandex-market")
       result.offers = await enrichImages(result.offers, queryFor(profile));
     if (result.offers.length || result.outcome.status === "blocked") return result;
+    if (this.name === "ozon") {
+      try {
+        const offers = normalizeOzonSearch(
+          await callOzon("search_products", { query: queryFor(profile), limit: 20 }),
+          profile,
+        );
+        return {
+          offers,
+          outcome: {
+            marketplace: this.name,
+            status: "ok",
+            stage: "ozon-native-discovery",
+            detail: "SZhukovWork/ozon-mcp search_products; unconfirmed candidates",
+            offersReturned: offers.length,
+          },
+        };
+      } catch (error) {
+        return {
+          offers: [],
+          outcome: {
+            ...result.outcome,
+            status: toolFailure(error),
+            stage: "ozon-native-discovery",
+            detail: "specialized_search_failed; see tool diagnostics",
+          },
+        };
+      }
+    }
     try {
       const browser = await browserDiscovery(this.name, profile);
       return {
@@ -141,7 +173,22 @@ export class MarketplaceConnector implements Connector {
     }
   }
   async verify(offer: Offer, _profile: ProductProfile) {
-    return this.name === "ozon" ? validateOzon(offer) : readCard(offer);
+    if (this.name === "ozon") return validateOzon(offer);
+    const native = await nativeCard(offer);
+    try {
+      return attachNative(await readCard(offer), native);
+    } catch {
+      return attachNative(
+        {
+          ...offer,
+          priceRub: null,
+          specs: {},
+          reasons: ["card_reopen_failed"],
+          evidence: undefined,
+        },
+        native,
+      );
+    }
   }
 }
 export const connectors: Connector[] = [

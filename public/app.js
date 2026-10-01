@@ -39,6 +39,8 @@ function reasonText(reason) {
     price_not_visible_on_card: "Цена отсутствует в выбранной карточке",
     seller_not_visible_on_card: "Продавец отсутствует в выбранной карточке",
     verification_expired: "Срок проверки истёк",
+    native_identity_unmatched: "Нативный коннектор вернул другой товар или вариант",
+    native_card_conflict: "Данные коннектора и повторно открытой карточки расходятся",
   };
   return labels[reason] || reason;
 }
@@ -180,6 +182,58 @@ function card(offer, seenAt) {
     details.append(list);
     verification.append(details);
   }
+  if (offer.native) {
+    const native = offer.native;
+    const details = element("details", "reasons");
+    details.append(element("summary", "", "Данные коннектора"));
+    const labels = {
+      ok: "данные получены",
+      blocked: "доступ ограничен",
+      invalid: "не удалось связать с выбранным товаром",
+      mismatch: "другой товар или вариант",
+      timeout: "время ожидания истекло",
+      error: "ошибка получения",
+    };
+    details.append(
+      element(
+        "p",
+        "meta",
+        `${native.provider} · ${native.tool} · ${labels[native.status] || native.status} · ${date(native.observedAt)}`,
+      ),
+    );
+    if (native.status === "ok") {
+      details.append(
+        element("p", "meta", "Наблюдение коннектора; само по себе не подтверждает текущую цену."),
+      );
+      details.append(
+        element(
+          "p",
+          "meta",
+          `Без специальных условий: ${money(native.ordinaryRub)} · ${native.conditionalLabel || "С условием"}: ${money(native.conditionalRub)} · До скидки: ${money(native.referenceRub)}`,
+        ),
+      );
+      details.append(
+        element(
+          "p",
+          "meta",
+          `Продавец: ${native.seller || "неизвестно"} · Рейтинг продавца: ${native.sellerRating ?? "неизвестно"} · Отзывы продавца: ${native.sellerReviews ?? "неизвестно"}`,
+        ),
+      );
+      if (native.region)
+        details.append(
+          element("p", "meta", `Регион площадки: ${native.region}; адрес доставки не выбран`),
+        );
+      if (native.productRating !== undefined)
+        details.append(
+          element(
+            "p",
+            "meta",
+            `Рейтинг товара: ${native.productRating} · ${native.productRatingScope}`,
+          ),
+        );
+    }
+    verification.append(details);
+  }
   article.append(verification);
   return article;
 }
@@ -297,6 +351,28 @@ $("#f").addEventListener("submit", async (event) => {
               : "Источник не дал подтверждённых данных. Подробности сохранены в журнале.",
         ),
       );
+      if (source.tools?.length) {
+        const diagnostics = element("details", "reasons");
+        diagnostics.append(element("summary", "", "Вызовы коннекторов"));
+        const list = element("ul");
+        for (const call of source.tools)
+          list.append(
+            element(
+              "li",
+              "meta",
+              `${call.provider} · ${call.tool}: ${call.status === "ok" ? "ответ получен" : call.status} (${Math.round(call.durationMs / 1000)} с)`,
+            ),
+          );
+        diagnostics.append(list);
+        diagnostics.append(
+          element(
+            "p",
+            "meta",
+            "Получение ответа не означает подтверждение карточки. Инструменты карточки и продавца вызываются только для найденного товара.",
+          ),
+        );
+        el.append(diagnostics);
+      }
       $("#sources").append(el);
     }
     renderOffers();

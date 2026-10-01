@@ -13,6 +13,8 @@
     "build": "tsc -p tsconfig.build.json",
     "acceptance": "node scripts/acceptance.mjs",
     "runtime:setup": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/runtime-setup.ps1",
+    "runtime:ozon": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/ozon-runtime-setup.ps1",
+    "probe:ozon": "node --import tsx scripts/ozon-probe.mjs",
     "test:browser": "node --import tsx scripts/browser-security.mjs"
   },
   "dependencies": {

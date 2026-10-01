@@ -1,3 +1,4 @@
+import { toolCalls } from "./adapters/http-mcp.js";
 import { type Connector, connectors, type Discovery, type SourceOutcome } from "./connectors.js";
 import type { Offer, ProductProfile } from "./domain.js";
 import { assess } from "./verification.js";
@@ -6,6 +7,7 @@ export async function searchVerified(profile: ProductProfile, sources: Connector
     sourceOutcomes: SourceOutcome[] = [];
   // One source/card at a time bounds browser load and avoids shared-profile races.
   for (const connector of sources) {
+    toolCalls.length = 0;
     let discovery: Discovery;
     try {
       discovery = await connector.search(profile);
@@ -35,6 +37,7 @@ export async function searchVerified(profile: ProductProfile, sources: Connector
         });
       }
     }
+    discovery.outcome.tools = [...toolCalls];
   }
   return { offers, sourceOutcomes };
 }

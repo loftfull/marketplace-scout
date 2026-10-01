@@ -4,10 +4,33 @@ import { resolve } from "node:path";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
 import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
+export type ToolCall = {
+  provider: string;
+  tool: string;
+  status: string;
+  at: string;
+  durationMs: number;
+};
+export const toolCalls: ToolCall[] = [];
+export function toolFailure(error: unknown): string {
+  const message = String(error);
+  if (/scout_source_blocked|\b403\b|\b429\b|blocked|challenge|TransportDown/i.test(message))
+    return "blocked";
+  if (/timeout|timed out|abort/i.test(message)) return "timeout";
+  return "error";
+}
 export class McpClient {
   private client?: Client;
   private connection?: Promise<Client>;
-  constructor(private executable?: { command: string; args: string[]; cwd: string }) {}
+  constructor(
+    private executable?: {
+      command: string;
+      args: string[];
+      cwd: string;
+      env?: Record<string, string>;
+      provider?: string;
+    },
+  ) {}
   async connect(signal?: AbortSignal): Promise<Client> {
     signal?.throwIfAborted();
     if (this.client) return this.client;
@@ -70,6 +93,7 @@ export class McpClient {
         CHROME_CHALLENGE_HANDOFF_S: "0",
         COMPARE_SOURCE_TIMEOUT: "45",
         PYTHONIOENCODING: "utf-8",
+        ...this.executable?.env,
       });
       const transport = new StdioClientTransport({
         command: this.executable?.command ?? command,
@@ -99,6 +123,30 @@ export class McpClient {
     timeoutMs = 65000,
     signal?: AbortSignal,
   ): Promise<unknown> {
+    const started = Date.now();
+    let status = "ok";
+    try {
+      return await this.execute(name, args, timeoutMs, signal);
+    } catch (error) {
+      status = toolFailure(error);
+      throw error;
+    } finally {
+      toolCalls.push({
+        provider: this.executable?.provider ?? "ru-marketplace-mcp",
+        tool: name,
+        status,
+        at: new Date().toISOString(),
+        durationMs: Date.now() - started,
+      });
+      if (toolCalls.length > 200) toolCalls.splice(0, toolCalls.length - 200);
+    }
+  }
+  private async execute(
+    name: string,
+    args: Record<string, unknown>,
+    timeoutMs: number,
+    signal?: AbortSignal,
+  ): Promise<unknown> {
     const client = await this.connect(signal);
     let result: Awaited<ReturnType<Client["callTool"]>>;
     try {
@@ -115,7 +163,10 @@ export class McpClient {
       }
       throw error;
     }
-    if (result.isError) throw new Error("mcp_tool_failed");
+    if (result.isError) {
+      const raw = JSON.stringify(result.content).slice(0, 20000);
+      throw new Error(`mcp_tool_${toolFailure(raw)}`);
+    }
     if (result.structuredContent) return result.structuredContent;
     const blocks = result.content as Array<{ type: string; text?: string }>;
     const text = blocks?.find((block) => block.type === "text")?.text;

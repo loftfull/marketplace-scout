@@ -1,3 +1,4 @@
+import { avitoMcp } from "./adapters/native-cards.js";
 import { buildApp } from "./app.js";
 import { browserRuntime } from "./browser.js";
 import { mcp } from "./connectors.js";
@@ -7,6 +8,7 @@ const app = await buildApp();
 app.addHook("onClose", async () => {
   await mcp.close();
   await imageMcp.close();
+  await avitoMcp.close();
   await browserRuntime.close();
 });
 for (const signal of ["SIGINT", "SIGTERM"] as const)

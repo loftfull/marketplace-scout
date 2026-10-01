@@ -24,6 +24,13 @@ try {
   const other = await browser.contexts()[0].newPage();
   await other.goto(`http://127.0.0.1:${trapPort}/popup`, { timeout: 10000 }).catch(() => undefined);
   assert.equal(privateRequests, 0, "unguarded page reached private service");
+  const isolatedContext = await browser.newContext();
+  const isolatedPage = await isolatedContext.newPage();
+  await isolatedPage
+    .goto(`http://127.0.0.1:${trapPort}/isolated`, { timeout: 10000 })
+    .catch(() => undefined);
+  assert.equal(privateRequests, 0, "isolated provider context bypassed proxy");
+  await isolatedContext.close();
   await page.setContent(
     '<h1>Fixture product</h1><div data-widget="webPrice">100 ₽</div><div data-widget="webPrice">200 ₽</div>',
   );

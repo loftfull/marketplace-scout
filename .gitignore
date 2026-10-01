@@ -8,3 +8,4 @@ work/
 dist/
 output/
 *.log
+__pycache__/
