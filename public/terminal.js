@@ -1,3 +1,4 @@
+import { comparisonModel, comparisonTable } from "./comparison-view.js";
 import { requestSelection } from "./offer-view.js";
 
 const $ = (selector) => document.querySelector(selector);
@@ -222,7 +223,19 @@ $("#research-form").addEventListener("submit", async (event) => {
               : "Источник не дал пригодного ответа. Проверьте доступность и выбранные параметры.",
         ),
       );
-    else box.append(node("div", "alert alert-info", result.note), tree(result.data));
+    else {
+      box.append(node("div", "alert alert-info", result.note));
+      const comparison = comparisonModel(result);
+      if (comparison) {
+        box.append(comparisonTable(comparison));
+        const raw = node("details");
+        raw.append(
+          node("summary", "mb-2", "Все поля и предупреждения источника"),
+          tree(result.data),
+        );
+        box.append(raw);
+      } else box.append(tree(result.data));
+    }
   } catch (error) {
     if (state.accepts(token))
       box.replaceChildren(

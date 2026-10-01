@@ -3,6 +3,7 @@
 import { readFile } from "node:fs/promises";
 import { createServer } from "node:http";
 import { resolve } from "node:path";
+import { comparisonResponse } from "./comparison-response.mjs";
 
 let observed;
 createServer(async (req, res) => {
@@ -42,7 +43,25 @@ createServer(async (req, res) => {
   }
   if (req.url === "/api/research" || req.url === "/api/connectors") {
     res.setHeader("Content-Type", "application/json");
-    res.end(JSON.stringify({ operations: [], providers: [] }));
+    res.end(
+      JSON.stringify(
+        req.method === "POST"
+          ? comparisonResponse
+          : {
+              operations: [
+                {
+                  id: "yandex-market.compare_products",
+                  source: "yandex-market",
+                  tool: "compare_products",
+                  label: "Сравнение карточек (тест)",
+                  fields: [{ key: "products", label: "Артикулы (тест)", kind: "ids" }],
+                  note: "Изолированный тест",
+                },
+              ],
+              providers: [],
+            },
+      ),
+    );
     return;
   }
   const files = {
@@ -51,6 +70,7 @@ createServer(async (req, res) => {
     "/app.css": "app.css",
     "/offer-view.js": "offer-view.js",
     "/terminal.js": "terminal.js",
+    "/comparison-view.js": "comparison-view.js",
     "/vendor/tabler/tabler.min.css": "vendor/tabler/tabler.min.css",
     "/vendor/tabler/tabler.min.js": "vendor/tabler/tabler.min.js",
   };

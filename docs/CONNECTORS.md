@@ -28,7 +28,7 @@ Source is installed under ignored runtime folders, not vendored into the applica
 | [ilyautov/yandex-market-mcp-ru](https://github.com/ilyautov/yandex-market-mcp-ru), [elchin92/avito-mcp](https://github.com/elchin92/avito-mcp), [MASTER116/ozon-mcp-server](https://github.com/MASTER116/ozon-mcp-server), [Sellematics/wildberries-mcp](https://github.com/Sellematics/wildberries-mcp) | Seller/account API tools surfaced in current search | Wrong product boundary: seller credentials/management rather than anonymous retail price verification. Not installed |
 | neuratechcompany-ops/kettu-marketplace-mcp | Search-index listing exists; current GitHub API returned404 | Not an installable verified source; do not rely on cached listing |
 
-All reused code runs locally/server-side, with bounded calls and escaped UI output. No UI themes/assets are imported; native select preserves accessibility and existing visual design. No extra paid provider, auth, migration or database. Supply-chain checks cover pinned sources, locks and advisories; they cannot guarantee unknown-vulnerability absence. Rollback reverts this slice and leaves old history readable and new runtime unused.
+All reused code runs locally/server-side, with bounded calls and escaped UI output. This connector audit originally preceded the owner-approved Tabler import. Current UI authority and imported MIT assets are documented in REUSE.md; native selects and accessible labels remain. No extra paid provider, auth, migration or database. Supply-chain checks cover pinned sources, locks and advisories; they cannot guarantee unknown-vulnerability absence. Rollback reverts this slice and leaves old history readable and new runtime unused.
 
 ## City and price contract
 
