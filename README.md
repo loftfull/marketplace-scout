@@ -1,5 +1,7 @@
 # Marketplace Scout
 
+Standalone ready application: [changedetection.io pilot](integrations/changedetection/README.md) at http://127.0.0.1:8791/ uses the original UI, processors and history with a bounded local launcher. Real control snapshot and restart persistence verified; target Market card returned302 and remains UNVERIFIED. This pilot is separate from Scout search routing.
+
 Local marketplace price verification for Windows. Continues PR #1 and `feat/marketplace-scout-mvp`; canonical folder: `D:\\Projects\\marketplace-scout`.
 
 ## Run

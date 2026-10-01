@@ -1,0 +1,27 @@
+{
+  "provider": "changedetection.io",
+  "version": "0.60.8",
+  "repository": "https://github.com/dgtlmoon/changedetection.io",
+  "revision": "09881f8b26aa01a2be66c5f63daf54a79a42b6bd",
+  "license": "Apache-2.0",
+  "python": "3.12.14",
+  "launch": "runner.py",
+  "interface": "http://127.0.0.1:8791",
+  "upstreamModified": false,
+  "sourceRequirementsSha256": "c7366285bb810d4f9b7346fa27532acb5e15d5e8ff8ea125ad3ecd57b8ddf5d6",
+  "dependencyLockSha256": "e5b82bfb2da44662a0ee57666e209748ecdda813ce9de44341ad0fe7173a22d9",
+  "dependencyOverride": {
+    "replaces": "44.0.0",
+    "cryptography": "50.0.0"
+  },
+  "boundary": [
+    "exact public URLs only",
+    "HTTP fetcher only",
+    "TLS public-IP pinning",
+    "single-use permits",
+    "redirects terminal",
+    "API key and Host/Origin guard",
+    "no automatic checks or notifications"
+  ],
+  "verification": "UNVERIFIED-only observations; no Scout history imports"
+}

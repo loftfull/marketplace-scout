@@ -1,5 +1,7 @@
 # Architecture
 
+External application pilot (2026-10-02): changedetection.io0.60.8 runs unchanged from pinned source in `.runtime/external/changedetection/upstream`, with a separate Python environment and `.data/external/changedetection`. `integrations/changedetection` provides lifecycle/HTTP policy only; upstream owns UI/REST/processing/snapshots/history. Local CLI calls its API with a server-side key. No import into Scout price history or search routing yet. HTTP8791, one worker, paused watches, one-use exact-URL permits, pinned TLS, terminal redirects/challenges, shared Market cooldown. See its README and immutable manifest; snapshot != VERIFIED.
+
 ```mermaid
 flowchart LR
   UI[Adapted Tabler dashboard] --> API[Fastify on loopback]

@@ -1,5 +1,7 @@
 # Local runbook
 
+Separate changedetection pilot: see [lifecycle/backup/rollback instructions](../integrations/changedetection/README.md). Use its cooperative `manage.py stop`; it does not stop Scout8787 or Chrome9337. Data and keys stay under `.data/external/changedetection`. No autostart or scheduled checking. Preserve terminal-state/cooldowns after target302; do not clear them to obtain another response. The runtime is optional; unavailable pilot must not affect existing search.
+
 Terminal assets: npm ci then npm run build (or npm start) copies the pinned Tabler core into ignored public/vendor; if running dist/server.js directly, run build first. Never serve templates from the reference clone. Research operations are selected in the UI and share the search busy guard; wait for completion before another operation. Source block means stop, not reset state. For review/parser output on Windows, child processes explicitly set PYTHONUTF8=1. Native review/seller results remain observations and are not part of the price-history backup.
 
 Ready-terminal rollback: stop only owned Scout processes, retain .data and .runtime, revert the terminal commit, npm ci and npm run build, restart. No data migration. Known limitation: selected-city WB geo resolution and readable target cards must be proven before declaring live price acceptance. Do not replace missing results with default city or zero price.

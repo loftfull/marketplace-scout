@@ -1,5 +1,14 @@
 # Release checklist
 
+## External application pilot, 2026-10-02
+
+- [x] Original changedetection.io0.60.8 installed, pinned source/license and hash-locked isolated dependencies; cryptography security override.
+- [x] Real REST watch/history/snapshot,10 boundary tests, auth/origin and forbidden-route checks; cooperative stop/backup/restart with unchanged snapshot/request count/Scout history.
+- [x] Target Market302 preserved as UNVERIFIED, no fabricated price or region; no automatic requests.
+- [ ] Rendered UI, keyboard/mobile/theme QA (browser attachment unavailable); HTTP HTML endpoint works.
+- [ ] Ten-save growth benchmark and backup restoration drill; basic backup/restart persistence already verified.
+- [ ] Positive target verification; further providers and Scout routing remain later approved-plan phases.
+
 ## Ready terminal continuation, 2026-10-01
 
 - [x] MIT Tabler1.6.1 pinned, template/component attribution and local vendor pipeline; source and capability provenance documented in REUSE.md.
