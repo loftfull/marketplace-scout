@@ -1,0 +1,490 @@
+{
+  "checkedAt": "2026-10-01T06:23:26.837Z",
+  "kind": "ACTUAL_MCP_CONTRACTS_NO_PRICE_REQUEST",
+  "contracts": [
+    {
+      "provider": "SZhukovWork/yandex-market-mcp",
+      "tools": [
+        {
+          "name": "search_products",
+          "input": {
+            "type": "object",
+            "properties": {
+              "query": {
+                "description": "Search phrase as typed on the site (Russian works best)",
+                "minLength": 1,
+                "title": "Query",
+                "type": "string"
+              },
+              "page": {
+                "default": 1,
+                "description": "Result page: page 1 has 8 tiles, every later page 16",
+                "maximum": 100,
+                "minimum": 1,
+                "title": "Page",
+                "type": "integer"
+              },
+              "sort": {
+                "default": "popular",
+                "description": "The site's orders. Price sorting uses the Pay-card price. 'popular' page 1 is almost all ads: for depth use price_asc with price windows",
+                "enum": [
+                  "popular",
+                  "price_asc",
+                  "price_desc",
+                  "rating"
+                ],
+                "title": "Sort",
+                "type": "string"
+              },
+              "price_min": {
+                "anyOf": [
+                  {
+                    "minimum": 0,
+                    "type": "integer"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "description": "Lower price bound, rubles (the site filters by the Pay-card price)",
+                "title": "Price Min"
+              },
+              "price_max": {
+                "anyOf": [
+                  {
+                    "minimum": 0,
+                    "type": "integer"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "description": "Upper price bound, rubles (Pay-card price)",
+                "title": "Price Max"
+              },
+              "include_sponsored": {
+                "default": true,
+                "description": "Keep sponsored tiles in `items` (they are always flagged and counted)",
+                "title": "Include Sponsored",
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "query"
+            ],
+            "title": "search_productsArguments"
+          }
+        },
+        {
+          "name": "get_product",
+          "input": {
+            "type": "object",
+            "properties": {
+              "product": {
+                "description": "Market card id («Артикул Маркета», `card_id` from search_products, e.g. '103266817440') or a market.yandex.ru/card/… URL",
+                "minLength": 1,
+                "title": "Product",
+                "type": "string"
+              },
+              "include_specs": {
+                "default": true,
+                "description": "Characteristics filled in by the seller/Market",
+                "title": "Include Specs",
+                "type": "boolean"
+              },
+              "include_description": {
+                "default": false,
+                "description": "Full description text",
+                "title": "Include Description",
+                "type": "boolean"
+              },
+              "include_seller_legal": {
+                "default": false,
+                "description": "Also load the seller's legal entity (INN/OGRN/address): +2 requests, one of them to Market's /api/ (robots.txt Disallow)",
+                "title": "Include Seller Legal",
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "product"
+            ],
+            "title": "get_productArguments"
+          }
+        },
+        {
+          "name": "get_offers",
+          "input": {
+            "type": "object",
+            "properties": {
+              "model_id": {
+                "description": "`model_id` from search_products / get_product",
+                "minLength": 1,
+                "title": "Model Id",
+                "type": "string"
+              },
+              "sku_id": {
+                "description": "`sku_id` (marketSku) from search_products / get_product: the exact product whose offers to list",
+                "minLength": 1,
+                "title": "Sku Id",
+                "type": "string"
+              },
+              "sort": {
+                "default": "price_asc",
+                "description": "The site's orders; price sorting uses the Pay-card price",
+                "enum": [
+                  "popular",
+                  "price_asc",
+                  "price_desc",
+                  "rating",
+                  "delivery"
+                ],
+                "title": "Sort",
+                "type": "string"
+              }
+            },
+            "required": [
+              "model_id",
+              "sku_id"
+            ],
+            "title": "get_offersArguments"
+          }
+        },
+        {
+          "name": "get_reviews",
+          "input": {
+            "type": "object",
+            "properties": {
+              "product": {
+                "description": "scope card/variant: card id («Артикул Маркета») or /card/ URL; scope model: `model_id`",
+                "minLength": 1,
+                "title": "Product",
+                "type": "string"
+              },
+              "scope": {
+                "default": "card",
+                "description": "'card' = this seller's card as the site shows it (can pool other products of the seller; each review says which product); 'variant' = only this exact product at this seller; 'model' = all sellers of the model group (can merge DIFFERENT products)",
+                "enum": [
+                  "card",
+                  "variant",
+                  "model"
+                ],
+                "title": "Scope",
+                "type": "string"
+              },
+              "sort": {
+                "default": "helpful",
+                "description": "'worst' = the site's «С низкой оценкой», complaints first",
+                "enum": [
+                  "helpful",
+                  "newest",
+                  "best",
+                  "worst"
+                ],
+                "title": "Sort",
+                "type": "string"
+              },
+              "page": {
+                "default": 1,
+                "description": "Page of 10",
+                "maximum": 200,
+                "minimum": 1,
+                "title": "Page",
+                "type": "integer"
+              }
+            },
+            "required": [
+              "product"
+            ],
+            "title": "get_reviewsArguments"
+          }
+        },
+        {
+          "name": "get_questions",
+          "input": {
+            "type": "object",
+            "properties": {
+              "product": {
+                "description": "Market card id («Артикул Маркета», `card_id` from search_products, e.g. '103266817440') or a market.yandex.ru/card/… URL",
+                "minLength": 1,
+                "title": "Product",
+                "type": "string"
+              },
+              "page": {
+                "default": 1,
+                "description": "Page of 10 questions",
+                "maximum": 200,
+                "minimum": 1,
+                "title": "Page",
+                "type": "integer"
+              }
+            },
+            "required": [
+              "product"
+            ],
+            "title": "get_questionsArguments"
+          }
+        },
+        {
+          "name": "get_seller",
+          "input": {
+            "type": "object",
+            "properties": {
+              "business_id": {
+                "description": "`business_id` of a seller from search_products / get_product",
+                "minLength": 1,
+                "title": "Business Id",
+                "type": "string"
+              }
+            },
+            "required": [
+              "business_id"
+            ],
+            "title": "get_sellerArguments"
+          }
+        },
+        {
+          "name": "compare_products",
+          "input": {
+            "type": "object",
+            "properties": {
+              "products": {
+                "description": "Up to 10 card ids («Артикул Маркета») or /card/ URLs",
+                "items": {
+                  "type": "string"
+                },
+                "maxItems": 10,
+                "minItems": 1,
+                "title": "Products",
+                "type": "array"
+              }
+            },
+            "required": [
+              "products"
+            ],
+            "title": "compare_productsArguments"
+          }
+        }
+      ]
+    },
+    {
+      "provider": "ru-marketplace-mcp/WB",
+      "tools": [
+        {
+          "name": "wb_card",
+          "input": {
+            "type": "object",
+            "properties": {
+              "nm_ids": {
+                "description": "1..100 nmId integers (positive). Batch product cards from WB v4 API.",
+                "items": {
+                  "type": "integer"
+                },
+                "type": "array"
+              },
+              "dest": {
+                "default": "-1257786",
+                "description": "Region ID. Default -1257786 (Moscow). Required for valid prices/stocks. Other examples: -1257786 Moscow, -1029256 Saint Petersburg.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "nm_ids"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "name": "wb_root_info",
+          "input": {
+            "type": "object",
+            "properties": {
+              "nm_id": {
+                "description": "nmId (positive integer). The SKU whose basket CDN card.json is fetched for imt_id resolution.",
+                "exclusiveMinimum": 0,
+                "type": "integer"
+              }
+            },
+            "required": [
+              "nm_id"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "name": "wb_reviews",
+          "input": {
+            "type": "object",
+            "properties": {
+              "imt_id": {
+                "description": "Root ID (imt_id) from wb_root_info. All product variants share one review pool indexed by imt_id, NOT by nmId.",
+                "exclusiveMinimum": 0,
+                "type": "integer"
+              },
+              "limit": {
+                "default": 20,
+                "description": "Max review texts to return (1..100). Counts always full.",
+                "maximum": 100,
+                "minimum": 1,
+                "type": "integer"
+              },
+              "sort": {
+                "default": "recent",
+                "description": "\"recent\"/\"newest\"/\"default\" (as returned, newest-first), \"best\"/\"highest\" (highest rating first), \"worst\"/\"lowest\"/\"complaints\" (LOWEST rating first — finds downsides). Reorders the ~1000-review pool WB returns, not all feedbacks.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "imt_id"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "name": "wb_questions",
+          "input": {
+            "type": "object",
+            "properties": {
+              "imt_id": {
+                "description": "Root ID (imt_id) from wb_root_info. Questions are pooled per imt_id across every variant, NOT by nmId.",
+                "exclusiveMinimum": 0,
+                "type": "integer"
+              },
+              "limit": {
+                "default": 30,
+                "description": "Max questions to return (1..100). Fetched in pages of 30, which is the upstream cap.",
+                "maximum": 100,
+                "minimum": 1,
+                "type": "integer"
+              },
+              "skip": {
+                "default": 0,
+                "description": "Offset into the question pool, for walking past the first page.",
+                "minimum": 0,
+                "type": "integer"
+              },
+              "answered_only": {
+                "default": false,
+                "description": "Return only questions the seller has answered. Unanswered questions carry no product information.",
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "imt_id"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "name": "wb_search",
+          "input": {
+            "type": "object",
+            "properties": {
+              "query": {
+                "description": "Russian text search query for the WB catalog.",
+                "minLength": 1,
+                "type": "string"
+              },
+              "dest": {
+                "default": "-1257786",
+                "description": "Region ID. Default -1257786 (Moscow). Required for valid prices/stocks.",
+                "type": "string"
+              },
+              "page": {
+                "default": 1,
+                "description": "Page number 1..20 (each page returns ~30 IDs from the long list).",
+                "maximum": 20,
+                "minimum": 1,
+                "type": "integer"
+              }
+            },
+            "required": [
+              "query"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "name": "wb_seller",
+          "input": {
+            "type": "object",
+            "properties": {
+              "supplier_id": {
+                "description": "WB supplier id (positive integer). Get it from wb_card's supplier_id field.",
+                "exclusiveMinimum": 0,
+                "type": "integer"
+              }
+            },
+            "required": [
+              "supplier_id"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "name": "wb_categories",
+          "input": {
+            "type": "object",
+            "properties": {
+              "root": {
+                "default": "top",
+                "description": "'top' for the top-level sections, or a category name / URL path / id to expand (e.g. 'Электроника', '/catalog/elektronika', '8126').",
+                "maxLength": 200,
+                "type": "string"
+              },
+              "max_depth": {
+                "default": 1,
+                "description": "How many levels below the root to include. 1 = direct children only.",
+                "maximum": 3,
+                "minimum": 1,
+                "type": "integer"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        {
+          "name": "wb_category_products",
+          "input": {
+            "type": "object",
+            "properties": {
+              "shard": {
+                "description": "WB catalog shard from wb_categories, e.g. 'electronic58'. The literal 'blackhole' means the category has no listable feed.",
+                "maxLength": 120,
+                "type": "string"
+              },
+              "query": {
+                "description": "WB catalog selector from wb_categories, e.g. 'cat=9845' or 'subject=1234'.",
+                "maxLength": 200,
+                "type": "string"
+              },
+              "page": {
+                "default": 1,
+                "description": "Page number. Each page carries up to 100 products.",
+                "maximum": 100,
+                "minimum": 1,
+                "type": "integer"
+              },
+              "sort": {
+                "default": "popular",
+                "description": "Upstream ordering: popular, priceup, pricedown, newly, rate, or benefit.",
+                "type": "string"
+              },
+              "dest": {
+                "default": "",
+                "description": "WB region id. Defaults to WB_DEFAULT_DEST (Moscow). Prices and stock are region-specific.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "shard",
+              "query"
+            ],
+            "additionalProperties": false
+          }
+        }
+      ]
+    }
+  ]
+}

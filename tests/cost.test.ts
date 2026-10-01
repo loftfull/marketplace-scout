@@ -1,0 +1,22 @@
+import assert from "node:assert/strict";
+import test from "node:test";
+import { landed } from "../src/cost.js";
+
+test("landed cost includes duty and shipping", () => {
+  assert.equal(
+    landed(
+      {
+        marketplace: "x",
+        title: "x",
+        url: "x",
+        priceRub: 120000,
+        specs: {},
+        status: "VERIFIED",
+        reasons: [],
+      },
+      3000,
+      17000,
+    ).total,
+    140000,
+  );
+});

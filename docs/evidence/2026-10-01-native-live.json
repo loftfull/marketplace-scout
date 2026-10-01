@@ -1,0 +1,487 @@
+{
+  "runAt": "2026-10-01T05:12:56.869Z",
+  "mode": "LIVE_NO_FIXTURES",
+  "query": "RedmiBook Pro 16 2026 Ultra 5 338H 32GB 1TB",
+  "profile": {
+    "brand": "Xiaomi",
+    "model": "RedmiBook Pro 16",
+    "year": 2026,
+    "cpu": "Ultra 5 338H",
+    "ramGb": 32,
+    "ssdGb": 1024
+  },
+  "checkedAt": "2026-10-01T05:12:56.847Z",
+  "offers": [
+    {
+      "marketplace": "yandex-market",
+      "title": "Ноутбук Xiaomi RedmiBook Pro 16 Ultra7 32/1T 165HZ (JYU4593CN)",
+      "url": "https://market.yandex.ru/card/noutbuk-xiaomi-redmibook-pro-16-ultra7-321t-165hz-jyu4593cn/6108950814?sku=6108950814",
+      "priceRub": null,
+      "imageUrl": "https://avatars.mds.yandex.net/get-mpic/20908166/2a0000019ff033de838527d40758ba12b6f7/orig",
+      "imageSource": "discovery",
+      "sku": "6108950814",
+      "specs": {},
+      "status": "UNVERIFIED",
+      "reasons": [
+        "selected_product_schema_missing_or_ambiguous",
+        "selected_offer_ambiguous",
+        "card_unavailable_or_challenged",
+        "missing_brand",
+        "missing_model",
+        "missing_year",
+        "missing_cpu",
+        "missing_ramGb",
+        "missing_ssdGb",
+        "live_card_not_confirmed",
+        "sku_missing",
+        "variant_missing",
+        "seller_missing",
+        "current_price_missing",
+        "unconditional_price_not_confirmed",
+        "availability_not_confirmed"
+      ],
+      "evidence": {
+        "method": "browser-card",
+        "observedAt": "2026-10-01T05:11:29.230Z",
+        "requestedUrl": "https://market.yandex.ru/card/noutbuk-xiaomi-redmibook-pro-16-ultra7-321t-165hz-jyu4593cn/6108950814?sku=6108950814",
+        "finalUrl": "https://market.yandex.ru/card/noutbuk-xiaomi-redmibook-pro-16-ultra7-321t-165hz-jyu4593cn/6108950814?sku=6108950814",
+        "live": false,
+        "httpStatus": 403,
+        "priceKind": "unknown",
+        "available": null
+      },
+      "native": {
+        "provider": "ru-marketplace-mcp",
+        "tool": "yandex_card",
+        "status": "error",
+        "observedAt": "2026-10-01T05:11:28.094Z"
+      },
+      "discoveredAt": "2026-10-01T05:11:21.691Z",
+      "discoveryPriceRub": 245000,
+      "risk": {
+        "flags": [
+          "seller_missing",
+          "not_verified"
+        ],
+        "score": 50
+      },
+      "landed": {
+        "item": null,
+        "shipping": null,
+        "duty": null,
+        "total": null,
+        "currency": "RUB",
+        "region": null
+      }
+    },
+    {
+      "marketplace": "yandex-market",
+      "title": "Ноутбук Xiaomi Redmi Book Pro 16\" (2026), 3200x2000 165Hz, Ultra X7 358H, 32 ГБ/1 ТБ, Windows 11 Home, русская клавиатура",
+      "url": "https://market.yandex.ru/card/noutbuk-xiaomi-redmi-book-pro-16-2026-3200x2000-165hz-ultra-x7-358h-32-gb1-tb-windows-11-home-russkaya-klaviatura/6103250888?sku=6103250888",
+      "priceRub": null,
+      "imageUrl": "https://avatars.mds.yandex.net/get-mpic/20240442/2a0000019febc6b1f16e5322c96e6fa4da73/orig",
+      "imageSource": "discovery",
+      "sku": "6103250888",
+      "specs": {},
+      "status": "UNVERIFIED",
+      "reasons": [
+        "selected_product_schema_missing_or_ambiguous",
+        "selected_offer_ambiguous",
+        "card_unavailable_or_challenged",
+        "missing_brand",
+        "missing_model",
+        "missing_year",
+        "missing_cpu",
+        "missing_ramGb",
+        "missing_ssdGb",
+        "live_card_not_confirmed",
+        "sku_missing",
+        "variant_missing",
+        "seller_missing",
+        "current_price_missing",
+        "unconditional_price_not_confirmed",
+        "availability_not_confirmed"
+      ],
+      "evidence": {
+        "method": "browser-card",
+        "observedAt": "2026-10-01T05:11:30.738Z",
+        "requestedUrl": "https://market.yandex.ru/card/noutbuk-xiaomi-redmi-book-pro-16-2026-3200x2000-165hz-ultra-x7-358h-32-gb1-tb-windows-11-home-russkaya-klaviatura/6103250888?sku=6103250888",
+        "finalUrl": "https://market.yandex.ru/card/noutbuk-xiaomi-redmi-book-pro-16-2026-3200x2000-165hz-ultra-x7-358h-32-gb1-tb-windows-11-home-russkaya-klaviatura/6103250888?sku=6103250888",
+        "live": false,
+        "httpStatus": 403,
+        "priceKind": "unknown",
+        "available": null
+      },
+      "native": {
+        "provider": "ru-marketplace-mcp",
+        "tool": "yandex_card",
+        "status": "error",
+        "observedAt": "2026-10-01T05:11:30.267Z"
+      },
+      "discoveredAt": "2026-10-01T05:11:21.691Z",
+      "discoveryPriceRub": 170208,
+      "risk": {
+        "flags": [
+          "seller_missing",
+          "not_verified"
+        ],
+        "score": 50
+      },
+      "landed": {
+        "item": null,
+        "shipping": null,
+        "duty": null,
+        "total": null,
+        "currency": "RUB",
+        "region": null
+      }
+    },
+    {
+      "marketplace": "yandex-market",
+      "title": "Xiaomi Book 16 Pro 2026, 3.2K 3200x2000 165Hz Ноутбук 16\", Intel Core Ultra 5 338H, RAM 32 ГБ, SSD 1024 ГБ, Intel Arc B370, Windows Pro, (A1602), серый, Русская раскладка",
+      "url": "https://market.yandex.ru/card/xiaomi-book-16-pro-2026-32k-3200x2000-165hz-noutbuk-16-intel-core-ultra-5-338h-ram-32-gb-ssd-1024-gb-intel-arc-b370-windows-pro-a1602-seryy-russkaya-raskladka/5981551118?sku=5981551118",
+      "priceRub": null,
+      "imageUrl": "https://avatars.mds.yandex.net/get-mpic/19790207/2a0000019eaa3b90fc6b57b94db9755faca7/orig",
+      "imageSource": "discovery",
+      "sku": "5981551118",
+      "specs": {},
+      "status": "UNVERIFIED",
+      "reasons": [
+        "selected_product_schema_missing_or_ambiguous",
+        "selected_offer_ambiguous",
+        "card_unavailable_or_challenged",
+        "missing_brand",
+        "missing_model",
+        "missing_year",
+        "missing_cpu",
+        "missing_ramGb",
+        "missing_ssdGb",
+        "live_card_not_confirmed",
+        "sku_missing",
+        "variant_missing",
+        "seller_missing",
+        "current_price_missing",
+        "unconditional_price_not_confirmed",
+        "availability_not_confirmed"
+      ],
+      "evidence": {
+        "method": "browser-card",
+        "observedAt": "2026-10-01T05:11:32.402Z",
+        "requestedUrl": "https://market.yandex.ru/card/xiaomi-book-16-pro-2026-32k-3200x2000-165hz-noutbuk-16-intel-core-ultra-5-338h-ram-32-gb-ssd-1024-gb-intel-arc-b370-windows-pro-a1602-seryy-russkaya-raskladka/5981551118?sku=5981551118",
+        "finalUrl": "https://market.yandex.ru/card/xiaomi-book-16-pro-2026-32k-3200x2000-165hz-noutbuk-16-intel-core-ultra-5-338h-ram-32-gb-ssd-1024-gb-intel-arc-b370-windows-pro-a1602-seryy-russkaya-raskladka/5981551118?sku=5981551118",
+        "live": false,
+        "httpStatus": 403,
+        "priceKind": "unknown",
+        "available": null
+      },
+      "native": {
+        "provider": "ru-marketplace-mcp",
+        "tool": "yandex_card",
+        "status": "error",
+        "observedAt": "2026-10-01T05:11:31.898Z"
+      },
+      "discoveredAt": "2026-10-01T05:11:21.691Z",
+      "discoveryPriceRub": 306365,
+      "risk": {
+        "flags": [
+          "seller_missing",
+          "not_verified"
+        ],
+        "score": 50
+      },
+      "landed": {
+        "item": null,
+        "shipping": null,
+        "duty": null,
+        "total": null,
+        "currency": "RUB",
+        "region": null
+      }
+    },
+    {
+      "marketplace": "avito",
+      "title": "Ноутбук Xiaomi RedmiBook Pro 16\" 2025 (JYU4650CN)",
+      "url": "https://www.avito.ru/moskva/noutbuki/noutbuk_xiaomi_redmibook_pro_16_2025_jyu4650cn_7295801160",
+      "priceRub": null,
+      "imageSource": "discovery",
+      "sku": "7295801160",
+      "specs": {},
+      "status": "UNVERIFIED",
+      "reasons": [
+        "selected_product_schema_missing_or_ambiguous",
+        "selected_offer_ambiguous",
+        "missing_brand",
+        "missing_model",
+        "missing_year",
+        "missing_cpu",
+        "missing_ramGb",
+        "missing_ssdGb",
+        "sku_missing",
+        "seller_missing",
+        "current_price_missing",
+        "availability_not_confirmed"
+      ],
+      "evidence": {
+        "method": "browser-card",
+        "observedAt": "2026-10-01T05:12:42.296Z",
+        "requestedUrl": "https://www.avito.ru/moskva/noutbuki/noutbuk_xiaomi_redmibook_pro_16_2025_jyu4650cn_7295801160",
+        "finalUrl": "https://www.avito.ru/moskva/noutbuki/noutbuk_xiaomi_redmibook_pro_16_2025_jyu4650cn_7295801160",
+        "live": true,
+        "httpStatus": 200,
+        "priceKind": "ordinary",
+        "available": null
+      },
+      "native": {
+        "provider": "ru-marketplace-mcp",
+        "tool": "avito_card",
+        "status": "invalid",
+        "observedAt": "2026-10-01T05:12:39.504Z"
+      },
+      "discoveredAt": "2026-10-01T05:12:25.878Z",
+      "discoveryPriceRub": null,
+      "risk": {
+        "flags": [
+          "seller_missing",
+          "not_verified"
+        ],
+        "score": 50
+      },
+      "landed": {
+        "item": null,
+        "shipping": null,
+        "duty": null,
+        "total": null,
+        "currency": "RUB",
+        "region": null
+      }
+    },
+    {
+      "marketplace": "avito",
+      "title": "Новый Xiaomi RedmiBook Pro 14 Ultra X7 358H 32Gb",
+      "url": "https://www.avito.ru/moskva/noutbuki/novyy_xiaomi_redmibook_pro_14_ultra_x7_358h_32gb_8429072560",
+      "priceRub": null,
+      "imageSource": "discovery",
+      "sku": "8429072560",
+      "specs": {},
+      "status": "UNVERIFIED",
+      "reasons": [
+        "selected_product_schema_missing_or_ambiguous",
+        "selected_offer_ambiguous",
+        "card_unavailable_or_challenged",
+        "missing_brand",
+        "missing_model",
+        "missing_year",
+        "missing_cpu",
+        "missing_ramGb",
+        "missing_ssdGb",
+        "live_card_not_confirmed",
+        "sku_missing",
+        "seller_missing",
+        "current_price_missing",
+        "availability_not_confirmed"
+      ],
+      "evidence": {
+        "method": "browser-card",
+        "observedAt": "2026-10-01T05:12:53.876Z",
+        "requestedUrl": "https://www.avito.ru/moskva/noutbuki/novyy_xiaomi_redmibook_pro_14_ultra_x7_358h_32gb_8429072560",
+        "finalUrl": "https://www.avito.ru/moskva/noutbuki/novyy_xiaomi_redmibook_pro_14_ultra_x7_358h_32gb_8429072560",
+        "live": false,
+        "httpStatus": 403,
+        "priceKind": "ordinary",
+        "available": null
+      },
+      "native": {
+        "provider": "ru-marketplace-mcp",
+        "tool": "avito_card",
+        "status": "blocked",
+        "observedAt": "2026-10-01T05:12:53.536Z"
+      },
+      "discoveredAt": "2026-10-01T05:12:25.879Z",
+      "discoveryPriceRub": null,
+      "risk": {
+        "flags": [
+          "seller_missing",
+          "not_verified"
+        ],
+        "score": 50
+      },
+      "landed": {
+        "item": null,
+        "shipping": null,
+        "duty": null,
+        "total": null,
+        "currency": "RUB",
+        "region": null
+      }
+    },
+    {
+      "marketplace": "avito",
+      "title": "Xiaomi RedmiBook Pro 15\" 2023 AMD Ryzen7/16G/512Gb",
+      "url": "https://www.avito.ru/moskva/noutbuki/xiaomi_redmibook_pro_15_2023_amd_ryzen716g512gb_8417926423",
+      "priceRub": null,
+      "imageSource": "discovery",
+      "sku": "8417926423",
+      "specs": {},
+      "status": "UNVERIFIED",
+      "reasons": [
+        "selected_product_schema_missing_or_ambiguous",
+        "selected_offer_ambiguous",
+        "card_unavailable_or_challenged",
+        "missing_brand",
+        "missing_model",
+        "missing_year",
+        "missing_cpu",
+        "missing_ramGb",
+        "missing_ssdGb",
+        "live_card_not_confirmed",
+        "sku_missing",
+        "seller_missing",
+        "current_price_missing",
+        "availability_not_confirmed"
+      ],
+      "evidence": {
+        "method": "browser-card",
+        "observedAt": "2026-10-01T05:12:56.816Z",
+        "requestedUrl": "https://www.avito.ru/moskva/noutbuki/xiaomi_redmibook_pro_15_2023_amd_ryzen716g512gb_8417926423",
+        "finalUrl": "https://www.avito.ru/moskva/noutbuki/xiaomi_redmibook_pro_15_2023_amd_ryzen716g512gb_8417926423",
+        "live": false,
+        "httpStatus": 403,
+        "priceKind": "ordinary",
+        "available": null
+      },
+      "native": {
+        "provider": "ru-marketplace-mcp",
+        "tool": "avito_card",
+        "status": "blocked",
+        "observedAt": "2026-10-01T05:12:55.914Z"
+      },
+      "discoveredAt": "2026-10-01T05:12:25.879Z",
+      "discoveryPriceRub": null,
+      "risk": {
+        "flags": [
+          "seller_missing",
+          "not_verified"
+        ],
+        "score": 50
+      },
+      "landed": {
+        "item": null,
+        "shipping": null,
+        "duty": null,
+        "total": null,
+        "currency": "RUB",
+        "region": null
+      }
+    }
+  ],
+  "sourceOutcomes": [
+    {
+      "marketplace": "yandex-market",
+      "status": "ok",
+      "stage": "mcp-discovery",
+      "detail": "8 results, 8 priced",
+      "offersReturned": 3,
+      "tools": [
+        {
+          "provider": "ru-marketplace-mcp",
+          "tool": "compare_prices",
+          "status": "ok",
+          "at": "2026-10-01T05:11:21.685Z",
+          "durationMs": 6440
+        },
+        {
+          "provider": "ru-marketplace-mcp",
+          "tool": "yandex_search",
+          "status": "ok",
+          "at": "2026-10-01T05:11:27.178Z",
+          "durationMs": 5485
+        },
+        {
+          "provider": "ru-marketplace-mcp",
+          "tool": "yandex_card",
+          "status": "error",
+          "at": "2026-10-01T05:11:28.094Z",
+          "durationMs": 914
+        },
+        {
+          "provider": "ru-marketplace-mcp",
+          "tool": "yandex_card",
+          "status": "error",
+          "at": "2026-10-01T05:11:30.267Z",
+          "durationMs": 1006
+        },
+        {
+          "provider": "ru-marketplace-mcp",
+          "tool": "yandex_card",
+          "status": "error",
+          "at": "2026-10-01T05:11:31.898Z",
+          "durationMs": 1139
+        }
+      ]
+    },
+    {
+      "marketplace": "ozon",
+      "status": "blocked",
+      "stage": "mcp-discovery",
+      "detail": "Tier-1 (curl_cffi) blocked AND Tier-2 (CDP) unreachable. Start Chrome (run scripts/start_chrome_cdp.ps1 (PowerShell)) and ensure the CDP port is open. Last error: Page.goto: net::ERR_EMPTY_RESPONSE at",
+      "offersReturned": 0,
+      "tools": [
+        {
+          "provider": "ru-marketplace-mcp",
+          "tool": "compare_prices",
+          "status": "ok",
+          "at": "2026-10-01T05:12:12.239Z",
+          "durationMs": 39807
+        }
+      ]
+    },
+    {
+      "marketplace": "avito",
+      "status": "ok",
+      "stage": "browser-discovery",
+      "detail": "ok: 0 results, 0 priced; browser: Авито — Объявления на сайте Авито",
+      "offersReturned": 3,
+      "discoveryUrl": "https://www.avito.ru/all/noutbuki?q=Xiaomi%20RedmiBook%20Pro%2016%202026%20Ultra%205%20338H%2032GB%201024GB",
+      "tools": [
+        {
+          "provider": "ru-marketplace-mcp",
+          "tool": "compare_prices",
+          "status": "ok",
+          "at": "2026-10-01T05:12:22.052Z",
+          "durationMs": 9812
+        },
+        {
+          "provider": "ru-marketplace-mcp",
+          "tool": "avito_card",
+          "status": "ok",
+          "at": "2026-10-01T05:12:39.503Z",
+          "durationMs": 13582
+        },
+        {
+          "provider": "ru-marketplace-mcp",
+          "tool": "avito_card",
+          "status": "blocked",
+          "at": "2026-10-01T05:12:53.536Z",
+          "durationMs": 11191
+        },
+        {
+          "provider": "ru-marketplace-mcp",
+          "tool": "avito_card",
+          "status": "blocked",
+          "at": "2026-10-01T05:12:55.914Z",
+          "durationMs": 2016
+        }
+      ]
+    }
+  ],
+  "complete": false,
+  "region": null,
+  "acceptance": {
+    "discoveryAttempted": true,
+    "candidatesDiscovered": 6,
+    "cardsReopened": 6,
+    "verified": 0,
+    "outcome": "UNVERIFIED",
+    "limitation": "Read each offer's evidence and reasons."
+  }
+}

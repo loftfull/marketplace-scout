@@ -1,0 +1,252 @@
+/* Integration rules only. Layout, colors, typography and controls belong to Tabler 1.6.1. */
+.view[hidden] {
+  display: none;
+}
+/* Refined composition of the existing Tabler sidebar, form and table patterns. */
+:root {
+  --tblr-border-radius: 0.75rem;
+  --tblr-border-radius-lg: 1rem;
+}
+.page-wrapper > .navbar {
+  background: transparent;
+  box-shadow: none;
+  border-bottom: 1px solid var(--tblr-border-color);
+}
+.page-header {
+  margin-top: 2.5rem;
+}
+.page-title {
+  font-size: 2rem;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+.page-body {
+  margin-top: 1.75rem;
+}
+.page > .navbar.navbar-vertical .navbar-brand {
+  font-size: 1.5rem;
+  display: flex;
+  gap: 0.25rem;
+  justify-content: flex-start;
+  padding: 1.5rem 1.25rem;
+}
+.navbar-vertical .nav-link {
+  min-height: 3rem;
+}
+.search-panel .card-body {
+  padding: 1.75rem;
+}
+.search-panel .form-control,
+.search-panel .form-select,
+.search-panel .btn {
+  min-height: 3rem;
+}
+.search-panel .form-hint {
+  line-height: 1.6;
+}
+.search-summary {
+  margin: 1.75rem 0 2rem;
+  max-width: 72ch;
+}
+.search-summary h2 {
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+.search-summary p {
+  color: var(--tblr-secondary-color);
+  line-height: 1.65;
+  margin-bottom: 0.75rem;
+}
+.search-totals {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+  font-variant-numeric: tabular-nums;
+}
+.search-totals[hidden],
+.source-details[hidden] {
+  display: none;
+}
+.search-totals strong {
+  margin-left: 0.5rem;
+}
+.source-details {
+  margin-bottom: 1.5rem;
+}
+.source-details > summary,
+.price-filter-panel > summary {
+  cursor: pointer;
+  font-weight: 500;
+  padding: 1rem 1.5rem;
+}
+.source-details > summary {
+  padding-left: 0;
+}
+.price-filter-panel {
+  border-bottom: 1px solid var(--tblr-border-color);
+}
+.offers-panel .empty {
+  padding: 3rem 1.5rem;
+}
+.table th,
+.table td {
+  padding: 1rem 1.25rem;
+}
+.table {
+  font-variant-numeric: tabular-nums;
+}
+a {
+  text-underline-offset: 0.2em;
+}
+:focus-visible {
+  outline: 2px solid var(--tblr-primary);
+  outline-offset: 3px;
+}
+input {
+  caret-color: var(--tblr-primary);
+}
+::selection {
+  background: var(--tblr-primary);
+  color: white;
+}
+.navbar-side {
+  margin-top: auto;
+}
+.nav-link-icon {
+  font-size: 1.35rem;
+}
+.offer-title {
+  max-width: 25rem;
+  white-space: normal;
+  font-weight: 500;
+}
+.offer-thumb {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+  border-radius: var(--tblr-border-radius);
+  background: white;
+}
+.table td {
+  vertical-align: middle;
+}
+.meta {
+  color: var(--tblr-secondary-color);
+  font-size: 0.8125rem;
+  margin-top: 0.35rem;
+  overflow-wrap: anywhere;
+}
+.source {
+  border-bottom: 1px solid var(--tblr-border-color);
+  padding: 1rem 0;
+}
+.source:last-child {
+  border: 0;
+}
+.scout-dialog {
+  border: 1px solid var(--tblr-border-color);
+  border-radius: var(--tblr-border-radius-lg);
+  background: var(--tblr-bg-surface);
+  color: var(--tblr-body-color);
+  padding: 0;
+  width: min(900px, 94vw);
+  max-height: 90vh;
+}
+.scout-dialog::backdrop {
+  background: rgb(0 0 0 / 45%);
+}
+.offer-detail {
+  display: grid;
+  grid-template-columns: 144px 1fr;
+  gap: 1.25rem;
+}
+.offer-detail .verification {
+  grid-column: 1 / -1;
+  border-top: 1px solid var(--tblr-border-color);
+  padding-top: 1rem;
+}
+.product-photo {
+  margin: 0;
+}
+.product-photo img {
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+  background: white;
+  border-radius: var(--tblr-border-radius);
+}
+.photo-empty {
+  display: grid;
+  min-height: 64px;
+  place-items: center;
+  color: var(--tblr-secondary-color);
+  background: var(--tblr-bg-surface-secondary);
+  border-radius: var(--tblr-border-radius);
+  font-size: 0.75rem;
+}
+.price {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+.search-price {
+  margin-top: 0.5rem;
+}
+.offer-link {
+  display: block;
+  margin-top: 0.75rem;
+}
+.reasons {
+  margin-top: 0.75rem;
+}
+.reasons summary {
+  cursor: pointer;
+  font-size: 0.8125rem;
+}
+.verification-summary {
+  margin: 0;
+}
+.research-tree {
+  overflow-wrap: anywhere;
+}
+.research-tree dl {
+  margin: 0.5rem 0;
+  padding-left: 0.75rem;
+  border-left: 2px solid var(--tblr-border-color);
+}
+.research-tree dt {
+  font-size: 0.75rem;
+  color: var(--tblr-secondary-color);
+  font-weight: 500;
+}
+.research-tree dd {
+  margin-bottom: 0.5rem;
+  white-space: pre-wrap;
+}
+.research-tree details {
+  margin-bottom: 0.5rem;
+}
+@media (max-width: 575px) {
+  .page-header {
+    margin-top: 1.5rem;
+  }
+  .search-panel .card-body {
+    padding: 1.25rem;
+  }
+  .page-wrapper > .navbar .container-xl {
+    gap: 0.75rem;
+  }
+  .page-wrapper > .navbar .navbar-nav {
+    gap: 0.5rem;
+  }
+  .offer-detail {
+    grid-template-columns: 1fr;
+  }
+  .product-photo {
+    max-width: 160px;
+  }
+  .page-title {
+    font-size: 1.4rem;
+  }
+}

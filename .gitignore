@@ -1,0 +1,12 @@
+node_modules/
+.data/
+.env
+.DS_Store
+
+.runtime/
+work/
+dist/
+output/
+*.log
+__pycache__/
+public/vendor/

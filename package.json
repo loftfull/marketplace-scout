@@ -1,0 +1,41 @@
+{
+  "name": "marketplace-scout",
+  "version": "0.3.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "prestart": "node scripts/vendor-ui.mjs",
+    "predev": "node scripts/vendor-ui.mjs",
+    "prebuild": "node scripts/vendor-ui.mjs",
+    "dev": "tsx watch src/server.ts",
+    "start": "tsx src/server.ts",
+    "test": "node --import tsx --test tests/*.test.ts",
+    "lint": "biome check .",
+    "format": "biome check --write .",
+    "typecheck": "tsc --noEmit",
+    "build": "tsc -p tsconfig.build.json",
+    "acceptance": "node scripts/acceptance.mjs",
+    "runtime:setup": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/runtime-setup.ps1",
+    "runtime:ozon": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/ozon-runtime-setup.ps1",
+    "probe:ozon": "node --import tsx scripts/ozon-probe.mjs",
+    "test:browser": "node --import tsx scripts/browser-security.mjs",
+    "runtime:yandex": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/yandex-runtime-setup.ps1"
+  },
+  "dependencies": {
+    "@fastify/static": "10.1.5",
+    "@modelcontextprotocol/sdk": "1.31.0",
+    "@tabler/core": "1.6.1",
+    "fastify": "5.12.5",
+    "playwright": "1.63.0",
+    "zod": "4.6.5"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.5.15",
+    "@types/node": "26.6.3",
+    "tsx": "4.23.15",
+    "typescript": "7.0.2"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}
