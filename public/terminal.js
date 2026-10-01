@@ -26,6 +26,13 @@ function navigation() {
     if (active) link.setAttribute("aria-current", "page");
     else link.removeAttribute("aria-current");
   }
+  $("#page-description").textContent = {
+    "search-view": "Найдите нужную комплектацию и сравните цены для своего города.",
+    "history-view":
+      "Сохранённые карточки и результаты проверок. Прошлая цена может быть неактуальна.",
+    "research-view": "Отзывы, продавцы и сравнение товаров из подключённых источников.",
+    "collectors-view": "Какие готовые решения используются и что они действительно умеют.",
+  }[selected.dataset.view];
   $("#page-title").textContent = selected.querySelector(".nav-link-title").textContent;
 }
 window.addEventListener("hashchange", navigation);

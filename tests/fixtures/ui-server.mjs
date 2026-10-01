@@ -12,6 +12,16 @@ createServer(async (req, res) => {
     res.end('{"ok":true}');
     return;
   }
+  if (req.url.startsWith("/api/search?")) {
+    res.setHeader("Content-Type", "application/json");
+    res.end(
+      JSON.stringify({
+        offers: [],
+        sourceOutcomes: [{ marketplace: "yandex-market", status: "blocked" }],
+      }),
+    );
+    return;
+  }
   if (req.url === "/api/history") {
     observed ??= new Date(Date.now() - 870000).toISOString();
     res.setHeader("Content-Type", "application/json");
@@ -69,6 +79,7 @@ createServer(async (req, res) => {
     "/app.js": "app.js",
     "/app.css": "app.css",
     "/offer-view.js": "offer-view.js",
+    "/history-view.js": "history-view.js",
     "/terminal.js": "terminal.js",
     "/comparison-view.js": "comparison-view.js",
     "/vendor/tabler/tabler.min.css": "vendor/tabler/tabler.min.css",

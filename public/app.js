@@ -1,3 +1,4 @@
+import { filterHistory, statusLabel } from "./history-view.js";
 import {
   filterOffers,
   parseBounds,
@@ -57,6 +58,8 @@ const names = {
 };
 const selection = requestSelection();
 let currentOffers = [];
+let searchPhase = "idle";
+let blockedSources = 0;
 let historyRows = [];
 let historyPage = 0;
 let renderedOfferStatuses = "";
@@ -351,7 +354,12 @@ function offerTable(rows, historical = false) {
     const state = element("td"),
       status = statusNow(offer);
     state.append(
-      element("span", `badge ${status === "VERIFIED" ? "bg-green-lt" : "bg-yellow-lt"}`, status),
+      element(
+        "span",
+        `badge ${status === "VERIFIED" ? "bg-green-lt" : "bg-yellow-lt"}`,
+        statusLabel(status),
+      ),
+      element("div", "meta", reasonSummary(offer)),
     );
     const actions = element("td");
     if (historical) actions.append(element("div", "meta mb-2", date(row.seenAt)));
@@ -388,6 +396,15 @@ function metrics() {
 }
 function renderOffers() {
   metrics();
+  if (searchPhase !== "complete") return;
+  const confirmed = currentOffers.filter((offer) => priceFor(offer, "current") !== null).length;
+  $("#summary-title").textContent = confirmed
+    ? "Есть подтверждённые предложения"
+    : "Пока нельзя выбрать лучшее предложение";
+  $("#summary-copy").textContent = confirmed
+    ? "Сравните актуальные цены ниже. Доставка и пошлина указаны отдельно в подробностях."
+    : `${blockedSources ? `Площадок с ограничением доступа: ${blockedSources}. ` : ""}Текущая цена нужной комплектации для выбранного города не подтверждена. Это не означает, что товара нет в продаже.`;
+  $("#search-totals").hidden = false;
   renderedOfferStatuses = statusSignature(currentOffers);
   const results = $("#results");
   results.replaceChildren();
@@ -452,24 +469,38 @@ function renderHistory() {
   const box = $("#history");
   const scrollTop = box.scrollTop;
   box.replaceChildren();
-  if (!historyRows.length)
+  const visible = filterHistory(historyRows, $("#history-query").value, $("#history-city").value);
+  if (!visible.length)
     box.append(
-      element("div", "empty", "История пока пуста. Здесь появятся реальные найденные карточки."),
+      element(
+        "div",
+        "empty",
+        historyRows.length
+          ? "Нет записей с такими параметрами. Измените название или выберите все города."
+          : "История пока пуста. Здесь появятся найденные карточки.",
+      ),
     );
-  historyPage = Math.min(historyPage, Math.max(0, Math.ceil(historyRows.length / 20) - 1));
-  if (historyRows.length)
-    box.append(offerTable(historyRows.slice(historyPage * 20, (historyPage + 1) * 20), true));
+  historyPage = Math.min(historyPage, Math.max(0, Math.ceil(visible.length / 20) - 1));
+  if (visible.length)
+    box.append(offerTable(visible.slice(historyPage * 20, (historyPage + 1) * 20), true));
   if ($("#history-page"))
     $("#history-page").textContent =
-      `${historyRows.length} наблюдений · страница ${historyPage + 1} из ${Math.max(1, Math.ceil(historyRows.length / 20))}`;
+      `Показано ${visible.length} из ${historyRows.length} наблюдений · страница ${historyPage + 1} из ${Math.max(1, Math.ceil(visible.length / 20))}`;
   if ($("#history-prev")) $("#history-prev").disabled = historyPage === 0;
-  if ($("#history-next"))
-    $("#history-next").disabled = (historyPage + 1) * 20 >= historyRows.length;
+  if ($("#history-next")) $("#history-next").disabled = (historyPage + 1) * 20 >= visible.length;
   box.scrollTop = scrollTop;
 }
 $("#f").addEventListener("submit", async (event) => {
   event.preventDefault();
   const city = $("#city").value;
+  searchPhase = "loading";
+  blockedSources = 0;
+  $("#summary-title").textContent = "Проверяем предложения";
+  $("#summary-copy").textContent =
+    "Ищем товар и повторно открываем карточки. Не закрывайте страницу: результат появится после ответа площадок.";
+  $("#search-totals").hidden = true;
+  $("#source-details").hidden = true;
+  $("#search").textContent = "Проверяем…";
   const token = selection.capture();
   $("#search").disabled = true;
   $("#price-filters").disabled = true;
@@ -496,6 +527,11 @@ $("#f").addEventListener("submit", async (event) => {
           : "Проверка не завершена. Проверьте локальный журнал.",
       );
     currentOffers = data.offers || [];
+    searchPhase = "complete";
+    blockedSources = (data.sourceOutcomes || []).filter(
+      (source) => source.status === "blocked",
+    ).length;
+    $("#source-details").hidden = !(data.sourceOutcomes || []).length;
     for (const source of data.sourceOutcomes || []) {
       const col = element("div", "col-md-6 col-xl-3");
       const el = element("div", "card card-body h-100");
@@ -503,7 +539,7 @@ $("#f").addEventListener("submit", async (event) => {
         element(
           "strong",
           "",
-          `${names[source.marketplace] || source.marketplace}: ${source.status}`,
+          `${names[source.marketplace] || source.marketplace}: ${source.status === "ok" ? "поиск завершён" : source.status === "blocked" ? "доступ ограничен" : "нет подтверждения"}`,
         ),
       );
       if (source.stage === "region-resolution")
@@ -554,6 +590,10 @@ $("#f").addEventListener("submit", async (event) => {
     await history();
   } catch (error) {
     if (!selection.accepts(token)) return;
+    searchPhase = "error";
+    $("#summary-title").textContent = "Проверка не завершена";
+    $("#summary-copy").textContent =
+      "Данные ниже не получены. Повторите проверку позже; прошлые наблюдения доступны в истории.";
     $("#results").replaceChildren(
       element(
         "div",
@@ -565,23 +605,40 @@ $("#f").addEventListener("submit", async (event) => {
     );
   } finally {
     $("#search").disabled = false;
+    $("#search").textContent = "Проверить цены";
     $("#price-filters").disabled = false;
     $("#results").removeAttribute("aria-busy");
   }
 });
-$("#city").addEventListener("change", () => {
+function invalidateSearch() {
+  searchPhase = "idle";
+  $("#search-totals").hidden = true;
+  $("#source-details").hidden = true;
+  $("#summary-title").textContent = "Параметры изменены";
+  $("#summary-copy").textContent =
+    "Запустите проверку для выбранного товара и города. Предыдущие наблюдения остаются в истории.";
   selection.change();
   currentOffers = [];
   metrics();
   $("#sources").replaceChildren();
   $("#count").textContent = "";
   $("#results").replaceChildren(
-    element(
-      "div",
-      "empty",
-      "Город изменён. Запустите новую проверку; предыдущие результаты убраны.",
-    ),
+    element("div", "empty", "Запустите проверку с новыми параметрами."),
   );
+}
+$("#city").addEventListener("change", invalidateSearch);
+$("#q").addEventListener("input", invalidateSearch);
+for (const id of ["#history-query", "#history-city"])
+  $(id).addEventListener("input", () => {
+    historyPage = 0;
+    renderHistory();
+  });
+$("#show-query-history").addEventListener("click", () => {
+  // Start with the model, since source titles spell capacities differently.
+  $("#history-query").value = $("#q").value.trim().split(/\s+/).slice(0, 3).join(" ");
+  $("#history-city").value = $("#city").selectedOptions[0].textContent;
+  historyPage = 0;
+  renderHistory();
 });
 fetch("/api/connectors")
   .then(async (response) => {
@@ -641,10 +698,10 @@ $("#reset-filter").addEventListener("click", () => {
 fetch("/health")
   .then((response) => {
     if (!response.ok) throw new Error();
-    $("#health").textContent = "● API доступен";
+    $("#health").textContent = "Приложение подключено";
   })
   .catch(() => {
-    $("#health").textContent = "● API недоступен";
+    $("#health").textContent = "Нет связи с приложением";
   });
 void history();
 setInterval(() => {
