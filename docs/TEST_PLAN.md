@@ -1,5 +1,9 @@
 # Test plan
 
+Ready terminal: 53 Node tests; tests/research.test.ts covers strict tool/field/URL/city boundaries, bounded/redacted output including WB user, source cooldown, UNVERIFIED-only responses, shared lock through cleanup and no price-history writes. Four tests in tests/ozon_bridge_test.py cover owned context lifecycle, terminal block latch and rejection of swallowed ancillary/partial outcomes. Upstream offline suites with PYTHONUTF8=1: Market parse72, Ozon parse68, WB helpers114, Avito server33. These selected upstream suites are not full live acceptance. Actual six-server tools/list and27-tool source inventory are committed under docs/evidence/2026-10-01-terminal-*.
+
+UI regression: open isolated fixture dialog while VERIFIED/100 RUB, leave it open across TTL and require STALE with price removed. Check history pagination, offer-to-research prefill, separate region display, theme toggle, narrow-screen navigation and source provenance. Fixtures must run only on8898, never the application port/history. Additional evidence: evidence/2026-10-01-ready-terminal.md.
+
 | Layer | Checks |
 |---|---|
 | Unit | Exact/missing/conflicting year/CPU/RAM/SSD; Yandex variant redirect; invalid/future/expired timestamps; null landed components; unsafe URLs; source normalization |

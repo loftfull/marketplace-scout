@@ -1,0 +1,296 @@
+[
+  {
+    "file": ".runtime\\ru-marketplace-mcp\\packages\\wb-connector\\src\\wb_connector\\server.py",
+    "line": 716,
+    "tool": "wb_card",
+    "args": [
+      "nm_ids",
+      "dest"
+    ],
+    "doc": "Fetch product card data from WB v4 API.\n\nReturns prices in rubles, brand, supplier, supplier_rating, review_rating,\nfeedbacks count, total_quantity for up to 100 SKUs.\n\n## Return Format\n\nWbCardResponse: {dest, count, items, meta}. Items carry nm_id, name, brand,\nsupplier, supplier_id, supplier_rating, review_rating, feedbacks,\ntotal_quantity, in_stock, price_rub, price_original_rub. price_rub is None\nwhen the SKU has no sellable price — never 0. "
+  },
+  {
+    "file": ".runtime\\ru-marketplace-mcp\\packages\\wb-connector\\src\\wb_connector\\server.py",
+    "line": 863,
+    "tool": "wb_root_info",
+    "args": [
+      "nm_id"
+    ],
+    "doc": "Fetch full card metadata from basket CDN. Returns imt_id (root_id) for review pool.\n\nAll variants of one product share imt_id. Reviews indexed by imt_id, NOT by nmId.\n\n## Return Format\n\nWbRootInfoResponse: {imt_id, subj_name, subj_root_name, colors,\ncompositions, options, host_used, meta}. imt_id is the root product id\nshared by every variant — wb_reviews is indexed by it, not by nmId.\n\n## Error Format\n\nOn validation or transport/parse failure, r"
+  },
+  {
+    "file": ".runtime\\ru-marketplace-mcp\\packages\\wb-connector\\src\\wb_connector\\server.py",
+    "line": 1015,
+    "tool": "wb_reviews",
+    "args": [
+      "imt_id",
+      "limit",
+      "sort"
+    ],
+    "doc": "Fetch reviews by imt_id (root_id from wb_root_info).\n\nAll product variants share one review pool, indexed by imt_id NOT nmId.\n\nThe WB feedbacks endpoint returns a fixed pool (~1000 most-recent reviews,\nnewest-first) and IGNORES server-side order params (verified Nov 2026), so\n`sort` is applied CLIENT-SIDE over that pool. To surface complaints, \"worst\"\nreorders the returned pool by lowest rating first.\n\n## Return Format\n\nWbReviewsResponse: {imt_id"
+  },
+  {
+    "file": ".runtime\\ru-marketplace-mcp\\packages\\wb-connector\\src\\wb_connector\\server.py",
+    "line": 1204,
+    "tool": "wb_questions",
+    "args": [
+      "imt_id",
+      "limit",
+      "skip",
+      "answered_only"
+    ],
+    "doc": "Fetch buyer questions and seller answers by imt_id (root_id from wb_root_info).\n\nAnswers this tool exists for: buyers ask what a listing omits — \"does it fit\na 60cm opening\", \"is the cable included\", \"is this the 10A or the 16A model\" —\nand the seller's reply is often the only public statement of that fact.\nReviews describe the experience of owning the product; questions clarify what\nit actually is.\n\nKeyed by imt_id, exactly like ``wb_reviews``: "
+  },
+  {
+    "file": ".runtime\\ru-marketplace-mcp\\packages\\wb-connector\\src\\wb_connector\\server.py",
+    "line": 1424,
+    "tool": "wb_search",
+    "args": [
+      "query",
+      "dest",
+      "page"
+    ],
+    "doc": "Search WB catalog by text query.\n\nUses the lightweight `search-goods.wildberries.ru/search` endpoint which\nreturns just product IDs (no PoW protection, very high rate limit). Then\nenriches via `wb_card` for full details.\n\n## Return Format\n\nWbSearchResponse: {query, page, page_size, total_ids, count, items, meta},\nwith items in the same shape as wb_card. Zero matches — or a page past the\nend — returns WbNoResultsResponse {status: \"no_results\", que"
+  },
+  {
+    "file": ".runtime\\ru-marketplace-mcp\\packages\\wb-connector\\src\\wb_connector\\server.py",
+    "line": 1799,
+    "tool": "wb_seller",
+    "args": [
+      "supplier_id"
+    ],
+    "doc": "Look up the registered legal entity behind a WB seller.\n\nAnswers \"who actually ships this?\" — the question a marketplace listing is\nworst at. Returns the registered name, tax ids (INN/KPP/OGRN) and legal\naddress, which is how you tell an official brand store from a reseller\ntrading under a lookalike name, and how you spot several storefronts sharing\none entity.\n\nChain from `wb_card`: its `supplier_id` field feeds straight into this tool.\n\n## Retu"
+  },
+  {
+    "file": ".runtime\\ru-marketplace-mcp\\packages\\wb-connector\\src\\wb_connector\\server.py",
+    "line": 1943,
+    "tool": "wb_categories",
+    "args": [
+      "root",
+      "max_depth"
+    ],
+    "doc": "Browse the Wildberries catalog tree.\n\nUse this to discover what exists before searching: `wb_search` needs a query\nstring, but a shopper's question is often \"what categories of humidifiers are\nthere?\". Each node carries WB's own `shard` and `query` selectors, which are\nthe addressing needed to pull a category feed.\n\nThe live menu is ~800 KB, so responses are always a bounded slice — start at\n'top', then expand the branch you care about.\n\n## Retur"
+  },
+  {
+    "file": ".runtime\\ru-marketplace-mcp\\packages\\wb-connector\\src\\wb_connector\\server.py",
+    "line": 2053,
+    "tool": "wb_category_products",
+    "args": [
+      "shard",
+      "query",
+      "page",
+      "sort",
+      "dest"
+    ],
+    "doc": "List the products in a catalog category, using the shard and query from wb_categories.\n\nThis closes the loop `wb_categories` opens. That tool hands back WB's own\n`shard` and `query` selectors — the address of a category feed — and this is\nthe tool that fetches it. Browsing \"what humidifiers exist\" no longer requires\ninventing a search phrase and hoping WB's relevance ranking agrees with you.\n\nItems come back in the same shape `wb_search` and `wb_"
+  },
+  {
+    "file": ".runtime\\ru-marketplace-mcp\\packages\\avito-connector\\src\\avito_connector\\server.py",
+    "line": 435,
+    "tool": "avito_search",
+    "args": [
+      "query",
+      "page",
+      "location_id",
+      "category_id"
+    ],
+    "doc": "Search Avito listings via the internal js/items API.\n\n## Return Format\n\nAvitoSearchResponse: {status, query, page, location_id, tier_used, count,\ntotal_count, items[], meta}. Items carry item_id, title, price_rub (None\nwhen the ad has no price — never 0), url, location, seller fields.\n\n## Error Format\n\nToolError: BadRequestError on malformed arguments; TransportDownError on\nfirewall blocks (with the captcha/proxy guidance inline); ParserDriftErro"
+  },
+  {
+    "file": ".runtime\\ru-marketplace-mcp\\packages\\avito-connector\\src\\avito_connector\\server.py",
+    "line": 509,
+    "tool": "avito_card",
+    "args": [
+      "item_id_or_url"
+    ],
+    "doc": "Fetch one Avito listing by id or URL.\n\n## Return Format\n\nAvitoCardResponse: {status, item_id, title, price_rub, description, location,\nposted_at, views, images, seller, url, tier_used, meta}. price_rub is None\nwhen the ad has no price — never 0.\n\n## Error Format\n\nToolError: BadRequestError when no id can be extracted; NotFoundError on a\n404 (deleted or never existed); TransportDownError on blocks; ParserDriftError\nwhen the envelope changed."
+  },
+  {
+    "file": ".runtime\\ru-marketplace-mcp\\packages\\avito-connector\\src\\avito_connector\\server.py",
+    "line": 602,
+    "tool": "avito_seller",
+    "args": [
+      "seller_id_or_url"
+    ],
+    "doc": "Fetch an Avito seller profile — reputation is the review signal here.\n\nClassifieds have no per-item review pool; the seller's rating, review count\nand active-listing count are what a buyer checks.\n\n## Return Format\n\nAvitoSellerResponse: {status, seller, active_items, tier_used, meta}.\n\n## Error Format\n\nToolError: BadRequestError on empty input; NotFoundError on 404;\nTransportDownError on blocks; ParserDriftError on envelope drift."
+  },
+  {
+    "file": ".runtime\\ru-marketplace-mcp\\packages\\ozon-connector\\src\\ozon_connector\\server.py",
+    "line": 623,
+    "tool": "ozon_card",
+    "args": [
+      "sku_or_path"
+    ],
+    "doc": "Fetch Ozon product card data via composer-api.bx.\n\nTier-1 (curl_cffi) tried first. Falls back to Tier-2 (Chrome CDP at port\n9222) when Tier-1 hits Cloudflare 403. Tier-2 requires the operator running Chrome\nvia scripts/start_chrome_cdp.ps1 (Windows) or scripts/start_chrome_cdp.sh (Linux/macOS) first.\n\n## Return Format\n\nOzonCardResponse: {status, price, card_price, price_original, is_available,\nrating_score, rating_count, title, seller, characteri"
+  },
+  {
+    "file": ".runtime\\ru-marketplace-mcp\\packages\\ozon-connector\\src\\ozon_connector\\server.py",
+    "line": 799,
+    "tool": "ozon_reviews",
+    "args": [
+      "sku_or_path",
+      "limit",
+      "sort"
+    ],
+    "doc": "Fetch Ozon product review texts + star distribution via composer-api.bx.\n\nTier-1 (curl_cffi) tried first, Tier-2 (Chrome CDP) fallback — same path\nas ozon_card. Returns review texts (comment/positive/negative), per-review\nscore, helpfulness votes, author first name, date, plus the overall star\ndistribution and total count.\n\nPages are walked automatically (30/page) until `limit` texts are collected\nor pages run out, deduplicating by review uuid. H"
+  },
+  {
+    "file": ".runtime\\ru-marketplace-mcp\\packages\\ozon-connector\\src\\ozon_connector\\server.py",
+    "line": 1288,
+    "tool": "ozon_search",
+    "args": [
+      "query",
+      "page"
+    ],
+    "doc": "Search Ozon catalog. Tier-1 curl_cffi → Tier-2 CDP fallback.\n\nReturns sku/title/price/rating per item. Schema parses Nov 2026\n`tileGridDesktop-*` widgets with `mainState` atom structure.\n\n## Return Format\n\nOzonSearchResponse: {status, query, page, tier_used, count, items, meta} on\nsuccess. Zero matching items is NOT an error — it returns a healthy response\nwith count=0 and empty items.\n\n## Error Format\n\nRaises ToolError on validation (BadRequestE"
+  },
+  {
+    "file": ".runtime\\ru-marketplace-mcp\\packages\\yandex-connector\\src\\yandex_connector\\server.py",
+    "line": 246,
+    "tool": "yandex_search",
+    "args": [
+      "query",
+      "page",
+      "limit"
+    ],
+    "doc": "Search Yandex Market and return products with both prices, ratings and sellers.\n\nYandex Market aggregates many sellers per product, which makes it the best\nsingle source for \"what does this cost right now\" across the Russian market —\nincluding goods Wildberries and Ozon do not carry.\n\nEach result reports `price_rub` (what anyone pays — the price the SERP\nsnippet's cart button charges, cross-verified against product cards) and\n`price_with_plus` (r"
+  },
+  {
+    "file": ".runtime\\ru-marketplace-mcp\\packages\\yandex-connector\\src\\yandex_connector\\server.py",
+    "line": 405,
+    "tool": "yandex_card",
+    "args": [
+      "product_id",
+      "include_reviews"
+    ],
+    "doc": "Fetch full detail for a Yandex Market product: prices, rating breakdown, reviews.\n\nTwo things here are hard to get anywhere else. The **star distribution**\n(`rating_stars`) shows whether a 4.8 average hides a cluster of one-star\ncomplaints. And **reviews arrive with the card** in one request, complete with\npros, cons and helpfulness votes.\n\nReviews are capped at the ~13 Yandex renders server-side; the remainder load\nthrough an API this connector "
+  },
+  {
+    "file": ".runtime\\yandex-market-mcp\\src\\yandex_market_mcp\\server.py",
+    "line": 309,
+    "tool": "search_products",
+    "args": [
+      "query",
+      "page",
+      "sort",
+      "price_min",
+      "price_max",
+      "include_sponsored"
+    ],
+    "doc": "Search Yandex Market like the site: real pages, the site's sort orders and a price window.\n\nEach item: offer/card/model/SKU ids, title, card URL, the three labelled prices (without the\nPay card, with it, crossed-out), discounts, seller, sponsored flag, rating of this seller's\ncard with its count, badges, cross-border / markdown flags, stock and delivery dates. One\nrequest per call."
+  },
+  {
+    "file": ".runtime\\yandex-market-mcp\\src\\yandex_market_mcp\\server.py",
+    "line": 400,
+    "tool": "get_product",
+    "args": [
+      "product",
+      "include_specs",
+      "include_description",
+      "include_seller_legal"
+    ],
+    "doc": "One seller's product card, live: the three labelled prices, promo conditions, delivery, seller.\n\nAlso: rating of this seller's card with stars and a check whether the card pools other\nproducts, «Все N предложений от X» (X = lowest Pay-card price; list them with get_offers),\nbadges with their real meaning, cross-border / markdown / version flags, stock,\ncharacteristics and question count. One request (three with include_seller_legal)."
+  },
+  {
+    "file": ".runtime\\yandex-market-mcp\\src\\yandex_market_mcp\\server.py",
+    "line": 441,
+    "tool": "get_offers",
+    "args": [
+      "model_id",
+      "sku_id",
+      "sort"
+    ],
+    "doc": "All sellers' offers of one product (the site's «Все N предложений»), as tiles.\n\nMarket's server pages show the first 16 offers per sort and ignore `page` (checked\n2026-09-25), so this returns at most 16; call again with another sort to see more (dedupe by\noffer_id). Also returns the model group's rating — labelled: it can merge different products.\nOne request."
+  },
+  {
+    "file": ".runtime\\yandex-market-mcp\\src\\yandex_market_mcp\\server.py",
+    "line": 496,
+    "tool": "get_reviews",
+    "args": [
+      "product",
+      "scope",
+      "sort",
+      "page"
+    ],
+    "doc": "Buyer reviews with date, stars, pros, cons, comment, votes, photo count and the product each is about.\n\nThe header numbers (rating, counts, stars) are the site's for the chosen scope; for\nscope=\"variant\" the site still shows the whole card's numbers (labelled). Items without text\nare ratings only. Author names and order numbers are never returned. One request."
+  },
+  {
+    "file": ".runtime\\yandex-market-mcp\\src\\yandex_market_mcp\\server.py",
+    "line": 576,
+    "tool": "get_questions",
+    "args": [
+      "product",
+      "page"
+    ],
+    "doc": "Buyers' questions about a card with the answers shown on the site; `by_seller` marks the seller's answers.\n\nDates are exact. Names of buyers are never returned; greetings with a name in answers are\nmasked. One request."
+  },
+  {
+    "file": ".runtime\\yandex-market-mcp\\src\\yandex_market_mcp\\server.py",
+    "line": 602,
+    "tool": "get_seller",
+    "args": [
+      "business_id"
+    ],
+    "doc": "A seller's storefront header (rating, ratings count, orders, years on Market, status) and legal entity.\n\nThe legal entity (name, INN, OGRN, address, cross-border flag) comes from the site's\nseller-info popup, loaded with a POST to Market's /api/ (robots.txt Disallow) — two requests."
+  },
+  {
+    "file": ".runtime\\yandex-market-mcp\\src\\yandex_market_mcp\\server.py",
+    "line": 630,
+    "tool": "compare_products",
+    "args": [
+      "products"
+    ],
+    "doc": "Side-by-side rows for up to 10 seller cards: the three prices, rating of the card, seller, delivery.\n\nOne request per card, sequentially (about 5 s each). A card that fails gets an `error` row;\na captcha or rate limit stops the whole comparison."
+  },
+  {
+    "file": ".runtime\\ozon-mcp\\src\\ozon_mcp\\server.py",
+    "line": 112,
+    "tool": "search_products",
+    "args": [
+      "query",
+      "page",
+      "sort",
+      "price_min",
+      "price_max",
+      "limit",
+      "auto_category"
+    ],
+    "doc": "Search Ozon like the site does, with real pagination.\n\nWalks Ozon's result pages from `page` until `limit` items are collected;\npages are never cut, so `next_page` continues without gaps (Ozon itself\nmay repeat an item across pages — repeats within one call are dropped).\nOzon does not report a total count.\n\nPer item: SKU, name, brand (only when the tile shows it — otherwise use\nget_product), `price_with_ozon_card_rub` (tiles show only the Ozon Ca"
+  },
+  {
+    "file": ".runtime\\ozon-mcp\\src\\ozon_mcp\\server.py",
+    "line": 215,
+    "tool": "get_product",
+    "args": [
+      "product",
+      "include_variants",
+      "include_other_sellers",
+      "include_description"
+    ],
+    "doc": "Full, live product card for one SKU.\n\nPrices: Ozon Card / without Ozon Card / crossed-out, plus the sale banner\nand Ozon's only price-history hint (current vs last month's average) when\nit shows \"Стало дешевле\". Availability, delivery options and dates for\nthe region, where it ships from, return terms. Seller with rating, order\ncount and legal entity (name, ОГРН/ИНН, address). Rating: the one Ozon\nshows (often the whole variant line's) next to th"
+  },
+  {
+    "file": ".runtime\\ozon-mcp\\src\\ozon_mcp\\server.py",
+    "line": 348,
+    "tool": "get_reviews",
+    "args": [
+      "product",
+      "page",
+      "limit",
+      "sort",
+      "scope",
+      "include_seller_replies"
+    ],
+    "doc": "Buyer reviews with date, stars, text, pros, cons and the variant bought.\n\nAlso returns the line rating with its star split and this SKU's own\nrating computed from its reviews, so it is clear what a headline number\ncovers. Per review: `sku`/`variant` (which product of the line it is\nabout), `purchased_on_ozon`, photo and video counts attached to that\nreview, helpful votes, `outdated` (Ozon no longer counts it in the\nrating), number of comments and"
+  },
+  {
+    "file": ".runtime\\ozon-mcp\\src\\ozon_mcp\\server.py",
+    "line": 446,
+    "tool": "compare_products",
+    "args": [
+      "products",
+      "with_delivery"
+    ],
+    "doc": "Live side-by-side offers for up to 20 SKUs (one card request each).\n\nPer SKU: name, brand, the three prices (Ozon Card / without / crossed-out),\navailability, the rating shown on the card with the size of its variant\nline (a line rating is not the SKU's own — use get_product for that),\nseller with rating, the cheapest other-seller offer Ozon advertises, and\nthe delivery date under the cart button (`express_delivery` with its\nsurcharge when Ozon a"
+  }
+]

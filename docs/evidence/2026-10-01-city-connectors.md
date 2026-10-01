@@ -32,3 +32,8 @@ WB region mapping success/response shape and downstream live regional card extra
 -One full test run initially missed the second history row; isolated reproduction and repeated full48-test suite passed. Added explicit second-search HTTP assertion for clearer future failure diagnosis; no storage rewrite was made on speculation.
 
 Independent critic closed variant identity/WB destination findings, then found and closed a verify-exception path that skipped region/spec conflicts. The safe unavailable observation now passes through assess; independent9/9 city tests passed and final scoped verdict is GO. The final live run preceded this error-path hardening and removal of unsupported WB search dest; both final deltas were tested deterministically. Hosted CI results are recorded separately after push. Positive live target verification remains HOLD regardless of those checks. Rollback: stop owned app processes, preserve .data/.runtime, revert this slice and rebuild; do not rewrite historical observations or clear site cooldowns.
+
+
+## Superseding correction — full tool inventory, 2026-10-01
+
+The earlier statements above that wb_search has no dest input were incorrect. Source inspection and actual tools/list confirm dest is accepted as input; only the response omits it. The ready-terminal change restores validated city destination input and retains wb_card regional reread. Historical live evidence above remains unchanged: that run stopped at geo resolution and never reached wb_search. See REUSE.md and terminal-tool-contracts.json.

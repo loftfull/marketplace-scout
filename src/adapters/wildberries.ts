@@ -120,7 +120,7 @@ export async function searchWb(profile: ProductProfile, city: City): Promise<Dis
     const search = record(
       await wbMcp.call(
         "wb_search",
-        { query: queryFor(profile) },
+        { query: queryFor(profile), dest: destinationId },
         45000,
         AbortSignal.timeout(50000),
       ),
@@ -129,7 +129,7 @@ export async function searchWb(profile: ProductProfile, city: City): Promise<Dis
       throw Error("destination_mismatch");
     if (search.status !== "no_results" && !Array.isArray(search.items))
       throw Error("invalid_wb_response");
-    // Upstream search schema drops dest. Re-read its candidate IDs through wb_card,
+    // Upstream search output omits dest. Re-read its candidate IDs through wb_card,
     // which carries dest, before accepting any discovery prices from that response.
     const ids = (Array.isArray(search.items) ? search.items : [])
       .slice(0, 30)

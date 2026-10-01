@@ -12,7 +12,7 @@ createServer(async (req, res) => {
     return;
   }
   if (req.url === "/api/history") {
-    observed ??= new Date(Date.now() - 899000).toISOString();
+    observed ??= new Date(Date.now() - 870000).toISOString();
     res.setHeader("Content-Type", "application/json");
     res.end(
       JSON.stringify({
@@ -26,12 +26,13 @@ createServer(async (req, res) => {
               sku: "123",
               priceRub: 100,
               status: "VERIFIED",
+              requestedCity: "Воронеж",
               verifiedAt: observed,
               reasons: [],
               specs: {},
               imageUrl: "https://avatars.mds.yandex.net/test-only-image",
               imageSource: "discovery",
-              evidence: { live: true, priceKind: "ordinary" },
+              evidence: { live: true, priceKind: "ordinary", region: "Воронеж" },
             },
           },
         ],
@@ -39,11 +40,19 @@ createServer(async (req, res) => {
     );
     return;
   }
+  if (req.url === "/api/research" || req.url === "/api/connectors") {
+    res.setHeader("Content-Type", "application/json");
+    res.end(JSON.stringify({ operations: [], providers: [] }));
+    return;
+  }
   const files = {
     "/": "index.html",
     "/app.js": "app.js",
     "/app.css": "app.css",
     "/offer-view.js": "offer-view.js",
+    "/terminal.js": "terminal.js",
+    "/vendor/tabler/tabler.min.css": "vendor/tabler/tabler.min.css",
+    "/vendor/tabler/tabler.min.js": "vendor/tabler/tabler.min.js",
   };
   const file = files[req.url];
   if (!file) {

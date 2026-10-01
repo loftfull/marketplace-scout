@@ -38,3 +38,8 @@ Implemented requested-city snapshot/UI, separate observed regions, ordinary/Pay/
 Independent critic closed URL/variant contradiction and WB destination findings, then reviewed live-log corrections. Final P2 found: the verify-exception branch skipped region/spec checks. Fixed by passing a cleared unavailable observation through assess; regression covers wrong city+CPU+exception and null comparison prices. Critic independently ran9 city tests, all passed, and returned **GO** for the reviewed slice. No open concrete blocking review findings. Positive live target verification and WB geo/card acceptance remain **HOLD**.
 
 Final source run06:34Z:3 Market candidates including requested configuration,0 browser reopens,0 VERIFIED. Market observed Moscow; first native card blocked and subsequent requests stopped. Ozon/Avito blocked; WB geo timed out before price tools. Live evidence was collected before the final exception-branch hardening; that branch and removal of unsupported WB search argument were verified deterministically, without repeating blocked-site requests.
+
+
+## Superseding correction — full tool inventory, 2026-10-01
+
+The earlier statements above that wb_search has no dest input were incorrect. Source inspection and actual tools/list confirm dest is accepted as input; only the response omits it. The ready-terminal change restores validated city destination input and retains wb_card regional reread. Historical live evidence above remains unchanged: that run stopped at geo resolution and never reached wb_search. See REUSE.md and terminal-tool-contracts.json.

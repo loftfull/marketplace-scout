@@ -58,6 +58,7 @@ const names = {
 const selection = requestSelection();
 let currentOffers = [];
 let historyRows = [];
+let historyPage = 0;
 let renderedOfferStatuses = "";
 let renderedHistoryStatuses = "";
 const statusSignature = (offers) => offers.map((offer) => statusNow(offer)).join(",");
@@ -100,7 +101,7 @@ function safeLink(offer) {
   }
 }
 function card(offer, seenAt) {
-  const article = element("article", "card");
+  const article = element("article", "offer-detail");
   const photo = element("figure", "product-photo");
   const imageUrl = safeImage(offer.imageUrl, offer.marketplace);
   if (imageUrl) {
@@ -200,8 +201,23 @@ function card(offer, seenAt) {
   if (offer.evidence?.priceKind !== "ordinary")
     price.append(element("div", "meta", "Условия цены не подтверждены"));
   const actions = element("div");
+  if (offer.sku && /^[1-9]\d{0,14}$/.test(offer.sku)) {
+    const researchButton = element("button", "btn btn-sm mt-2", "Исследовать товар");
+    researchButton.type = "button";
+    researchButton.addEventListener("click", () => {
+      $("#offer-dialog")?.close();
+      window.dispatchEvent(
+        new CustomEvent("scout-research", {
+          detail: { source: offer.marketplace, sku: offer.sku, city: offer.requestedCityId },
+        }),
+      );
+    });
+    actions.append(researchButton);
+  }
   const status = statusNow(offer);
-  actions.append(element("span", `badge ${status === "VERIFIED" ? "" : "warn"}`, status));
+  actions.append(
+    element("span", `badge ${status === "VERIFIED" ? "bg-green-lt" : "bg-yellow-lt"}`, status),
+  );
   const url = safeLink(offer);
   if (url) {
     const link = element("a", "offer-link", "Открыть карточку ↗");
@@ -278,7 +294,100 @@ function card(offer, seenAt) {
   article.append(verification);
   return article;
 }
+function offerTable(rows, historical = false) {
+  const wrapper = element("div", "table-responsive");
+  const table = element("table", "table table-vcenter card-table table-hover");
+  const head = element("thead"),
+    header = element("tr");
+  for (const label of [
+    "Товар / площадка",
+    "Цена и регион",
+    "Проверка",
+    historical ? "Наблюдение" : "Действие",
+  ])
+    header.append(element("th", "", label));
+  head.append(header);
+  table.append(head);
+  const body = element("tbody");
+  for (const row of rows) {
+    const offer = row.offer ?? row,
+      tr = element("tr"),
+      product = element("td");
+    const productRow = element("div", "d-flex align-items-center gap-3");
+    const image = safeImage(offer.imageUrl, offer.marketplace);
+    if (image) {
+      const img = element("img", "offer-thumb");
+      img.src = image;
+      img.alt = "Фото товара";
+      img.loading = "lazy";
+      img.referrerPolicy = "no-referrer";
+      img.addEventListener("error", () => img.replaceWith(element("span", "avatar", "—")), {
+        once: true,
+      });
+      productRow.append(img);
+    } else productRow.append(element("span", "avatar text-secondary", "—"));
+    const description = element("div");
+    description.append(
+      element("div", "offer-title", offer.title || "Без названия"),
+      element(
+        "div",
+        "meta",
+        `${names[offer.marketplace] || offer.marketplace} · ${offer.sku || "артикул неизвестен"}`,
+      ),
+    );
+    productRow.append(description);
+    product.append(productRow);
+    const price = element("td"),
+      current = priceFor(offer, "current"),
+      discovery = priceFor(offer, "discovery");
+    price.append(
+      element("div", "fw-semibold", current === null ? "Не подтверждена" : money(current)),
+    );
+    if (discovery !== null)
+      price.append(element("div", "meta", `${money(discovery)} · поиск, без карты`));
+    price.append(element("div", "meta", `Город: ${offer.requestedCity || "не указан"}`));
+    if (offer.discoveryRegion && offer.discoveryRegion !== offer.requestedCity)
+      price.append(element("div", "text-warning small", `Площадка: ${offer.discoveryRegion}`));
+    const state = element("td"),
+      status = statusNow(offer);
+    state.append(
+      element("span", `badge ${status === "VERIFIED" ? "bg-green-lt" : "bg-yellow-lt"}`, status),
+    );
+    const actions = element("td");
+    if (historical) actions.append(element("div", "meta mb-2", date(row.seenAt)));
+    const button = element("button", "btn btn-sm", "Подробнее");
+    button.type = "button";
+    button.addEventListener("click", () => {
+      const dialog = $("#offer-dialog");
+      openOffer = { offer: { ...offer, landed: row.landed ?? offer.landed }, seenAt: row.seenAt };
+      refreshOpenOffer();
+      dialog.showModal();
+    });
+    actions.append(button);
+    tr.append(product, price, state, actions);
+    body.append(tr);
+  }
+  table.append(body);
+  wrapper.append(table);
+  return wrapper;
+}
+function metrics() {
+  const verified = currentOffers.filter((offer) => priceFor(offer, "current") !== null);
+  for (const [id, value] of [
+    ["metric-offers", currentOffers.length],
+    ["metric-verified", verified.length],
+    [
+      "metric-price",
+      verified.length
+        ? money(Math.min(...verified.map((offer) => priceFor(offer, "current"))))
+        : "—",
+    ],
+    ["metric-history", historyRows.length],
+  ])
+    if ($(`#${id}`)) $(`#${id}`).textContent = String(value);
+}
 function renderOffers() {
+  metrics();
   renderedOfferStatuses = statusSignature(currentOffers);
   const results = $("#results");
   results.replaceChildren();
@@ -321,7 +430,7 @@ function renderOffers() {
         "Нет предложений в этом диапазоне. Измените границы, выберите цены из поиска или включите товары без цены.",
       ),
     );
-  for (const offer of filtered) results.append(card(offer));
+  if (filtered.length) results.append(offerTable(filtered));
 }
 async function history() {
   const box = $("#history");
@@ -338,6 +447,7 @@ async function history() {
   }
 }
 function renderHistory() {
+  metrics();
   renderedHistoryStatuses = statusSignature(historyRows.map((row) => row.offer));
   const box = $("#history");
   const scrollTop = box.scrollTop;
@@ -346,7 +456,15 @@ function renderHistory() {
     box.append(
       element("div", "empty", "История пока пуста. Здесь появятся реальные найденные карточки."),
     );
-  for (const row of historyRows) box.append(card({ ...row.offer, landed: row.landed }, row.seenAt));
+  historyPage = Math.min(historyPage, Math.max(0, Math.ceil(historyRows.length / 20) - 1));
+  if (historyRows.length)
+    box.append(offerTable(historyRows.slice(historyPage * 20, (historyPage + 1) * 20), true));
+  if ($("#history-page"))
+    $("#history-page").textContent =
+      `${historyRows.length} наблюдений · страница ${historyPage + 1} из ${Math.max(1, Math.ceil(historyRows.length / 20))}`;
+  if ($("#history-prev")) $("#history-prev").disabled = historyPage === 0;
+  if ($("#history-next"))
+    $("#history-next").disabled = (historyPage + 1) * 20 >= historyRows.length;
   box.scrollTop = scrollTop;
 }
 $("#f").addEventListener("submit", async (event) => {
@@ -379,7 +497,8 @@ $("#f").addEventListener("submit", async (event) => {
       );
     currentOffers = data.offers || [];
     for (const source of data.sourceOutcomes || []) {
-      const el = element("div", "source");
+      const col = element("div", "col-md-6 col-xl-3");
+      const el = element("div", "card card-body h-100");
       el.append(
         element(
           "strong",
@@ -428,7 +547,8 @@ $("#f").addEventListener("submit", async (event) => {
         );
         el.append(diagnostics);
       }
-      $("#sources").append(el);
+      col.append(el);
+      $("#sources").append(col);
     }
     renderOffers();
     await history();
@@ -452,6 +572,7 @@ $("#f").addEventListener("submit", async (event) => {
 $("#city").addEventListener("change", () => {
   selection.change();
   currentOffers = [];
+  metrics();
   $("#sources").replaceChildren();
   $("#count").textContent = "";
   $("#results").replaceChildren(
@@ -490,6 +611,25 @@ fetch("/api/connectors")
       "Сведения о коннекторах недоступны. Проверьте подключение к приложению.";
   });
 $("#refresh-history").addEventListener("click", history);
+$("#history-prev")?.addEventListener("click", () => {
+  historyPage--;
+  renderHistory();
+});
+$("#history-next")?.addEventListener("click", () => {
+  historyPage++;
+  renderHistory();
+});
+$("#close-offer")?.addEventListener("click", () => $("#offer-dialog").close());
+let openOffer;
+let openOfferStatus;
+function refreshOpenOffer() {
+  if (!openOffer) return;
+  openOfferStatus = statusNow(openOffer.offer);
+  $("#offer-detail").replaceChildren(card(openOffer.offer, openOffer.seenAt));
+}
+$("#offer-dialog")?.addEventListener("close", () => {
+  openOffer = undefined;
+});
 $("#price-filters").addEventListener("input", renderOffers);
 $("#reset-filter").addEventListener("click", () => {
   $("#price-min").value = "";
@@ -508,8 +648,9 @@ fetch("/health")
   });
 void history();
 setInterval(() => {
+  if (openOffer && statusNow(openOffer.offer) !== openOfferStatus) refreshOpenOffer();
   if (!$("#search").disabled && statusSignature(currentOffers) !== renderedOfferStatuses)
     renderOffers();
   if (statusSignature(historyRows.map((row) => row.offer)) !== renderedHistoryStatuses)
     renderHistory();
-}, 30000);
+}, 1000);

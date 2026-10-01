@@ -4,6 +4,9 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "prestart": "node scripts/vendor-ui.mjs",
+    "predev": "node scripts/vendor-ui.mjs",
+    "prebuild": "node scripts/vendor-ui.mjs",
     "dev": "tsx watch src/server.ts",
     "start": "tsx src/server.ts",
     "test": "node --import tsx --test tests/*.test.ts",
@@ -21,6 +24,7 @@
   "dependencies": {
     "@fastify/static": "10.1.5",
     "@modelcontextprotocol/sdk": "1.31.0",
+    "@tabler/core": "1.6.1",
     "fastify": "5.12.5",
     "playwright": "1.63.0",
     "zod": "4.6.5"

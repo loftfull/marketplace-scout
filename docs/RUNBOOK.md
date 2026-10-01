@@ -1,5 +1,9 @@
 # Local runbook
 
+Terminal assets: npm ci then npm run build (or npm start) copies the pinned Tabler core into ignored public/vendor; if running dist/server.js directly, run build first. Never serve templates from the reference clone. Research operations are selected in the UI and share the search busy guard; wait for completion before another operation. Source block means stop, not reset state. For review/parser output on Windows, child processes explicitly set PYTHONUTF8=1. Native review/seller results remain observations and are not part of the price-history backup.
+
+Ready-terminal rollback: stop only owned Scout processes, retain .data and .runtime, revert the terminal commit, npm ci and npm run build, restart. No data migration. Known limitation: selected-city WB geo resolution and readable target cards must be proven before declaring live price acceptance. Do not replace missing results with default city or zero price.
+
 1. Enter D:\\Projects\\marketplace-scout. npm ci; npm run runtime:setup; npm run runtime:ozon; npm run runtime:yandex; npm run build; npm start.
 2. Open http://127.0.0.1:8787. /health proves API readiness only. Search proves runtime startup and source readiness; every source has an outcome.
 3. npm run acceptance writes work/live-acceptance.json. Save this before changing runtime versions. No web-search prices count as confirmation.

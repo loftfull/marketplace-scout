@@ -1,6 +1,14 @@
 {
   "files": {
-    "includes": ["src/**", "tests/**", "public/**", "scripts/**", "*.json", "!package-lock.json"]
+    "includes": [
+      "src/**",
+      "tests/**",
+      "public/**",
+      "scripts/**",
+      "*.json",
+      "!package-lock.json",
+      "!public/vendor"
+    ]
   },
   "formatter": {
     "enabled": true,

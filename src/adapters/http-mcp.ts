@@ -97,6 +97,7 @@ export class McpClient {
         CHROME_CHALLENGE_HANDOFF_S: "0",
         COMPARE_SOURCE_TIMEOUT: "45",
         PYTHONIOENCODING: "utf-8",
+        PYTHONUTF8: "1",
         ...this.executable?.env,
       });
       const transport = new StdioClientTransport({

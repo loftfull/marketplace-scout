@@ -2,12 +2,17 @@
 
 ```mermaid
 flowchart LR
-  UI[Existing vanilla UI] --> API[Fastify on loopback]
+  UI[Adapted Tabler dashboard] --> API[Fastify on loopback]
   API --> Query[Server query parser]
   Query --> MCP[Official MCP SDK]
   MCP --> RU[Pinned ru-marketplace-mcp]
   RU --> Discovery[Ozon / Avito / WB collectors]
   MCP --> YM[Pinned specialized Market parser]
+  API --> Research[Allowlisted read-only research registry]
+  Research --> MCP
+  Research --> Observation[Bounded UNVERIFIED data; no history writes]
+  Observation --> UI
+  MCP --> Ozon[Pinned specialized Ozon module]
   YM --> Discovery
   Discovery --> URLs[Canonical product / variant]
   URLs --> Browser[Independent Chrome card reader]
@@ -18,6 +23,8 @@ flowchart LR
 ```
 
 One active search; at most three candidates per source, four sources sequentially. MCP requests have bounded deadlines (Market35s tool/40s total; existing ru65s total); WB geo12s. Browser navigation has30s deadlines. Source failure is retained separately from offers. MCP SDK implements initialization, stdio or optional loopback Streamable HTTP, reconnect after child exit and bounded calls.
+
+Search and research share one synchronous lock, retained through awaited cleanup. Research uses fixed operation IDs and exact typed fields in src/research.ts. public/terminal.js owns navigation, native capability forms and generation-safe response handling; public/app.js owns comparison/history/detail rendering; offer-view.js retains domain predicates. Tabler core is locally vendored at build/start from the exact npm lock. Upstream template/module provenance: REUSE.md. Open offer dialogs also recompute TTL; they cannot retain VERIFIED after table/history expiry.
 
 Chrome is created with a dedicated profile, loopback CDP, no sync/accounts, no proxy bypass, and a mandatory local HTTPS CONNECT proxy. The proxy resolves and validates a public IPv4 then connects directly to that address; rejects private/local and plaintext targets. This protects redirect hops, service workers and pages opened by the MCP as well as Scout pages. The additional page route limits navigations to the named marketplace. This is a local single-user design, not a multi-tenant network service or an OS sandbox for the Python process.
 

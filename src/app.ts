@@ -10,6 +10,7 @@ import { freshness } from "./freshness.js";
 import { parseQuery } from "./parse.js";
 import { providerCatalog } from "./providers.js";
 import { rank } from "./rank.js";
+import { ResearchGateway, researchOperations, researchRequest } from "./research.js";
 import { searchVerified } from "./service.js";
 import { HistoryStore } from "./store.js";
 
@@ -28,10 +29,12 @@ export async function buildApp(
     store?: HistoryStore;
     logger?: boolean;
     cooldownMs?: number;
+    research?: ResearchGateway;
   } = {},
 ) {
   const app = Fastify({ logger: options.logger ?? true, bodyLimit: 16384 });
   const store = options.store ?? new HistoryStore();
+  const research = options.research ?? new ResearchGateway();
   let searching = false,
     lastSearch = 0;
   app.addHook("onRequest", async (request, reply) => {
@@ -69,6 +72,24 @@ export async function buildApp(
     cities,
     defaultCity: "voronezh",
   }));
+  app.get("/api/research", async () => ({ operations: researchOperations }));
+  app.post("/api/research", async (request, reply) => {
+    let input: ReturnType<typeof researchRequest>;
+    try {
+      input = researchRequest(request.body);
+    } catch {
+      return reply.code(400).send({ error: "invalid_research_request" });
+    }
+    if (searching || Date.now() - lastSearch < (options.cooldownMs ?? 5000))
+      return reply.code(429).send({ error: "search_busy_try_later" });
+    searching = true;
+    lastSearch = Date.now();
+    try {
+      return await research.run(input);
+    } finally {
+      searching = false;
+    }
+  });
   app.get("/api/search", async (request, reply) => {
     const input = request.query as Record<string, unknown>;
     const city = cityById(input.city);
