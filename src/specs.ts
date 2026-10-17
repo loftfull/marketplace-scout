@@ -15,12 +15,12 @@ export function cardSpecs(title: string, properties: Array<{ name?: unknown; val
     if (specs[field] === undefined || specs[field] === "") Object.assign(specs, { [field]: value });
   };
   const capacity = (field: "ramGb" | "ssdGb", value: string) => {
-    const match = /^\s*(\d+(?:[.,]\d+)?)\s*(gb|гб|tb|тб)?\s*$/i.exec(value);
+    const match = /^\s*(\d+(?:[.,]\d+)?)\s*(gb|гб|tb|тб|g|г|t|т)?\s*$/i.exec(value);
     if (!match || Number(match[1].replace(",", ".")) <= 0) {
       reasons.push(`spec_evidence_unparseable_${field}`);
       return;
     }
-    add(field, Number(match[1].replace(",", ".")) * (/tb|тб/i.test(match[2] ?? "") ? 1024 : 1));
+    add(field, Number(match[1].replace(",", ".")) * (/tb|тб|t|т/i.test(match[2] ?? "") ? 1024 : 1));
   };
   for (const [key, value] of Object.entries(specs)) add(key as keyof ProductProfile, value);
   for (const year of title.matchAll(/\b(20\d{2})\b/g)) add("year", Number(year[1]));

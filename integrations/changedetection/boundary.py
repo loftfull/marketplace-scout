@@ -11,8 +11,9 @@ import socket
 import ssl
 import threading
 import time
+import re
 from pathlib import Path
-from urllib.parse import urlsplit
+from urllib.parse import parse_qsl, urlsplit
 
 ROOT = Path(__file__).resolve().parents[2]
 DATA = ROOT / ".data/external/changedetection"
@@ -21,6 +22,48 @@ TARGETS = {
     "control": "https://raw.githubusercontent.com/dgtlmoon/changedetection.io/09881f8b26aa01a2be66c5f63daf54a79a42b6bd/README-pip.md",
 }
 MAX_BODY = 8 * 1024 * 1024
+PRODUCT_HOSTS = {
+    "market.yandex.ru": ("yandex-market", r"^/card/[^/]+/\d+/?$|^/(?:product--[^/]+|product)/\d+/?$"),
+    "www.ozon.ru": ("ozon", r"^/product/(?:[^/]*-)?\d+/?$"),
+    "ozon.ru": ("ozon", r"^/product/(?:[^/]*-)?\d+/?$"),
+    "www.avito.ru": ("avito", r"^/.+_\d+/?$"),
+    "avito.ru": ("avito", r"^/.+_\d+/?$"),
+    "www.wildberries.ru": ("wildberries", r"^/catalog/\d+/detail\.aspx$"),
+    "wildberries.ru": ("wildberries", r"^/catalog/\d+/detail\.aspx$"),
+}
+
+
+def marketplace_for_product_url(url):
+    if not isinstance(url, str) or not url or len(url) > 1000:
+        return None
+    try:
+        parsed = urlsplit(url)
+        if (
+            parsed.scheme != "https"
+            or not parsed.hostname
+            or parsed.username
+            or parsed.password
+            or parsed.port
+            or parsed.fragment
+        ):
+            return None
+        rule = PRODUCT_HOSTS.get(parsed.hostname.lower())
+        if not rule:
+            return None
+        marketplace, pattern = rule
+        if not re.fullmatch(pattern, parsed.path):
+            return None
+        query = parse_qsl(parsed.query, keep_blank_values=True)
+        if marketplace == "yandex-market":
+            if any(key != "sku" or not value.isdigit() for key, value in query):
+                return None
+            if len([key for key, _ in query if key == "sku"]) > 1:
+                return None
+        elif query:
+            return None
+        return marketplace
+    except (ValueError, UnicodeError):
+        return None
 
 
 def write_json(path, value):
@@ -65,7 +108,7 @@ class Boundary:
         self.lock = threading.Lock()
 
     def check_target(self, url):
-        if url not in TARGETS.values():
+        if url not in TARGETS.values() and marketplace_for_product_url(url) is None:
             raise ValueError("URL outside pilot allowlist")
         if url in read_json(self.data / "terminal.json", {}):
             raise ValueError("Previous access failure: explicit review required")

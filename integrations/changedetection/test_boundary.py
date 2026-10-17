@@ -6,7 +6,8 @@ from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import patch
 
-from boundary import TARGETS, Boundary, PinnedHTTPS, write_json
+from boundary import TARGETS, Boundary, PinnedHTTPS, marketplace_for_product_url, write_json
+from manage import ensure_watch
 from runner import resolve_http
 
 
@@ -139,6 +140,48 @@ class BoundaryTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 self.boundary.send(None, self.request)
             connection.assert_not_called()
+
+    def test_only_canonical_marketplace_product_cards_are_monitorable(self):
+        allowed = {
+            "https://market.yandex.ru/card/redmi/123?sku=456": "yandex-market",
+            "https://www.ozon.ru/product/redmi-book-123/": "ozon",
+            "https://www.avito.ru/voronezh/noutbuki/redmi_1234567890": "avito",
+            "https://www.wildberries.ru/catalog/123456/detail.aspx": "wildberries",
+        }
+        for url, marketplace in allowed.items():
+            with self.subTest(url=url):
+                self.assertEqual(marketplace_for_product_url(url), marketplace)
+                self.boundary.check_target(url)
+        denied = [
+            "https://example.com/product/123",
+            "http://market.yandex.ru/card/redmi/123",
+            "https://market.yandex.ru/search?text=redmi",
+            "https://market.yandex.ru/card/redmi/123?sku=456&url=https://127.0.0.1",
+            "https://user@market.yandex.ru/card/redmi/123",
+            "https://market.yandex.ru:444/card/redmi/123",
+            "https://www.ozon.ru/product/redmi-123/?from=tracker",
+        ]
+        for url in denied:
+            with self.subTest(url=url):
+                self.assertIsNone(marketplace_for_product_url(url))
+                with self.assertRaisesRegex(ValueError, "allowlist"):
+                    self.boundary.check_target(url)
+
+    def test_add_creates_only_paused_watch_and_deduplicates_url(self):
+        url = "https://www.ozon.ru/product/redmi-book-123/"
+        with patch(
+            "manage.api",
+            side_effect=[{}, {"uuid": "watch-123"}],
+        ) as api:
+            self.assertEqual(ensure_watch(url, "Redmi Book 2026 · UNVERIFIED"), "watch-123")
+        payload = api.call_args_list[1].args[1]
+        self.assertTrue(payload["paused"])
+        self.assertEqual(payload["fetch_backend"], "html_requests")
+        self.assertEqual(payload["notification_urls"], [])
+        self.assertEqual(payload["processor"], "text_json_diff")
+        with patch("manage.api", return_value={"watch-123": {"url": url}}) as api:
+            self.assertEqual(ensure_watch(url, "Redmi Book 2026 · UNVERIFIED"), "watch-123")
+            api.assert_called_once_with("/watch")
 
     def test_mutable_global_backend_cannot_select_browser(self):
         class Watch(dict):

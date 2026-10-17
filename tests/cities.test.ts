@@ -231,7 +231,7 @@ test("city API defaults Voronezh, rejects unknown IDs, snapshots propagation and
       history.map((row: { offer: Offer }) => row.offer.requestedCity),
       ["Москва", "Воронеж"],
     );
-    assert.equal((await app.inject("/api/connectors")).json().providers.length, 3);
+    assert.equal((await app.inject("/api/connectors")).json().providers.length, 4);
   } finally {
     await app.close();
   }
@@ -246,19 +246,19 @@ test("late city A response cannot repopulate results after A-B-A changes", async
   assert.equal(state.accepts(token), false);
   assert.equal(state.accepts(state.capture()), true);
 });
-test("WB mapping rejects default, echo-only, wrong city, coordinates and duplicate destinations", () => {
+test("WB geo response maps the exact selected coordinates without requiring an absent city field", () => {
   const city = cities[0];
   const geo = {
-    city: city.name,
     latitude: city.latitude,
     longitude: city.longitude,
     xinfo: "curr=rub&dest=-123",
+    destinations: [-123, -456],
   };
   assert.equal(destinationFrom(geo, city), "-123");
   for (const bad of [
-    { ...geo, city: "Москва" },
-    { ...geo, city: undefined, address: "Воронеж" },
-    { ...geo, latitude: 55 },
+    { ...geo, latitude: 55, address: city.name },
+    { ...geo, destinations: [-456] },
+    { ...geo, destinations: "-123" },
     { ...geo, xinfo: "dest=-123&dest=-456" },
     { xinfo: "dest=-1257786" },
   ])

@@ -20,8 +20,10 @@ export function publicAddress(address: string): boolean {
 }
 export class BrowserEgress {
   private server?: Server;
+  private port?: number;
   private sockets = new Set<Duplex>();
   async start(): Promise<number> {
+    if (this.server && this.port) return this.port;
     const server = createServer((_request, response) => {
       response.writeHead(403);
       response.end();
@@ -69,7 +71,8 @@ export class BrowserEgress {
     });
     const address = server.address();
     if (!address || typeof address === "string") throw Error("proxy_start_failed");
-    return address.port;
+    this.port = address.port;
+    return this.port;
   }
   async close() {
     for (const socket of this.sockets) socket.destroy();
@@ -77,5 +80,6 @@ export class BrowserEgress {
       this.server ? this.server.close(() => resolve()) : resolve(),
     );
     this.server = undefined;
+    this.port = undefined;
   }
 }

@@ -1,5 +1,15 @@
 export const providerCatalog = [
   {
+    name: "scrapy/scrapy",
+    repository: "https://github.com/scrapy/scrapy",
+    license: "BSD-3-Clause",
+    pin: "8026deeaac371a5d9a3edbe4886d58f61139d464",
+    marketplaces: ["Яндекс Маркет", "Ozon", "Avito", "Wildberries"],
+    role: "Opt-in HTML-only discovery from public search pages. The Scout adapter constrains each GET to one HTTPS marketplace host and routes it through the pinned egress proxy; Scrapy/parsel handle downloading and HTML selectors.",
+    limitations:
+      "Robots policy is fail-closed, retries and redirects are disabled, and blocks are terminal. Candidates are UNVERIFIED until the existing independent card reader confirms them; pages may omit or challenge HTML results.",
+  },
+  {
     name: "ru-marketplace-mcp",
     repository: "https://github.com/Vladimir-Human/ru-marketplace-mcp",
     license: "MIT",

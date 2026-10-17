@@ -1,0 +1,262 @@
+{
+  "profile": {
+    "brand": "Xiaomi",
+    "model": "RedmiBook",
+    "year": 2026,
+    "ramGb": 32,
+    "ssdGb": 1024
+  },
+  "checkedAt": "2026-10-13T22:14:03.072Z",
+  "offers": [
+    {
+      "marketplace": "yandex-market",
+      "title": "Ноутбук Xiaomi Redmi Book 16\" (2026), 2560x1600 120Hz, Ultra 5 125H, 32 ГБ/1 ТБ, Windows 11 Home, русская клавиатура",
+      "url": "https://market.yandex.ru/card/x/227764487838298112?sku=227764487838298112",
+      "priceRub": null,
+      "imageUrl": "https://avatars.mds.yandex.net/get-mpic/19298998/picb5f83eb4fd4e81dfe98e0ef82f352447/orig",
+      "imageSource": "discovery",
+      "sku": "227764487838298112",
+      "specs": {},
+      "status": "UNVERIFIED",
+      "reasons": [
+        "selected_product_schema_missing_or_ambiguous",
+        "selected_offer_ambiguous",
+        "card_unavailable_or_challenged",
+        "region_not_confirmed",
+        "region_conflict",
+        "missing_brand",
+        "missing_model",
+        "missing_year",
+        "missing_ramGb",
+        "missing_ssdGb",
+        "live_card_not_confirmed",
+        "sku_missing",
+        "variant_missing",
+        "seller_missing",
+        "current_price_missing",
+        "unconditional_price_not_confirmed",
+        "availability_not_confirmed"
+      ],
+      "evidence": {
+        "method": "browser-card",
+        "observedAt": "2026-10-13T22:13:53.368Z",
+        "requestedUrl": "https://market.yandex.ru/card/x/227764487838298112?sku=227764487838298112",
+        "finalUrl": "https://market.yandex.ru/card/x/227764487838298112?sku=227764487838298112",
+        "live": false,
+        "httpStatus": 403,
+        "priceKind": "unknown",
+        "available": null
+      },
+      "native": {
+        "provider": "SZhukovWork/yandex-market-mcp",
+        "tool": "get_product",
+        "status": "error",
+        "observedAt": "2026-10-13T22:13:51.479Z"
+      },
+      "requestedCity": "Воронеж",
+      "requestedCityId": "voronezh",
+      "discoveryPriceKind": "ordinary",
+      "discoveryReferenceRub": 319999,
+      "discoveryProvider": "SZhukovWork/yandex-market-mcp",
+      "discoveryRegion": "Москва",
+      "discoveredAt": "2026-10-13T22:13:49.568Z",
+      "discoveryPriceRub": 121706,
+      "risk": {
+        "flags": [
+          "seller_missing",
+          "not_verified"
+        ],
+        "score": 50
+      },
+      "landed": {
+        "item": null,
+        "shipping": null,
+        "duty": null,
+        "total": null,
+        "currency": "RUB",
+        "region": null
+      }
+    },
+    {
+      "marketplace": "yandex-market",
+      "sku": "5875524478",
+      "variantId": "5875524478",
+      "title": "16“ Ноутбук Xiaomi Redmibook 16 2026(JYU4714), Intel Ultra5-125H,32ГБ/1ТБ, Win11,2.5K 120 Гц, русская клавиатура, Серый",
+      "url": "https://market.yandex.ru/card/x/5875524478?sku=5875524478",
+      "priceRub": null,
+      "discoveryPriceKind": "ordinary",
+      "discoveryReferenceRub": 206296,
+      "discoveryProvider": "SZhukovWork/yandex-market-mcp",
+      "discoveryRegion": "Москва",
+      "specs": {},
+      "status": "UNVERIFIED",
+      "reasons": [
+        "card_unavailable_or_challenged",
+        "region_not_confirmed",
+        "region_conflict",
+        "missing_brand",
+        "missing_model",
+        "missing_year",
+        "missing_ramGb",
+        "missing_ssdGb",
+        "live_card_not_confirmed",
+        "seller_missing",
+        "current_price_missing",
+        "unconditional_price_not_confirmed",
+        "availability_not_confirmed"
+      ],
+      "discoveredAt": "2026-10-13T22:13:49.568Z",
+      "imageUrl": "https://avatars.mds.yandex.net/get-mpic/20200979/2a0000019ef77d410982246e8c1ffb416372/orig",
+      "imageSource": "discovery",
+      "requestedCity": "Воронеж",
+      "requestedCityId": "voronezh",
+      "discoveryPriceRub": 97586,
+      "risk": {
+        "flags": [
+          "seller_missing",
+          "not_verified"
+        ],
+        "score": 50
+      },
+      "landed": {
+        "item": null,
+        "shipping": null,
+        "duty": null,
+        "total": null,
+        "currency": "RUB",
+        "region": null
+      }
+    },
+    {
+      "marketplace": "yandex-market",
+      "sku": "227763890623926272",
+      "variantId": "227763890623926272",
+      "title": "Ноутбук Xiaomi Redmi Book 16 (2026), 2560x1600 120Hz, Ultra 5 125H, 32 ГБ/1 ТБ, Windows 11 Home, русская клавиатура",
+      "url": "https://market.yandex.ru/card/x/227763890623926272?sku=227763890623926272",
+      "priceRub": null,
+      "discoveryPriceKind": "ordinary",
+      "discoveryReferenceRub": 329990,
+      "discoveryProvider": "SZhukovWork/yandex-market-mcp",
+      "discoveryRegion": "Москва",
+      "specs": {},
+      "status": "UNVERIFIED",
+      "reasons": [
+        "card_unavailable_or_challenged",
+        "region_not_confirmed",
+        "region_conflict",
+        "missing_brand",
+        "missing_model",
+        "missing_year",
+        "missing_ramGb",
+        "missing_ssdGb",
+        "live_card_not_confirmed",
+        "seller_missing",
+        "current_price_missing",
+        "unconditional_price_not_confirmed",
+        "availability_not_confirmed"
+      ],
+      "discoveredAt": "2026-10-13T22:13:49.568Z",
+      "imageUrl": "https://avatars.mds.yandex.net/get-mpic/18742739/pic3d47ec37be19e6cb6aa7a01665be29fc/orig",
+      "imageSource": "discovery",
+      "requestedCity": "Воронеж",
+      "requestedCityId": "voronezh",
+      "discoveryPriceRub": 124730,
+      "risk": {
+        "flags": [
+          "seller_missing",
+          "not_verified"
+        ],
+        "score": 50
+      },
+      "landed": {
+        "item": null,
+        "shipping": null,
+        "duty": null,
+        "total": null,
+        "currency": "RUB",
+        "region": null
+      }
+    }
+  ],
+  "sourceOutcomes": [
+    {
+      "marketplace": "yandex-market",
+      "status": "ok",
+      "stage": "native-discovery",
+      "detail": "ordinary/Pay/reference separated; city from page",
+      "offersReturned": 3,
+      "tools": [
+        {
+          "provider": "SZhukovWork/yandex-market-mcp",
+          "tool": "search_products",
+          "status": "ok",
+          "at": "2026-10-13T22:13:49.567Z",
+          "durationMs": 1867
+        },
+        {
+          "provider": "ru-marketplace-mcp",
+          "tool": "yandex_search",
+          "status": "ok",
+          "at": "2026-10-13T22:13:51.475Z",
+          "durationMs": 1906
+        },
+        {
+          "provider": "SZhukovWork/yandex-market-mcp",
+          "tool": "get_product",
+          "status": "error",
+          "at": "2026-10-13T22:13:51.479Z",
+          "durationMs": 3
+        }
+      ]
+    },
+    {
+      "marketplace": "ozon",
+      "status": "blocked",
+      "stage": "mcp-discovery",
+      "detail": "Ozon returned HTTP 403 via cdp_blocked. CDP may be reachable, but the browser session is blocked by Ozon/Cloudflare. Open ozon.ru in the Chrome CDP profile, solve any captcha/challenge, then retry. De",
+      "offersReturned": 0,
+      "tools": [
+        {
+          "provider": "ru-marketplace-mcp",
+          "tool": "compare_prices",
+          "status": "ok",
+          "at": "2026-10-13T22:14:00.621Z",
+          "durationMs": 7234
+        }
+      ]
+    },
+    {
+      "marketplace": "avito",
+      "status": "blocked",
+      "stage": "city-browser-discovery",
+      "detail": "Доступ ограничен: проблема с IP",
+      "discoveryUrl": "https://www.avito.ru/voronezh/noutbuki?q=Xiaomi%20RedmiBook%202026%2032GB%201TB",
+      "offersReturned": 0,
+      "tools": []
+    },
+    {
+      "marketplace": "wildberries",
+      "status": "error",
+      "stage": "region-resolution",
+      "detail": "city_mapping_unconfirmed; no default Moscow fallback",
+      "offersReturned": 0,
+      "tools": [
+        {
+          "provider": "Wildberries public geo",
+          "tool": "get-geo-info",
+          "status": "error",
+          "at": "2026-10-13T22:14:03.068Z",
+          "durationMs": 1336
+        }
+      ]
+    }
+  ],
+  "complete": false,
+  "requestedCity": {
+    "id": "voronezh",
+    "name": "Воронеж",
+    "latitude": 51.6608,
+    "longitude": 39.2003
+  },
+  "region": null
+}

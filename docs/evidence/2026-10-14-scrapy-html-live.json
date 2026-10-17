@@ -1,0 +1,47 @@
+{
+  "date": "2026-10-14",
+  "project": "marketplace-scout",
+  "request": {
+    "method": "GET",
+    "path": "/api/search",
+    "query": "Ноутбук Redmi 2026 32Гб 1Тб",
+    "city": "voronezh",
+    "mode": "html"
+  },
+  "result": {
+    "http_status": 200,
+    "complete": false,
+    "offers_returned": 3,
+    "yandex_discovery_candidates": [
+      { "title": "Xiaomi Redmi Book 14 (2026), Ultra 5 125H, 32 ГБ/1 ТБ", "discovery_price_rub": 117584, "status": "UNVERIFIED" },
+      { "title": "Xiaomi Redmi Book Pro 14 (2026), Ultra 5 338H, 32 ГБ/1 ТБ", "discovery_price_rub": 142919, "status": "UNVERIFIED" },
+      { "title": "Xiaomi Redmi Book 14 (2026), Ultra 5 125H, 32ГБ/1 ТБ", "discovery_price_rub": 120608, "status": "UNVERIFIED" }
+    ],
+    "source_outcomes": {
+      "yandex-market": "HTML candidates extracted; first live product-card verification returned HTTP 403; source paused; no VERIFIED offer",
+      "ozon": "robots_policy_unavailable; stopped before search page; source paused",
+      "avito": "not requested; prior IP access restriction remains paused",
+      "wildberries": "robots_policy_unavailable; stopped before search page; source paused"
+    }
+  },
+  "bounded_live_debug_activity": {
+    "yandex_market": { "robots_gets": 6, "search_page_gets": 6, "product_card_gets": 1 },
+    "ozon": { "robots_gets": 1, "search_page_gets": 0 },
+    "avito": { "requests": 0 },
+    "wildberries": { "robots_gets": 1, "search_page_gets": 0 },
+    "total_outbound_gets": 15,
+    "notes": "Yandex requests include failed worker runs used to expose and reproduce the Windows stdout bug. Each run had one robots fetch and one search-page fetch. Card verification stopped at the first HTTP 403; other candidates were not opened. No retries, redirects, API endpoints, CAPTCHA handling, or proxy rotation were used."
+  },
+  "root_cause_and_fix": {
+    "cause": "Scrapy runs under Python isolated mode on Windows, where stdout used CP1251 despite PYTHONUTF8. A live HTML title containing U+2033 caused UnicodeEncodeError during JSON output, so Node saw a failed worker.",
+    "fix": "The worker now serializes protocol output as UTF-8 bytes through sys.stdout.buffer; a regression test covers Russian text and U+2033.",
+    "python_integration_tests_passed": 11
+  },
+  "interpretation": "HTML discovery is operational for Yandex Market. The observed listing prices are discovery-only and are not verified current prices. Yandex product-card access is blocked; Ozon and Wildberries did not pass the fail-closed robots check; Avito was deliberately not retried. No marketplace currently produced a VERIFIED offer.",
+  "verification": {
+    "scrapy_source_commit": "8026deeaac371a5d9a3edbe4886d58f61139d464",
+    "scrapy_version": "2.19.0",
+    "runtime_dependencies_checked": 44,
+    "ui": "Playwright smoke on http://127.0.0.1:8788; HTML-only is selected by default; zero console errors"
+  }
+}

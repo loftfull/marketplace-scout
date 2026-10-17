@@ -18,6 +18,10 @@ export class BrowserRuntime {
   private egress = new BrowserEgress();
   private process?: ChildProcess;
   private starting?: Promise<Browser>;
+  async egressProxyUrl(): Promise<string> {
+    const port = await this.egress.start();
+    return `http://127.0.0.1:${port}`;
+  }
   async ensure(): Promise<Browser> {
     if (this.browser?.isConnected()) return this.browser;
     if (this.starting) return this.starting;

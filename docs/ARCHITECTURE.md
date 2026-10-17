@@ -1,5 +1,11 @@
 # Architecture
 
+## Optional Scrapy HTML discovery (2026-10-14)
+
+The UI defaults to HTML-only search to honor the no-site-API product requirement. The pinned native connector stack remains available as an explicit alternative; the local API preserves `mode=native` when callers omit a mode for compatibility. HTML discovery invokes the separately installed Scrapy 2.19.0 source checkout through `src/adapters/scrapy-html.ts` and `integrations/scrapy-html/runner.py`. The worker accepts only a marketplace enum, bounded query, and selected city ID; it constructs a fixed public HTML search URL and emits bounded JSON candidates. It cannot accept arbitrary URLs, credentials, cookies, or site API operations.
+
+Every worker request is constrained to the selected marketplace's exact HTTPS host and GET method, passed through Scout's existing public DNS-pinned HTTPS CONNECT egress proxy, and redirected nowhere. Retries, cookies and browser-like follow-up loads are disabled. Scrapy's robots middleware is enabled and fails closed when robots.txt is blocked, unavailable, malformed, redirected, oversized or not text/plain. Native and HTML modes keep separate source circuit state so a native endpoint failure does not suppress a first standard HTML request; each mode stops its own source after a block. Search is serial and one page per source. The existing independent card reader alone can verify a candidate; HTML discovery itself never grants VERIFIED. See [Scrapy provider](CONNECTORS.md) and [reuse/license record](REUSE.md).
+
 External application pilot (2026-10-02): changedetection.io0.60.8 runs unchanged from pinned source in `.runtime/external/changedetection/upstream`, with a separate Python environment and `.data/external/changedetection`. `integrations/changedetection` provides lifecycle/HTTP policy only; upstream owns UI/REST/processing/snapshots/history. Local CLI calls its API with a server-side key. No import into Scout price history or search routing yet. HTTP8791, one worker, paused watches, one-use exact-URL permits, pinned TLS, terminal redirects/challenges, shared Market cooldown. See its README and immutable manifest; snapshot != VERIFIED.
 
 ```mermaid
