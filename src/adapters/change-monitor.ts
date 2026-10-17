@@ -1,4 +1,4 @@
-import { spawn, type ChildProcess } from "node:child_process";
+import { type ChildProcess, spawn } from "node:child_process";
 import { access, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { setTimeout as delay } from "node:timers/promises";
@@ -62,7 +62,9 @@ export class ChangedetectionAdapter implements ChangeMonitor {
         await access(python);
         await access(runner);
       } catch {
-        throw new Error("changedetection_runtime_unavailable; see integrations/changedetection/README.md");
+        throw new Error(
+          "changedetection_runtime_unavailable; see integrations/changedetection/README.md",
+        );
       }
       if (!this.child || this.child.exitCode !== null) {
         const env: NodeJS.ProcessEnv = {

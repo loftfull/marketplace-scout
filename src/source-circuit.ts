@@ -20,11 +20,13 @@ const isMarketplaceName = (value: string): value is MarketplaceName =>
 
 export class SourceCircuit {
   private queue: Promise<unknown> = Promise.resolve();
+  /** Состояние без файла (path не задан): живёт в памяти процесса, не теряется между вызовами. */
+  private memory: SourceCircuitFile = { version: 1, sources: {} };
 
   constructor(private readonly path?: string) {}
 
   private async read(): Promise<SourceCircuitFile> {
-    if (!this.path) return { version: 1, sources: {} };
+    if (!this.path) return { version: 1, sources: { ...this.memory.sources } };
     try {
       const value: unknown = JSON.parse(await readFile(this.path, "utf8"));
       if (
@@ -56,7 +58,10 @@ export class SourceCircuit {
   }
 
   private async write(state: SourceCircuitFile) {
-    if (!this.path) return;
+    if (!this.path) {
+      this.memory = { version: 1, sources: { ...state.sources } };
+      return;
+    }
     await mkdir(dirname(this.path), { recursive: true });
     const temp = `${this.path}.${randomUUID()}.tmp`;
     await writeFile(temp, JSON.stringify(state, null, 2), { flag: "wx" });

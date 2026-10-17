@@ -47,7 +47,11 @@ class FakeMonitor implements ChangeMonitor {
   }
 }
 
-async function appWith(monitor: FakeMonitor, source = new SourceCircuit(), html = new SourceCircuit()) {
+async function appWith(
+  monitor: FakeMonitor,
+  source = new SourceCircuit(),
+  html = new SourceCircuit(),
+) {
   return await buildApp({
     logger: false,
     changeMonitor: monitor,

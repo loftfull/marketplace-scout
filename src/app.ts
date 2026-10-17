@@ -3,9 +3,9 @@ import fastifyStatic from "@fastify/static";
 import Fastify from "fastify";
 import { z } from "zod";
 import { imageHosts } from "../public/offer-view.js";
+import { ChangedetectionAdapter, type ChangeMonitor } from "./adapters/change-monitor.js";
 import { cities, cityById } from "./cities.js";
 import { type Connector, scrapyHtmlConnectors } from "./connectors.js";
-import { ChangedetectionAdapter, type ChangeMonitor } from "./adapters/change-monitor.js";
 import { landed } from "./cost.js";
 import { freshness } from "./freshness.js";
 import { parseQuery } from "./parse.js";
@@ -13,7 +13,7 @@ import { providerCatalog } from "./providers.js";
 import { rank } from "./rank.js";
 import { ResearchGateway, researchOperations, researchRequest } from "./research.js";
 import { searchVerified } from "./service.js";
-import { marketplaceNames, SourceCircuit } from "./source-circuit.js";
+import { marketplaceNames, SourceCircuit, type SourcePause } from "./source-circuit.js";
 import { HistoryStore } from "./store.js";
 import { canonicalUrl } from "./urls.js";
 
@@ -156,45 +156,50 @@ export async function buildApp(
       return reply.code(503).send({ error: "changedetection_unavailable" });
     }
   });
-  app.post<{ Params: { uuid: string } }>("/api/monitor/watches/:uuid/check", async (request, reply) => {
-    if (!/^[a-zA-Z0-9-]{6,64}$/.test(request.params.uuid))
-      return reply.code(400).send({ error: "invalid_watch_id" });
-    try {
-      const watches = await changeMonitor.list();
-      const watch = watches.find((candidate) => candidate.uuid === request.params.uuid);
-      if (!watch) return reply.code(404).send({ error: "watch_not_found" });
-      if (!marketplaceNames.includes(watch.marketplace as (typeof marketplaceNames)[number]))
-        return reply.code(400).send({ error: "not_a_marketplace_product_watch" });
-      const marketplace = watch.marketplace as (typeof marketplaceNames)[number];
-      let pauses;
+  app.post<{ Params: { uuid: string } }>(
+    "/api/monitor/watches/:uuid/check",
+    async (request, reply) => {
+      if (!/^[a-zA-Z0-9-]{6,64}$/.test(request.params.uuid))
+        return reply.code(400).send({ error: "invalid_watch_id" });
       try {
-        pauses = await Promise.all([sourceCircuit.get(marketplace), htmlSourceCircuit.get(marketplace)]);
+        const watches = await changeMonitor.list();
+        const watch = watches.find((candidate) => candidate.uuid === request.params.uuid);
+        if (!watch) return reply.code(404).send({ error: "watch_not_found" });
+        if (!marketplaceNames.includes(watch.marketplace as (typeof marketplaceNames)[number]))
+          return reply.code(400).send({ error: "not_a_marketplace_product_watch" });
+        const marketplace = watch.marketplace as (typeof marketplaceNames)[number];
+        let pauses: Array<SourcePause | undefined>;
+        try {
+          pauses = await Promise.all([
+            sourceCircuit.get(marketplace),
+            htmlSourceCircuit.get(marketplace),
+          ]);
+        } catch {
+          return reply.code(503).send({ error: "source_circuit_state_unavailable" });
+        }
+        const pause = pauses.find(Boolean);
+        if (pause) return reply.code(409).send({ error: "source_paused", detail: pause.detail });
+        const checked = await changeMonitor.check(watch.url);
+        const status = Number(checked.last_check_status);
+        if (checked.last_error || !Number.isFinite(status) || status < 200 || status >= 400) {
+          const blocked = [401, 403, 407, 429, 451].includes(status);
+          const state = blocked ? "blocked" : "error";
+          const detail = blocked ? `http_${status}` : "changedetection_check_failed";
+          await Promise.all([
+            sourceCircuit.pause(marketplace, state, "changedetection-watch", detail),
+            htmlSourceCircuit.pause(marketplace, state, "changedetection-watch", detail),
+          ]);
+          return reply.code(blocked ? 200 : 502).send({
+            watch: { ...checked, canCheck: false, blockedReason: detail },
+            verification: "UNVERIFIED",
+          });
+        }
+        return { watch: { ...checked, verification: "UNVERIFIED" } };
       } catch {
-        return reply.code(503).send({ error: "source_circuit_state_unavailable" });
+        return reply.code(502).send({ error: "changedetection_check_failed" });
       }
-      const pause = pauses.find(Boolean);
-      if (pause)
-        return reply.code(409).send({ error: "source_paused", detail: pause.detail });
-      const checked = await changeMonitor.check(watch.url);
-      const status = Number(checked.last_check_status);
-      if (checked.last_error || !Number.isFinite(status) || status < 200 || status >= 400) {
-        const blocked = [401, 403, 407, 429, 451].includes(status);
-        const state = blocked ? "blocked" : "error";
-        const detail = blocked ? `http_${status}` : "changedetection_check_failed";
-        await Promise.all([
-          sourceCircuit.pause(marketplace, state, "changedetection-watch", detail),
-          htmlSourceCircuit.pause(marketplace, state, "changedetection-watch", detail),
-        ]);
-        return reply.code(blocked ? 200 : 502).send({
-          watch: { ...checked, canCheck: false, blockedReason: detail },
-          verification: "UNVERIFIED",
-        });
-      }
-      return { watch: { ...checked, verification: "UNVERIFIED" } };
-    } catch {
-      return reply.code(502).send({ error: "changedetection_check_failed" });
-    }
-  });
+    },
+  );
   app.get("/api/research", async () => ({ operations: researchOperations }));
   app.post("/api/research", async (request, reply) => {
     let input: ReturnType<typeof researchRequest>;
