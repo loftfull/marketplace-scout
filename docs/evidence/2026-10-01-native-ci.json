@@ -1,0 +1,1 @@
+{"conclusion":"success","headSha":"47fab80b82ae7680166b22495de3d3829c30fd4c","jobs":[{"conclusion":"success","name":"test (windows-latest)","status":"completed"},{"conclusion":"success","name":"test (ubuntu-latest)","status":"completed"}],"status":"completed","url":"https://github.com/loftfull/marketplace-scout/actions/runs/36819778190"}

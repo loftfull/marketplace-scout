@@ -1,0 +1,29 @@
+{
+  "files": {
+    "includes": [
+      "src/**",
+      "tests/**",
+      "public/**",
+      "scripts/**",
+      "*.json",
+      "!package-lock.json",
+      "!public/vendor"
+    ]
+  },
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "lineWidth": 100
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "preset": "recommended"
+    }
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "double"
+    }
+  }
+}

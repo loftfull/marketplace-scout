@@ -1,0 +1,312 @@
+{
+  "runAt": "2026-10-01T06:18:10.607Z",
+  "mode": "LIVE_NO_FIXTURES",
+  "query": "RedmiBook Pro 16 2026 Ultra 5 338H 32GB 1TB",
+  "profile": {
+    "brand": "Xiaomi",
+    "model": "RedmiBook Pro 16",
+    "year": 2026,
+    "cpu": "Ultra 5 338H",
+    "ramGb": 32,
+    "ssdGb": 1024
+  },
+  "checkedAt": "2026-10-01T06:18:10.575Z",
+  "offers": [
+    {
+      "marketplace": "yandex-market",
+      "sku": "5970782603",
+      "variantId": "5970782603",
+      "title": "Смартфон X7 Pro 5G 16/1024ГБ, Stardust Black (Черный), +SIM, 8000 мА*ч, IP64",
+      "url": "https://market.yandex.ru/card/x/5970782603?sku=5970782603",
+      "priceRub": null,
+      "discoveryPriceKind": "ordinary",
+      "discoveryConditionalRub": 12760,
+      "discoveryReferenceRub": 149678,
+      "discoveryProvider": "SZhukovWork/yandex-market-mcp",
+      "discoveryRegion": "Москва",
+      "specs": {},
+      "status": "UNVERIFIED",
+      "reasons": [
+        "card_unavailable_or_challenged",
+        "region_not_confirmed",
+        "discovery_specs_conflict",
+        "missing_brand",
+        "missing_model",
+        "missing_year",
+        "missing_cpu",
+        "missing_ramGb",
+        "missing_ssdGb",
+        "live_card_not_confirmed",
+        "seller_missing",
+        "current_price_missing",
+        "unconditional_price_not_confirmed",
+        "availability_not_confirmed"
+      ],
+      "discoveredAt": "2026-10-01T06:16:25.805Z",
+      "requestedCity": "Воронеж",
+      "requestedCityId": "voronezh",
+      "native": {
+        "provider": "SZhukovWork/yandex-market-mcp",
+        "tool": "get_product",
+        "status": "blocked",
+        "observedAt": "2026-10-01T06:16:43.107Z"
+      },
+      "discoveryPriceRub": 13155,
+      "risk": {
+        "flags": [
+          "seller_missing",
+          "not_verified"
+        ],
+        "score": 50
+      },
+      "landed": {
+        "item": null,
+        "shipping": null,
+        "duty": null,
+        "total": null,
+        "currency": "RUB",
+        "region": null
+      }
+    },
+    {
+      "marketplace": "yandex-market",
+      "title": "Монитор Hisense 34G6Q PRO (2026), Ultra WQHD",
+      "url": "https://market.yandex.ru/card/x/5222509141?sku=5793108049",
+      "priceRub": null,
+      "sku": "5222509141",
+      "specs": {},
+      "status": "UNVERIFIED",
+      "reasons": [
+        "selected_product_schema_missing_or_ambiguous",
+        "selected_offer_ambiguous",
+        "card_unavailable_or_challenged",
+        "region_not_confirmed",
+        "discovery_specs_conflict",
+        "missing_brand",
+        "missing_model",
+        "missing_year",
+        "missing_cpu",
+        "missing_ramGb",
+        "missing_ssdGb",
+        "live_card_not_confirmed",
+        "sku_missing",
+        "variant_missing",
+        "seller_missing",
+        "current_price_missing",
+        "unconditional_price_not_confirmed",
+        "availability_not_confirmed"
+      ],
+      "evidence": {
+        "method": "browser-card",
+        "observedAt": "2026-10-01T06:16:58.224Z",
+        "requestedUrl": "https://market.yandex.ru/card/x/5222509141?sku=5793108049",
+        "finalUrl": "https://market.yandex.ru/card/x/5222509141?sku=5793108049",
+        "live": false,
+        "httpStatus": 403,
+        "priceKind": "unknown",
+        "available": null
+      },
+      "native": {
+        "provider": "SZhukovWork/yandex-market-mcp",
+        "tool": "get_product",
+        "status": "error",
+        "observedAt": "2026-10-01T06:16:43.117Z"
+      },
+      "requestedCity": "Воронеж",
+      "requestedCityId": "voronezh",
+      "discoveryPriceKind": "ordinary",
+      "discoveryConditionalRub": 33465,
+      "discoveryProvider": "SZhukovWork/yandex-market-mcp",
+      "discoveryRegion": "Москва",
+      "discoveredAt": "2026-10-01T06:16:25.805Z",
+      "discoveryPriceRub": 34500,
+      "risk": {
+        "flags": [
+          "seller_missing",
+          "not_verified"
+        ],
+        "score": 50
+      },
+      "landed": {
+        "item": null,
+        "shipping": null,
+        "duty": null,
+        "total": null,
+        "currency": "RUB",
+        "region": null
+      }
+    },
+    {
+      "marketplace": "yandex-market",
+      "title": "Смартфон X7 Pro 5G, Android 15, 16Гб+1024Гб, камера 108Мп, экран 6.78\", 2 SIM",
+      "url": "https://market.yandex.ru/card/x/5971012463?sku=5971012463",
+      "priceRub": null,
+      "sku": "5971012463",
+      "specs": {},
+      "status": "UNVERIFIED",
+      "reasons": [
+        "selected_product_schema_missing_or_ambiguous",
+        "selected_offer_ambiguous",
+        "card_unavailable_or_challenged",
+        "region_not_confirmed",
+        "discovery_specs_conflict",
+        "missing_brand",
+        "missing_model",
+        "missing_year",
+        "missing_cpu",
+        "missing_ramGb",
+        "missing_ssdGb",
+        "live_card_not_confirmed",
+        "sku_missing",
+        "variant_missing",
+        "seller_missing",
+        "current_price_missing",
+        "unconditional_price_not_confirmed",
+        "availability_not_confirmed"
+      ],
+      "evidence": {
+        "method": "browser-card",
+        "observedAt": "2026-10-01T06:17:00.314Z",
+        "requestedUrl": "https://market.yandex.ru/card/x/5971012463?sku=5971012463",
+        "finalUrl": "https://market.yandex.ru/card/x/5971012463?sku=5971012463",
+        "live": false,
+        "httpStatus": 403,
+        "priceKind": "unknown",
+        "available": null
+      },
+      "native": {
+        "provider": "SZhukovWork/yandex-market-mcp",
+        "tool": "get_product",
+        "status": "error",
+        "observedAt": "2026-10-01T06:16:58.534Z"
+      },
+      "requestedCity": "Воронеж",
+      "requestedCityId": "voronezh",
+      "discoveryPriceKind": "ordinary",
+      "discoveryConditionalRub": 12760,
+      "discoveryReferenceRub": 124732,
+      "discoveryProvider": "SZhukovWork/yandex-market-mcp",
+      "discoveryRegion": "Москва",
+      "discoveredAt": "2026-10-01T06:16:25.804Z",
+      "discoveryPriceRub": 13155,
+      "risk": {
+        "flags": [
+          "seller_missing",
+          "not_verified"
+        ],
+        "score": 50
+      },
+      "landed": {
+        "item": null,
+        "shipping": null,
+        "duty": null,
+        "total": null,
+        "currency": "RUB",
+        "region": null
+      }
+    }
+  ],
+  "sourceOutcomes": [
+    {
+      "marketplace": "yandex-market",
+      "status": "ok",
+      "stage": "native-discovery",
+      "detail": "ordinary/Pay/reference separated; city from page",
+      "offersReturned": 3,
+      "tools": [
+        {
+          "provider": "SZhukovWork/yandex-market-mcp",
+          "tool": "search_products",
+          "status": "ok",
+          "at": "2026-10-01T06:16:25.800Z",
+          "durationMs": 6327
+        },
+        {
+          "provider": "ru-marketplace-mcp",
+          "tool": "yandex_search",
+          "status": "timeout",
+          "at": "2026-10-01T06:16:41.766Z",
+          "durationMs": 15959
+        },
+        {
+          "provider": "SZhukovWork/yandex-market-mcp",
+          "tool": "get_product",
+          "status": "blocked",
+          "at": "2026-10-01T06:16:43.107Z",
+          "durationMs": 1340
+        },
+        {
+          "provider": "SZhukovWork/yandex-market-mcp",
+          "tool": "get_product",
+          "status": "error",
+          "at": "2026-10-01T06:16:43.117Z",
+          "durationMs": 8
+        },
+        {
+          "provider": "SZhukovWork/yandex-market-mcp",
+          "tool": "get_product",
+          "status": "error",
+          "at": "2026-10-01T06:16:58.534Z",
+          "durationMs": 119
+        }
+      ]
+    },
+    {
+      "marketplace": "ozon",
+      "status": "blocked",
+      "stage": "mcp-discovery",
+      "detail": "Tier-1 (curl_cffi) blocked AND Tier-2 (CDP) unreachable. Start Chrome (run scripts/start_chrome_cdp.ps1 (PowerShell)) and ensure the CDP port is open. Last error: CDP timeout after 20.0s",
+      "offersReturned": 0,
+      "tools": [
+        {
+          "provider": "ru-marketplace-mcp",
+          "tool": "compare_prices",
+          "status": "ok",
+          "at": "2026-10-01T06:17:57.503Z",
+          "durationMs": 56539
+        }
+      ]
+    },
+    {
+      "marketplace": "avito",
+      "status": "blocked",
+      "stage": "city-browser-discovery",
+      "detail": "Доступ ограничен: проблема с IP",
+      "discoveryUrl": "https://www.avito.ru/voronezh/noutbuki?q=Xiaomi%20RedmiBook%20Pro%2016%202026%20Ultra%205%20338H%2032GB%201024GB",
+      "offersReturned": 0,
+      "tools": []
+    },
+    {
+      "marketplace": "wildberries",
+      "status": "timeout",
+      "stage": "region-resolution",
+      "detail": "city_mapping_unconfirmed; no default Moscow fallback",
+      "offersReturned": 0,
+      "tools": [
+        {
+          "provider": "Wildberries public geo",
+          "tool": "get-geo-info",
+          "status": "timeout",
+          "at": "2026-10-01T06:18:10.557Z",
+          "durationMs": 12013
+        }
+      ]
+    }
+  ],
+  "complete": false,
+  "requestedCity": {
+    "id": "voronezh",
+    "name": "Воронеж",
+    "latitude": 51.6608,
+    "longitude": 39.2003
+  },
+  "region": null,
+  "acceptance": {
+    "discoveryAttempted": true,
+    "candidatesDiscovered": 3,
+    "cardsReopened": 2,
+    "verified": 0,
+    "outcome": "UNVERIFIED",
+    "limitation": "Read each offer's evidence and reasons."
+  }
+}

@@ -1,0 +1,172 @@
+{
+  "date": "2026-10-02",
+  "provider": "changedetection.io",
+  "revision": "09881f8b26aa01a2be66c5f63daf54a79a42b6bd",
+  "version": "0.60.8",
+  "independentCritic": "GO for bounded live pilot",
+  "nodeTests": 60,
+  "pythonBoundaryTests": 10,
+  "pythonAuditedDependencies": 169,
+  "pythonVulnerabilities": 0,
+  "npmVulnerabilities": 0,
+  "lint": "PASS",
+  "typecheck": "PASS",
+  "build": "PASS",
+  "pythonLint": "PASS",
+  "htmlEndpoint": {
+    "bytes": 58142,
+    "status": 200
+  },
+  "renderedUiVerified": false,
+  "lifecycle": {
+    "before": {
+      "authAndOrigin": {
+        "missingApiKey": 403,
+        "wrongApiKey": 403,
+        "foreignHost": 403,
+        "foreignOrigin": 403,
+        "crossSite": 403,
+        "socketIo": 403,
+        "socketForeignOrigin": 403,
+        "browserSteps": 403,
+        "proxyCheck": 403,
+        "browserSnapshot": 403
+      },
+      "watches": [
+        {
+          "url": "https://raw.githubusercontent.com/dgtlmoon/changedetection.io/09881f8b26aa01a2be66c5f63daf54a79a42b6bd/README-pip.md",
+          "title": "TECHNICAL CONTROL — upstream README; not a product or price",
+          "paused": true,
+          "last_checked": 1790888455,
+          "last_error": false,
+          "last_check_status": null,
+          "uuid": "13aedbbd-8d18-479f-aae3-6731bf61ff0b",
+          "history": {
+            "1790888455": "D:\\Projects\\marketplace-scout\\.data\\external\\changedetection\\13aedbbd-8d18-479f-aae3-6731bf61ff0b\\15ff5ce343fc61f3c62def723d9b7ba0.txt"
+          },
+          "verification": "UNVERIFIED"
+        },
+        {
+          "url": "https://market.yandex.ru/card/x/6013745409?sku=6013745409",
+          "title": "RedmiBook Pro 16 2026 / 338H / 32 GB / 1 TB — UNVERIFIED; Voronezh unconfirmed",
+          "paused": true,
+          "last_checked": 1790888549,
+          "last_error": "Exception: Source restricted/redirected: HTTP 302",
+          "last_check_status": null,
+          "uuid": "8406c2b6-a6cf-45d2-ae3b-bd00e3f196de",
+          "history": {},
+          "verification": "UNVERIFIED"
+        }
+      ],
+      "snapshots": [
+        {
+          "uuid": "13aedbbd-8d18-479f-aae3-6731bf61ff0b",
+          "timestamp": "1790888455",
+          "bytes": 6287,
+          "sha256": "9581bb6fc7b424f957d906e6237ad4a82b73f9c29171b2eb07718f389fa0a580"
+        }
+      ],
+      "requests": [
+        {
+          "url": "https://raw.githubusercontent.com/dgtlmoon/changedetection.io/09881f8b26aa01a2be66c5f63daf54a79a42b6bd/README-pip.md",
+          "at": 1790888455.2568712,
+          "status": 200,
+          "bytes": 6287,
+          "elapsedSeconds": 0.875
+        },
+        {
+          "url": "https://market.yandex.ru/card/x/6013745409?sku=6013745409",
+          "at": 1790888549.4149673,
+          "status": 302,
+          "error": "ValueError",
+          "elapsedSeconds": 1.484
+        }
+      ],
+      "resources": {
+        "processes": 1,
+        "rssBytes": 16588800,
+        "peakRssBytes": 98775040,
+        "datastoreBytes": 68567
+      },
+      "scoutHistorySha256": "9d88a2c92a2717984ca2b67196739b5c408f8ec2259c940df75496f8b0fe38c6"
+    },
+    "stopSeconds": 1.797,
+    "ownedProcessExited": true,
+    "portReleased": true,
+    "backup": ".runtime\\backups\\changedetection\\20261001T210647Z",
+    "after": {
+      "authAndOrigin": {
+        "missingApiKey": 403,
+        "wrongApiKey": 403,
+        "foreignHost": 403,
+        "foreignOrigin": 403,
+        "crossSite": 403,
+        "socketIo": 403,
+        "socketForeignOrigin": 403,
+        "browserSteps": 403,
+        "proxyCheck": 403,
+        "browserSnapshot": 403
+      },
+      "watches": [
+        {
+          "url": "https://raw.githubusercontent.com/dgtlmoon/changedetection.io/09881f8b26aa01a2be66c5f63daf54a79a42b6bd/README-pip.md",
+          "title": "TECHNICAL CONTROL — upstream README; not a product or price",
+          "paused": true,
+          "last_checked": 1790888455,
+          "last_error": false,
+          "last_check_status": null,
+          "uuid": "13aedbbd-8d18-479f-aae3-6731bf61ff0b",
+          "history": {
+            "1790888455": "D:\\Projects\\marketplace-scout\\.data\\external\\changedetection\\13aedbbd-8d18-479f-aae3-6731bf61ff0b\\15ff5ce343fc61f3c62def723d9b7ba0.txt"
+          },
+          "verification": "UNVERIFIED"
+        },
+        {
+          "url": "https://market.yandex.ru/card/x/6013745409?sku=6013745409",
+          "title": "RedmiBook Pro 16 2026 / 338H / 32 GB / 1 TB — UNVERIFIED; Voronezh unconfirmed",
+          "paused": true,
+          "last_checked": 1790888549,
+          "last_error": "Exception: Source restricted/redirected: HTTP 302",
+          "last_check_status": null,
+          "uuid": "8406c2b6-a6cf-45d2-ae3b-bd00e3f196de",
+          "history": {},
+          "verification": "UNVERIFIED"
+        }
+      ],
+      "snapshots": [
+        {
+          "uuid": "13aedbbd-8d18-479f-aae3-6731bf61ff0b",
+          "timestamp": "1790888455",
+          "bytes": 6287,
+          "sha256": "9581bb6fc7b424f957d906e6237ad4a82b73f9c29171b2eb07718f389fa0a580"
+        }
+      ],
+      "requests": [
+        {
+          "url": "https://raw.githubusercontent.com/dgtlmoon/changedetection.io/09881f8b26aa01a2be66c5f63daf54a79a42b6bd/README-pip.md",
+          "at": 1790888455.2568712,
+          "status": 200,
+          "bytes": 6287,
+          "elapsedSeconds": 0.875
+        },
+        {
+          "url": "https://market.yandex.ru/card/x/6013745409?sku=6013745409",
+          "at": 1790888549.4149673,
+          "status": 302,
+          "error": "ValueError",
+          "elapsedSeconds": 1.484
+        }
+      ],
+      "resources": {
+        "processes": 1,
+        "rssBytes": 74727424,
+        "peakRssBytes": 84811776,
+        "datastoreBytes": 31599
+      },
+      "scoutHistorySha256": "9d88a2c92a2717984ca2b67196739b5c408f8ec2259c940df75496f8b0fe38c6"
+    },
+    "pauseAndHistoryRestored": true,
+    "noAutomaticRequests": true,
+    "scoutHistoryUnchanged": true
+  }
+}

@@ -1,0 +1,211 @@
+{
+  "runAt": "2026-09-30T20:32:40.455Z",
+  "mode": "LIVE_NO_FIXTURES",
+  "query": "RedmiBook Pro 16 2026 Ultra 5 338H 32GB 1TB",
+  "profile": {
+    "brand": "Xiaomi",
+    "model": "RedmiBook Pro 16",
+    "year": 2026,
+    "cpu": "Ultra 5 338H",
+    "ramGb": 32,
+    "ssdGb": 1024
+  },
+  "checkedAt": "2026-09-30T20:32:40.443Z",
+  "offers": [
+    {
+      "marketplace": "yandex-market",
+      "title": "Xiaomi Book 16 Pro 2026, 3.2K 3200x2000 165Hz Ноутбук 16\", Intel Core Ultra 5 338H, RAM 32 ГБ, SSD 1024 ГБ, Intel Arc B370, Windows Pro, (A1602), серый, Русская раскладка",
+      "url": "https://market.yandex.ru/card/xiaomi-book-16-pro-2026-32k-3200x2000-165hz-noutbuk-16-intel-core-ultra-5-338h-ram-32-gb-ssd-1024-gb-intel-arc-b370-windows-pro-a1602-seryy-russkaya-raskladka/5829889027?sku=5932997102",
+      "priceRub": null,
+      "sku": "5829889027",
+      "specs": {},
+      "status": "UNVERIFIED",
+      "reasons": [
+        "selected_product_schema_missing_or_ambiguous",
+        "selected_offer_ambiguous",
+        "card_unavailable_or_challenged",
+        "missing_brand",
+        "missing_model",
+        "missing_year",
+        "missing_cpu",
+        "missing_ramGb",
+        "missing_ssdGb",
+        "live_card_not_confirmed",
+        "sku_missing",
+        "variant_missing",
+        "seller_missing",
+        "current_price_missing",
+        "unconditional_price_not_confirmed",
+        "availability_not_confirmed"
+      ],
+      "evidence": {
+        "method": "browser-card",
+        "observedAt": "2026-09-30T20:32:26.784Z",
+        "requestedUrl": "https://market.yandex.ru/card/xiaomi-book-16-pro-2026-32k-3200x2000-165hz-noutbuk-16-intel-core-ultra-5-338h-ram-32-gb-ssd-1024-gb-intel-arc-b370-windows-pro-a1602-seryy-russkaya-raskladka/5829889027?sku=5932997102",
+        "finalUrl": "https://market.yandex.ru/card/xiaomi-book-16-pro-2026-32k-3200x2000-165hz-noutbuk-16-intel-core-ultra-5-338h-ram-32-gb-ssd-1024-gb-intel-arc-b370-windows-pro-a1602-seryy-russkaya-raskladka/5829889027?sku=5932997102",
+        "live": false,
+        "httpStatus": 403,
+        "priceKind": "unknown",
+        "available": null
+      },
+      "discoveredAt": "2026-09-30T20:32:25.896Z",
+      "discoveryPriceRub": 230377,
+      "risk": {
+        "flags": [
+          "seller_missing",
+          "not_verified"
+        ],
+        "score": 50
+      },
+      "landed": {
+        "item": null,
+        "shipping": null,
+        "duty": null,
+        "total": null,
+        "currency": "RUB",
+        "region": null
+      }
+    },
+    {
+      "marketplace": "yandex-market",
+      "title": "Xiaomi Book 16 Pro 2026, 3.2K 3200x2000 165Hz Ноутбук 16\", Intel Core Ultra 5 338H, RAM 32 ГБ, SSD 1024 ГБ, Intel Arc B370, Windows Pro, (A1602), серый, Русская раскладка",
+      "url": "https://market.yandex.ru/card/xiaomi-book-16-pro-2026-32k-3200x2000-165hz-noutbuk-16-intel-core-ultra-5-338h-ram-32-gb-ssd-1024-gb-intel-arc-b370-windows-pro-a1602-seryy-russkaya-raskladka/5981551118?sku=5981551118",
+      "priceRub": null,
+      "sku": "5981551118",
+      "specs": {},
+      "status": "UNVERIFIED",
+      "reasons": [
+        "selected_product_schema_missing_or_ambiguous",
+        "selected_offer_ambiguous",
+        "card_unavailable_or_challenged",
+        "missing_brand",
+        "missing_model",
+        "missing_year",
+        "missing_cpu",
+        "missing_ramGb",
+        "missing_ssdGb",
+        "live_card_not_confirmed",
+        "sku_missing",
+        "variant_missing",
+        "seller_missing",
+        "current_price_missing",
+        "unconditional_price_not_confirmed",
+        "availability_not_confirmed"
+      ],
+      "evidence": {
+        "method": "browser-card",
+        "observedAt": "2026-09-30T20:32:27.193Z",
+        "requestedUrl": "https://market.yandex.ru/card/xiaomi-book-16-pro-2026-32k-3200x2000-165hz-noutbuk-16-intel-core-ultra-5-338h-ram-32-gb-ssd-1024-gb-intel-arc-b370-windows-pro-a1602-seryy-russkaya-raskladka/5981551118?sku=5981551118",
+        "finalUrl": "https://market.yandex.ru/card/xiaomi-book-16-pro-2026-32k-3200x2000-165hz-noutbuk-16-intel-core-ultra-5-338h-ram-32-gb-ssd-1024-gb-intel-arc-b370-windows-pro-a1602-seryy-russkaya-raskladka/5981551118?sku=5981551118",
+        "live": false,
+        "httpStatus": 403,
+        "priceKind": "unknown",
+        "available": null
+      },
+      "discoveredAt": "2026-09-30T20:32:25.896Z",
+      "discoveryPriceRub": 309546,
+      "risk": {
+        "flags": [
+          "seller_missing",
+          "not_verified"
+        ],
+        "score": 50
+      },
+      "landed": {
+        "item": null,
+        "shipping": null,
+        "duty": null,
+        "total": null,
+        "currency": "RUB",
+        "region": null
+      }
+    },
+    {
+      "marketplace": "yandex-market",
+      "title": "Ноутбук Xiaomi Redmi Book Pro 16, 16″ IPS 3072×1920 165 Гц, Intel Core Ultra 7 255H, 32 ГБ LPDDR5X, SSD 1 ТБ, Intel Arc 140T, Windows 11 Pro + MS Office, серый, RU",
+      "url": "https://market.yandex.ru/card/16-noutbuk-xiaomi-redmi-book-pro-16-2025-3072x1920-ips-165gts-intel-core-ultra-7-255h-44-ggts-ram-32-gb-lpddr5kh-ssd-1024-gb-intel-arc-graphics-windows-11-pro--ms-office-pro-seryy-russkaya-raskladka-jyu4650cn/4926159786?sku=4926159786",
+      "priceRub": null,
+      "sku": "4926159786",
+      "specs": {},
+      "status": "UNVERIFIED",
+      "reasons": [
+        "selected_product_schema_missing_or_ambiguous",
+        "selected_offer_ambiguous",
+        "card_unavailable_or_challenged",
+        "missing_brand",
+        "missing_model",
+        "missing_year",
+        "missing_cpu",
+        "missing_ramGb",
+        "missing_ssdGb",
+        "live_card_not_confirmed",
+        "sku_missing",
+        "variant_missing",
+        "seller_missing",
+        "current_price_missing",
+        "unconditional_price_not_confirmed",
+        "availability_not_confirmed"
+      ],
+      "evidence": {
+        "method": "browser-card",
+        "observedAt": "2026-09-30T20:32:27.623Z",
+        "requestedUrl": "https://market.yandex.ru/card/16-noutbuk-xiaomi-redmi-book-pro-16-2025-3072x1920-ips-165gts-intel-core-ultra-7-255h-44-ggts-ram-32-gb-lpddr5kh-ssd-1024-gb-intel-arc-graphics-windows-11-pro--ms-office-pro-seryy-russkaya-raskladka-jyu4650cn/4926159786?sku=4926159786",
+        "finalUrl": "https://market.yandex.ru/card/16-noutbuk-xiaomi-redmi-book-pro-16-2025-3072x1920-ips-165gts-intel-core-ultra-7-255h-44-ggts-ram-32-gb-lpddr5kh-ssd-1024-gb-intel-arc-graphics-windows-11-pro--ms-office-pro-seryy-russkaya-raskladka-jyu4650cn/4926159786?sku=4926159786",
+        "live": false,
+        "httpStatus": 403,
+        "priceKind": "unknown",
+        "available": null
+      },
+      "discoveredAt": "2026-09-30T20:32:25.895Z",
+      "discoveryPriceRub": 143452,
+      "risk": {
+        "flags": [
+          "seller_missing",
+          "not_verified"
+        ],
+        "score": 50
+      },
+      "landed": {
+        "item": null,
+        "shipping": null,
+        "duty": null,
+        "total": null,
+        "currency": "RUB",
+        "region": null
+      }
+    }
+  ],
+  "sourceOutcomes": [
+    {
+      "marketplace": "yandex-market",
+      "status": "ok",
+      "stage": "mcp-discovery",
+      "detail": "8 results, 8 priced",
+      "offersReturned": 3
+    },
+    {
+      "marketplace": "ozon",
+      "status": "blocked",
+      "stage": "mcp-discovery",
+      "detail": "Ozon returned HTTP 403 via cdp_blocked. CDP may be reachable, but the browser session is blocked by Ozon/Cloudflare. Open ozon.ru in the Chrome CDP profile, solve any captcha/challenge, then retry. De",
+      "offersReturned": 0
+    },
+    {
+      "marketplace": "avito",
+      "status": "blocked",
+      "stage": "mcp-discovery",
+      "detail": "Avito returned an IP-firewall block via cdp. Open avito.ru in the Chrome CDP profile, solve the captcha, then retry; from a datacenter IP a Russian residential proxy (AVITO_PROXY) is the tier-1 fix. D",
+      "offersReturned": 0
+    }
+  ],
+  "complete": false,
+  "region": null,
+  "acceptance": {
+    "discoveryAttempted": true,
+    "candidatesDiscovered": 3,
+    "cardsReopened": 3,
+    "verified": 0,
+    "outcome": "UNVERIFIED",
+    "limitation": "Read each offer's evidence and reasons."
+  }
+}

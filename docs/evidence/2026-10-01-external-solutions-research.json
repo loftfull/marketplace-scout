@@ -1,0 +1,248 @@
+{
+  "reviewedOn": "2026-10-01",
+  "mode": "SOURCE_AND_CONTRACT_REVIEW_ONLY",
+  "repositories": [
+    {
+      "full_name": "dgtlmoon/changedetection.io",
+      "commit": "0e0566721b1c483dcf7ae548210ee10532d9b181",
+      "pushed_at": "2026-09-28T08:08:29Z",
+      "archived": false,
+      "stargazers_count": 34728,
+      "open_issues_count": 393,
+      "license": "Apache-2.0",
+      "reviewed_files": [
+        {
+          "path": "changedetectionio/__init__.py",
+          "sha256": "8fd2bdd0455032ef4ebd4f9e201f5bd239e305e8b2ca8c0ca72b3acd23092041",
+          "bytes": 32965
+        },
+        {
+          "path": "docker-compose.yml",
+          "sha256": "9720bdc3c890f7cb3097fbe7530aac7ae5f81965ce32c526af1c7d47eb3f667a",
+          "bytes": 8695
+        },
+        {
+          "path": "docs/api-spec.yaml",
+          "sha256": "db9ddaff42036f1337843c57dc7cb2c771d20e57da34bcf8dcdc69ffc6c29761",
+          "bytes": 85995
+        },
+        {
+          "path": "LICENSE",
+          "sha256": "94819497b44fbfbbc93198af0eb1b20144098a96c10ab577e9a868bab26d3705",
+          "bytes": 11382
+        },
+        {
+          "path": "README-pip.md",
+          "sha256": "9581bb6fc7b424f957d906e6237ad4a82b73f9c29171b2eb07718f389fa0a580",
+          "bytes": 6287
+        }
+      ]
+    },
+    {
+      "full_name": "Duff89/parser_avito",
+      "commit": "91a5399f79bf035d3eb919d66ada00545571c2f1",
+      "pushed_at": "2026-09-30T17:36:56Z",
+      "archived": false,
+      "stargazers_count": 753,
+      "open_issues_count": 42,
+      "license": null,
+      "reviewed_files": []
+    },
+    {
+      "full_name": "eduard256/ozon-mcp-server",
+      "commit": "1f2f7e3dcd301a015e93301f0cfe66ffc0b4c647",
+      "pushed_at": "2026-06-06T22:03:41Z",
+      "archived": false,
+      "stargazers_count": 70,
+      "open_issues_count": 5,
+      "license": null,
+      "reviewed_files": []
+    },
+    {
+      "full_name": "FaHoLo/Avito_parser",
+      "commit": "7e48a54bb54135b4fe269bf5c8b8d4656e4eff38",
+      "pushed_at": "2026-05-15T16:33:10Z",
+      "archived": false,
+      "stargazers_count": 4,
+      "open_issues_count": 1,
+      "license": "MIT",
+      "reviewed_files": [
+        {
+          "path": "Bot/avito_parser.py",
+          "sha256": "b989eb8b5f91e51bdcad9be7486c576db493fea2fc9b4f4567755564dc2f780e",
+          "bytes": 8855
+        },
+        {
+          "path": "LICENSE",
+          "sha256": "bc010fb80be9b9b687d7a5de3dcf674753b9b7f56f00fe24ea802cfecceb6b47",
+          "bytes": 1063
+        },
+        {
+          "path": "README.md",
+          "sha256": "58b65f08a6b77e77f844eb230600dddebff4b4d2980624448ab84a702a76b9c5",
+          "bytes": 1974
+        }
+      ]
+    },
+    {
+      "full_name": "Grovvik/avito-deal-parser",
+      "commit": "cd5ca6ff365bbd480e918dd589dcf0b59afed819",
+      "pushed_at": "2026-08-30T18:15:12Z",
+      "archived": false,
+      "stargazers_count": 10,
+      "open_issues_count": 0,
+      "license": "MIT",
+      "reviewed_files": [
+        {
+          "path": "docker-compose.yml",
+          "sha256": "14a4a8fd431c936fbb60cefc264fea535e0aae068c8e5331e4f8e94cdf9dbdd8",
+          "bytes": 347
+        },
+        {
+          "path": "LICENSE",
+          "sha256": "a753aff5fbbe555645a06abccb5bbeb670b3cffdd155c2ade598007a2f1d65bc",
+          "bytes": 1063
+        },
+        {
+          "path": "package.json",
+          "sha256": "b93cdc4b4399f5bc6d61fd196203d1da872f5e4470391455c63031c8c8deacbc",
+          "bytes": 514
+        },
+        {
+          "path": "README.md",
+          "sha256": "35f4a8fe1385eb0072252b2646eaf0cbf46ffe008601320b9c4d77c94f09a037",
+          "bytes": 4823
+        },
+        {
+          "path": "README.ru.md",
+          "sha256": "7916d9e88464ac429f3bd329ca791b4219edda1794517a20db8513518a3c3dc3",
+          "bytes": 7670
+        },
+        {
+          "path": "src/scrapers/ScraperRegistry.js",
+          "sha256": "b6ce739b7346e3375135da17f305f1834a73193a6a0d69c8024bd2378d30da66",
+          "bytes": 2424
+        },
+        {
+          "path": "src/services/ConfigManager.js",
+          "sha256": "7ee1a5d69f04475dea031cb9a76c7248fb3687b64dabcf8df190d9fa49c200d1",
+          "bytes": 3779
+        },
+        {
+          "path": "src/web/WebServer.js",
+          "sha256": "aaeb71e9db70d3de1154879094e3042ae3746923e6afd47ddfa91c84383cfeab",
+          "bytes": 10884
+        }
+      ]
+    },
+    {
+      "full_name": "jez500/pricebuddy",
+      "commit": "602eed0eb38407cb6e39da6645c36e93c2192ffa",
+      "pushed_at": "2026-10-01T04:39:20Z",
+      "archived": false,
+      "stargazers_count": 1362,
+      "open_issues_count": 77,
+      "license": "NOASSERTION",
+      "reviewed_files": [
+        {
+          "path": "config/price_buddy.php",
+          "sha256": "ba20c824cec44a201ddc1a44155f5b6ce2768cbc8c98c878af158e0d0a2ec635",
+          "bytes": 5195
+        },
+        {
+          "path": "docker-compose.yml",
+          "sha256": "2a1be5c140a1644a6a0452bc3581a12279de0ee8c6d2974f852604e9cf2d7aad",
+          "bytes": 1885
+        },
+        {
+          "path": "LICENSE.md",
+          "sha256": "fbfb853f454140bae1b1a39d5c60e2d87d02dfb3f3640c014541b84d55ca3a11",
+          "bytes": 2131
+        },
+        {
+          "path": "README.md",
+          "sha256": "1d4e4df543a9b80d58730d8241067f8448a5bc8068f526c280227034b109601f",
+          "bytes": 7315
+        },
+        {
+          "path": "routes/api.php",
+          "sha256": "824198bf59afd39f9e8d17e484cb4001bf40a9a5cacf3da8a0cdaa6ea0323d39",
+          "bytes": 779
+        }
+      ]
+    },
+    {
+      "full_name": "LightWolf11/AvitoParser",
+      "commit": "c2ee91e505e34509b2f3e404b748b0e224d98074",
+      "pushed_at": "2026-06-10T20:43:02Z",
+      "archived": false,
+      "stargazers_count": 1,
+      "open_issues_count": 0,
+      "license": null,
+      "reviewed_files": []
+    },
+    {
+      "full_name": "neosheps/ozon-shopping-mcp",
+      "commit": "2ec1c7071ca44c8b8c44497c4e801158f26aeaa5",
+      "pushed_at": "2026-09-25T03:34:20Z",
+      "archived": false,
+      "stargazers_count": 14,
+      "open_issues_count": 6,
+      "license": "MIT",
+      "reviewed_files": [
+        {
+          "path": "LICENSE",
+          "sha256": "42faa4b22121eeaad69646245b7567984642f34d310ab62af64a652627c28b19",
+          "bytes": 1105
+        },
+        {
+          "path": "package.json",
+          "sha256": "0c2314b75c3d5e53c264527be0e979690f9c1316bc585b98e8a1d668b7439eee",
+          "bytes": 1676
+        },
+        {
+          "path": "src/browser-session.ts",
+          "sha256": "68b2ed597e01e27c7dc4ae2ad61f9fd9fa79bae78ad9dc04f7d0b747cae675d7",
+          "bytes": 9342
+        },
+        {
+          "path": "src/cli.ts",
+          "sha256": "bbb8f784942024235218c3519a1a2fec48fc8b407c4c665f2a3db902d6c20204",
+          "bytes": 2257
+        },
+        {
+          "path": "src/config.ts",
+          "sha256": "fd35ee12a785fb42aa492f6f74c18ba1f71ab5511542112b6687e37e1b8875fe",
+          "bytes": 2110
+        },
+        {
+          "path": "src/mcp-server.ts",
+          "sha256": "803c925d94e896da9b12d119ae13e821ce478c91076a1e74e3ce0999b5e64369",
+          "bytes": 4845
+        }
+      ]
+    }
+  ],
+  "host": {
+    "node": "24.19.0",
+    "dockerCliInstalled": true,
+    "dockerEngineReachable": false,
+    "runtimeChangesMade": false
+  },
+  "releasesObserved": {
+    "dgtlmoon/changedetection.io": {
+      "tag": "0.60.8",
+      "publishedAt": "2026-09-28T07:24:57Z"
+    },
+    "jez500/pricebuddy": {
+      "tag": "v1.0.54",
+      "publishedAt": "2026-08-09T00:05:15Z"
+    }
+  },
+  "notes": [
+    "Commit pins describe reviewed sources, not installed or live-tested deployments.",
+    "Release tags and audited default-branch commits may differ; deployment must reconcile source and packaged image.",
+    "Missing license means rights not established; process separation does not resolve licensing.",
+    "GitHub open_issues_count includes pull requests."
+  ]
+}

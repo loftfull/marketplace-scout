@@ -1,0 +1,1506 @@
+{
+  "at": "2026-10-01T07:12:54.295Z",
+  "rows": [
+    {
+      "provider": "yandex",
+      "tools": [
+        {
+          "name": "search_products",
+          "description": "Search Yandex Market like the site: real pages, the site's sort orders and a price window.\n\n    Each item: offer/card/model/SKU ids, title, card URL, the three labelled prices (without the\n    Pay card, with it, crossed-out), discounts, seller, sponsored flag, rating of this seller's\n    card with its count, badges, cross-border / markdown flags, stock and delivery dates. One\n    request per call.\n    ",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "query": {
+                "description": "Search phrase as typed on the site (Russian works best)",
+                "minLength": 1,
+                "title": "Query",
+                "type": "string"
+              },
+              "page": {
+                "default": 1,
+                "description": "Result page: page 1 has 8 tiles, every later page 16",
+                "maximum": 100,
+                "minimum": 1,
+                "title": "Page",
+                "type": "integer"
+              },
+              "sort": {
+                "default": "popular",
+                "description": "The site's orders. Price sorting uses the Pay-card price. 'popular' page 1 is almost all ads: for depth use price_asc with price windows",
+                "enum": [
+                  "popular",
+                  "price_asc",
+                  "price_desc",
+                  "rating"
+                ],
+                "title": "Sort",
+                "type": "string"
+              },
+              "price_min": {
+                "anyOf": [
+                  {
+                    "minimum": 0,
+                    "type": "integer"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "description": "Lower price bound, rubles (the site filters by the Pay-card price)",
+                "title": "Price Min"
+              },
+              "price_max": {
+                "anyOf": [
+                  {
+                    "minimum": 0,
+                    "type": "integer"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "description": "Upper price bound, rubles (Pay-card price)",
+                "title": "Price Max"
+              },
+              "include_sponsored": {
+                "default": true,
+                "description": "Keep sponsored tiles in `items` (they are always flagged and counted)",
+                "title": "Include Sponsored",
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "query"
+            ],
+            "title": "search_productsArguments"
+          },
+          "outputSchema": {
+            "type": "object",
+            "additionalProperties": true,
+            "title": "search_productsDictOutput"
+          },
+          "annotations": {
+            "readOnlyHint": true,
+            "destructiveHint": false,
+            "idempotentHint": true,
+            "openWorldHint": true
+          }
+        },
+        {
+          "name": "get_product",
+          "description": "One seller's product card, live: the three labelled prices, promo conditions, delivery, seller.\n\n    Also: rating of this seller's card with stars and a check whether the card pools other\n    products, «Все N предложений от X» (X = lowest Pay-card price; list them with get_offers),\n    badges with their real meaning, cross-border / markdown / version flags, stock,\n    characteristics and question count. One request (three with include_seller_legal).\n    ",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "product": {
+                "description": "Market card id («Артикул Маркета», `card_id` from search_products, e.g. '103266817440') or a market.yandex.ru/card/… URL",
+                "minLength": 1,
+                "title": "Product",
+                "type": "string"
+              },
+              "include_specs": {
+                "default": true,
+                "description": "Characteristics filled in by the seller/Market",
+                "title": "Include Specs",
+                "type": "boolean"
+              },
+              "include_description": {
+                "default": false,
+                "description": "Full description text",
+                "title": "Include Description",
+                "type": "boolean"
+              },
+              "include_seller_legal": {
+                "default": false,
+                "description": "Also load the seller's legal entity (INN/OGRN/address): +2 requests, one of them to Market's /api/ (robots.txt Disallow)",
+                "title": "Include Seller Legal",
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "product"
+            ],
+            "title": "get_productArguments"
+          },
+          "outputSchema": {
+            "type": "object",
+            "additionalProperties": true,
+            "title": "get_productDictOutput"
+          },
+          "annotations": {
+            "readOnlyHint": true,
+            "destructiveHint": false,
+            "idempotentHint": true,
+            "openWorldHint": true
+          }
+        },
+        {
+          "name": "get_offers",
+          "description": "All sellers' offers of one product (the site's «Все N предложений»), as tiles.\n\n    Market's server pages show the first 16 offers per sort and ignore `page` (checked\n    2026-09-25), so this returns at most 16; call again with another sort to see more (dedupe by\n    offer_id). Also returns the model group's rating — labelled: it can merge different products.\n    One request.\n    ",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "model_id": {
+                "description": "`model_id` from search_products / get_product",
+                "minLength": 1,
+                "title": "Model Id",
+                "type": "string"
+              },
+              "sku_id": {
+                "description": "`sku_id` (marketSku) from search_products / get_product: the exact product whose offers to list",
+                "minLength": 1,
+                "title": "Sku Id",
+                "type": "string"
+              },
+              "sort": {
+                "default": "price_asc",
+                "description": "The site's orders; price sorting uses the Pay-card price",
+                "enum": [
+                  "popular",
+                  "price_asc",
+                  "price_desc",
+                  "rating",
+                  "delivery"
+                ],
+                "title": "Sort",
+                "type": "string"
+              }
+            },
+            "required": [
+              "model_id",
+              "sku_id"
+            ],
+            "title": "get_offersArguments"
+          },
+          "outputSchema": {
+            "type": "object",
+            "additionalProperties": true,
+            "title": "get_offersDictOutput"
+          },
+          "annotations": {
+            "readOnlyHint": true,
+            "destructiveHint": false,
+            "idempotentHint": true,
+            "openWorldHint": true
+          }
+        },
+        {
+          "name": "get_reviews",
+          "description": "Buyer reviews with date, stars, pros, cons, comment, votes, photo count and the product each is about.\n\n    The header numbers (rating, counts, stars) are the site's for the chosen scope; for\n    scope=\"variant\" the site still shows the whole card's numbers (labelled). Items without text\n    are ratings only. Author names and order numbers are never returned. One request.\n    ",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "product": {
+                "description": "scope card/variant: card id («Артикул Маркета») or /card/ URL; scope model: `model_id`",
+                "minLength": 1,
+                "title": "Product",
+                "type": "string"
+              },
+              "scope": {
+                "default": "card",
+                "description": "'card' = this seller's card as the site shows it (can pool other products of the seller; each review says which product); 'variant' = only this exact product at this seller; 'model' = all sellers of the model group (can merge DIFFERENT products)",
+                "enum": [
+                  "card",
+                  "variant",
+                  "model"
+                ],
+                "title": "Scope",
+                "type": "string"
+              },
+              "sort": {
+                "default": "helpful",
+                "description": "'worst' = the site's «С низкой оценкой», complaints first",
+                "enum": [
+                  "helpful",
+                  "newest",
+                  "best",
+                  "worst"
+                ],
+                "title": "Sort",
+                "type": "string"
+              },
+              "page": {
+                "default": 1,
+                "description": "Page of 10",
+                "maximum": 200,
+                "minimum": 1,
+                "title": "Page",
+                "type": "integer"
+              }
+            },
+            "required": [
+              "product"
+            ],
+            "title": "get_reviewsArguments"
+          },
+          "outputSchema": {
+            "type": "object",
+            "additionalProperties": true,
+            "title": "get_reviewsDictOutput"
+          },
+          "annotations": {
+            "readOnlyHint": true,
+            "destructiveHint": false,
+            "idempotentHint": true,
+            "openWorldHint": true
+          }
+        },
+        {
+          "name": "get_questions",
+          "description": "Buyers' questions about a card with the answers shown on the site; `by_seller` marks the seller's answers.\n\n    Dates are exact. Names of buyers are never returned; greetings with a name in answers are\n    masked. One request.\n    ",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "product": {
+                "description": "Market card id («Артикул Маркета», `card_id` from search_products, e.g. '103266817440') or a market.yandex.ru/card/… URL",
+                "minLength": 1,
+                "title": "Product",
+                "type": "string"
+              },
+              "page": {
+                "default": 1,
+                "description": "Page of 10 questions",
+                "maximum": 200,
+                "minimum": 1,
+                "title": "Page",
+                "type": "integer"
+              }
+            },
+            "required": [
+              "product"
+            ],
+            "title": "get_questionsArguments"
+          },
+          "outputSchema": {
+            "type": "object",
+            "additionalProperties": true,
+            "title": "get_questionsDictOutput"
+          },
+          "annotations": {
+            "readOnlyHint": true,
+            "destructiveHint": false,
+            "idempotentHint": true,
+            "openWorldHint": true
+          }
+        },
+        {
+          "name": "get_seller",
+          "description": "A seller's storefront header (rating, ratings count, orders, years on Market, status) and legal entity.\n\n    The legal entity (name, INN, OGRN, address, cross-border flag) comes from the site's\n    seller-info popup, loaded with a POST to Market's /api/ (robots.txt Disallow) — two requests.\n    ",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "business_id": {
+                "description": "`business_id` of a seller from search_products / get_product",
+                "minLength": 1,
+                "title": "Business Id",
+                "type": "string"
+              }
+            },
+            "required": [
+              "business_id"
+            ],
+            "title": "get_sellerArguments"
+          },
+          "outputSchema": {
+            "type": "object",
+            "additionalProperties": true,
+            "title": "get_sellerDictOutput"
+          },
+          "annotations": {
+            "readOnlyHint": true,
+            "destructiveHint": false,
+            "idempotentHint": true,
+            "openWorldHint": true
+          }
+        },
+        {
+          "name": "compare_products",
+          "description": "Side-by-side rows for up to 10 seller cards: the three prices, rating of the card, seller, delivery.\n\n    One request per card, sequentially (about 5 s each). A card that fails gets an `error` row;\n    a captcha or rate limit stops the whole comparison.\n    ",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "products": {
+                "description": "Up to 10 card ids («Артикул Маркета») or /card/ URLs",
+                "items": {
+                  "type": "string"
+                },
+                "maxItems": 10,
+                "minItems": 1,
+                "title": "Products",
+                "type": "array"
+              }
+            },
+            "required": [
+              "products"
+            ],
+            "title": "compare_productsArguments"
+          },
+          "outputSchema": {
+            "type": "object",
+            "additionalProperties": true,
+            "title": "compare_productsDictOutput"
+          },
+          "annotations": {
+            "readOnlyHint": true,
+            "destructiveHint": false,
+            "idempotentHint": true,
+            "openWorldHint": true
+          }
+        }
+      ]
+    },
+    {
+      "provider": "ozon",
+      "tools": [
+        {
+          "name": "search_products",
+          "description": "Search Ozon like the site does, with real pagination.\n\n    Walks Ozon's result pages from `page` until `limit` items are collected;\n    pages are never cut, so `next_page` continues without gaps (Ozon itself\n    may repeat an item across pages — repeats within one call are dropped).\n    Ozon does not report a total count.\n\n    Per item: SKU, name, brand (only when the tile shows it — otherwise use\n    get_product), `price_with_ozon_card_rub` (tiles show only the Ozon Card\n    price; e-books and similar show a single `price_rub`), crossed-out price,\n    Ozon's discount label, rating and review count as on the tile (usually the\n    whole variant line's — see `rating_shared_with`), delivery date for the\n    region (`express_delivery` = faster paid option with its `surcharge_rub`),\n    `units_left` when Ozon shows a stock counter, `sold_by_ozon`,\n    `adult_only`, marketing labels. `resolved_to` shows the category/brand\n    filters Ozon applied to the query.\n    ",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "query": {
+                "description": "Search phrase, as typed on the site (Russian works best)",
+                "minLength": 1,
+                "title": "Query",
+                "type": "string"
+              },
+              "page": {
+                "default": 1,
+                "description": "Ozon result page to start from (continue with `next_page`)",
+                "maximum": 200,
+                "minimum": 1,
+                "title": "Page",
+                "type": "integer"
+              },
+              "sort": {
+                "default": "popular",
+                "description": "Order of results, the site's options",
+                "enum": [
+                  "popular",
+                  "price_asc",
+                  "price_desc",
+                  "rating",
+                  "newest",
+                  "discount"
+                ],
+                "title": "Sort",
+                "type": "string"
+              },
+              "price_min": {
+                "anyOf": [
+                  {
+                    "minimum": 0,
+                    "type": "integer"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "description": "Lower bound, rubles (Ozon filters by the Ozon Card price)",
+                "title": "Price Min"
+              },
+              "price_max": {
+                "anyOf": [
+                  {
+                    "minimum": 0,
+                    "type": "integer"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "description": "Upper bound, rubles (Ozon filters by the Ozon Card price)",
+                "title": "Price Max"
+              },
+              "limit": {
+                "default": 36,
+                "description": "Fetch whole Ozon pages until at least this many items (pages hold 8–36)",
+                "maximum": 150,
+                "minimum": 1,
+                "title": "Limit",
+                "type": "integer"
+              },
+              "auto_category": {
+                "default": true,
+                "description": "Let Ozon narrow the query to its predicted category/brand, as the site does; false searches every category",
+                "title": "Auto Category",
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "query"
+            ],
+            "title": "search_productsArguments"
+          },
+          "outputSchema": {
+            "type": "object",
+            "additionalProperties": true,
+            "title": "search_productsDictOutput"
+          },
+          "annotations": {
+            "readOnlyHint": true,
+            "destructiveHint": false,
+            "idempotentHint": true,
+            "openWorldHint": true
+          }
+        },
+        {
+          "name": "get_product",
+          "description": "Full, live product card for one SKU.\n\n    Prices: Ozon Card / without Ozon Card / crossed-out, plus the sale banner\n    and Ozon's only price-history hint (current vs last month's average) when\n    it shows \"Стало дешевле\". Availability, delivery options and dates for\n    the region, where it ships from, return terms. Seller with rating, order\n    count and legal entity (name, ОГРН/ИНН, address). Rating: the one Ozon\n    shows (often the whole variant line's) next to this SKU's own rating\n    computed from its own reviews. Variants with their prices, other\n    sellers' offers of the same product, characteristics, description,\n    package contents.\n    ",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "product": {
+                "description": "Ozon SKU (the number in the product URL, e.g. 1837133915) or a full ozon.ru product URL",
+                "minLength": 1,
+                "title": "Product",
+                "type": "string"
+              },
+              "include_variants": {
+                "default": true,
+                "description": "List every variant of the line (colour/size/weight) with its own SKU and Ozon Card price",
+                "title": "Include Variants",
+                "type": "boolean"
+              },
+              "include_other_sellers": {
+                "default": true,
+                "description": "List other sellers' offers of the same product (Ozon's 'У других продавцов')",
+                "title": "Include Other Sellers",
+                "type": "boolean"
+              },
+              "include_description": {
+                "default": true,
+                "description": "Full characteristics, description and package contents (one more request)",
+                "title": "Include Description",
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "product"
+            ],
+            "title": "get_productArguments"
+          },
+          "outputSchema": {
+            "type": "object",
+            "additionalProperties": true,
+            "title": "get_productDictOutput"
+          },
+          "annotations": {
+            "readOnlyHint": true,
+            "destructiveHint": false,
+            "idempotentHint": true,
+            "openWorldHint": true
+          }
+        },
+        {
+          "name": "get_reviews",
+          "description": "Buyer reviews with date, stars, text, pros, cons and the variant bought.\n\n    Also returns the line rating with its star split and this SKU's own\n    rating computed from its reviews, so it is clear what a headline number\n    covers. Per review: `sku`/`variant` (which product of the line it is\n    about), `purchased_on_ozon`, photo and video counts attached to that\n    review, helpful votes, `outdated` (Ozon no longer counts it in the\n    rating), number of comments and — optionally — the seller's reply.\n    `date` is the date the site shows (the edit date for edited reviews).\n    Ozon says only buyers can review (`review_policy`); `purchase_badge`\n    appears only where Ozon still prints \"Товар куплен на OZON\".\n    ",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "product": {
+                "description": "Ozon SKU (the number in the product URL, e.g. 1837133915) or a full ozon.ru product URL",
+                "minLength": 1,
+                "title": "Product",
+                "type": "string"
+              },
+              "page": {
+                "default": 1,
+                "description": "Ozon review page to start from (30 per page; continue with `next_page`)",
+                "maximum": 500,
+                "minimum": 1,
+                "title": "Page",
+                "type": "integer"
+              },
+              "limit": {
+                "default": 30,
+                "description": "Fetch whole pages until at least this many reviews",
+                "maximum": 150,
+                "minimum": 1,
+                "title": "Limit",
+                "type": "integer"
+              },
+              "sort": {
+                "default": "helpful",
+                "description": "'worst' puts the lowest ratings first — the fastest way to real drawbacks; 'helpful' is Ozon's default (new and useful)",
+                "enum": [
+                  "helpful",
+                  "worst",
+                  "best"
+                ],
+                "title": "Sort",
+                "type": "string"
+              },
+              "scope": {
+                "default": "sku",
+                "description": "'sku' = reviews of this exact SKU; 'line' = the whole variant line the card rating is based on",
+                "enum": [
+                  "sku",
+                  "line"
+                ],
+                "title": "Scope",
+                "type": "string"
+              },
+              "include_seller_replies": {
+                "default": false,
+                "description": "Load the shop's reply for reviews that have comments (one request each, up to 15)",
+                "title": "Include Seller Replies",
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "product"
+            ],
+            "title": "get_reviewsArguments"
+          },
+          "outputSchema": {
+            "type": "object",
+            "additionalProperties": true,
+            "title": "get_reviewsDictOutput"
+          },
+          "annotations": {
+            "readOnlyHint": true,
+            "destructiveHint": false,
+            "idempotentHint": true,
+            "openWorldHint": true
+          }
+        },
+        {
+          "name": "compare_products",
+          "description": "Live side-by-side offers for up to 20 SKUs (one card request each).\n\n    Per SKU: name, brand, the three prices (Ozon Card / without / crossed-out),\n    availability, the rating shown on the card with the size of its variant\n    line (a line rating is not the SKU's own — use get_product for that),\n    seller with rating, the cheapest other-seller offer Ozon advertises, and\n    the delivery date under the cart button (`express_delivery` with its\n    surcharge when Ozon also sells faster paid delivery). SKUs that fail are\n    listed with the reason.\n    ",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "products": {
+                "description": "SKUs or product URLs to compare",
+                "items": {
+                  "type": "string"
+                },
+                "maxItems": 20,
+                "minItems": 1,
+                "title": "Products",
+                "type": "array"
+              },
+              "with_delivery": {
+                "default": true,
+                "description": "Also fetch the earliest delivery date Ozon shows under the cart button (one small request per SKU)",
+                "title": "With Delivery",
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "products"
+            ],
+            "title": "compare_productsArguments"
+          },
+          "outputSchema": {
+            "type": "object",
+            "additionalProperties": true,
+            "title": "compare_productsDictOutput"
+          },
+          "annotations": {
+            "readOnlyHint": true,
+            "destructiveHint": false,
+            "idempotentHint": true,
+            "openWorldHint": true
+          }
+        }
+      ]
+    },
+    {
+      "provider": "wb",
+      "tools": [
+        {
+          "name": "wb_card",
+          "title": "WB Product Cards",
+          "description": "Fetch product card data from WB v4 API.\n\nReturns prices in rubles, brand, supplier, supplier_rating, review_rating,\nfeedbacks count, total_quantity for up to 100 SKUs.\n\n## Return Format\n\nWbCardResponse: {dest, count, items, meta}. Items carry nm_id, name, brand,\nsupplier, supplier_id, supplier_rating, review_rating, feedbacks,\ntotal_quantity, in_stock, price_rub, price_original_rub. price_rub is None\nwhen the SKU has no sellable price — never 0. Unknown SKUs are NOT an\nerror — they simply do not appear in items.\n\n## Error Format\n\nToolError: BadRequestError on malformed nm_ids; RateLimitedError on HTTP\n429; TransportDownError on network failures, non-200 responses, an HTML wall\npage from WB's edge, and unexpected internal errors; ParserDriftError on a\nnon-JSON or mis-shaped body.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "nm_ids": {
+                "description": "1..100 nmId integers (positive). Batch product cards from WB v4 API.",
+                "items": {
+                  "type": "integer"
+                },
+                "type": "array"
+              },
+              "dest": {
+                "default": "-1257786",
+                "description": "Region ID. Default -1257786 (Moscow). Required for valid prices/stocks. Other examples: -1257786 Moscow, -1029256 Saint Petersburg.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "nm_ids"
+            ],
+            "additionalProperties": false
+          },
+          "outputSchema": {
+            "type": "object",
+            "properties": {
+              "dest": {},
+              "count": {},
+              "items": {},
+              "meta": {}
+            }
+          },
+          "annotations": {
+            "title": "WB Product Cards",
+            "readOnlyHint": true,
+            "destructiveHint": false,
+            "idempotentHint": true,
+            "openWorldHint": true
+          },
+          "_meta": {
+            "fastmcp": {
+              "tags": []
+            }
+          }
+        },
+        {
+          "name": "wb_root_info",
+          "title": "WB Root Info (imt_id)",
+          "description": "Fetch full card metadata from basket CDN. Returns imt_id (root_id) for review pool.\n\nAll variants of one product share imt_id. Reviews indexed by imt_id, NOT by nmId.\n\n## Return Format\n\nWbRootInfoResponse: {imt_id, subj_name, subj_root_name, colors,\ncompositions, options, host_used, meta}. imt_id is the root product id\nshared by every variant — wb_reviews is indexed by it, not by nmId.\n\n## Error Format\n\nOn validation or transport/parse failure, raises ToolError with a JSON\nmessage describing the error code and whether it is retryable.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "nm_id": {
+                "description": "nmId (positive integer). The SKU whose basket CDN card.json is fetched for imt_id resolution.",
+                "exclusiveMinimum": 0,
+                "type": "integer"
+              }
+            },
+            "required": [
+              "nm_id"
+            ],
+            "additionalProperties": false
+          },
+          "outputSchema": {
+            "type": "object",
+            "properties": {
+              "imt_id": {},
+              "subj_name": {},
+              "subj_root_name": {},
+              "colors": {},
+              "compositions": {},
+              "options": {},
+              "host_used": {},
+              "meta": {}
+            }
+          },
+          "annotations": {
+            "title": "WB Root Info (imt_id)",
+            "readOnlyHint": true,
+            "destructiveHint": false,
+            "idempotentHint": true,
+            "openWorldHint": true
+          },
+          "_meta": {
+            "fastmcp": {
+              "tags": []
+            }
+          }
+        },
+        {
+          "name": "wb_reviews",
+          "title": "WB Reviews by imt_id",
+          "description": "Fetch reviews by imt_id (root_id from wb_root_info).\n\nAll product variants share one review pool, indexed by imt_id NOT nmId.\n\nThe WB feedbacks endpoint returns a fixed pool (~1000 most-recent reviews,\nnewest-first) and IGNORES server-side order params (verified Nov 2026), so\n`sort` is applied CLIENT-SIDE over that pool. To surface complaints, \"worst\"\nreorders the returned pool by lowest rating first.\n\n## Return Format\n\nWbReviewsResponse: {imt_id, sort, pool_size, feedback_count, valuation,\nvaluation_distribution, feedbacks, host_used, meta}. Review items carry\nrating, text, pros, cons, user, date. An empty pool is NOT an error — it\nreturns a healthy response with zero feedbacks.\n\n## Error Format\n\nToolError: BadRequestError on a bad limit or sort; ParserDriftError when\na 200 body has no feedbacks list; TransportDownError when every review\nhost fails and on unexpected internal errors.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "imt_id": {
+                "description": "Root ID (imt_id) from wb_root_info. All product variants share one review pool indexed by imt_id, NOT by nmId.",
+                "exclusiveMinimum": 0,
+                "type": "integer"
+              },
+              "limit": {
+                "default": 20,
+                "description": "Max review texts to return (1..100). Counts always full.",
+                "maximum": 100,
+                "minimum": 1,
+                "type": "integer"
+              },
+              "sort": {
+                "default": "recent",
+                "description": "\"recent\"/\"newest\"/\"default\" (as returned, newest-first), \"best\"/\"highest\" (highest rating first), \"worst\"/\"lowest\"/\"complaints\" (LOWEST rating first — finds downsides). Reorders the ~1000-review pool WB returns, not all feedbacks.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "imt_id"
+            ],
+            "additionalProperties": false
+          },
+          "outputSchema": {
+            "type": "object",
+            "properties": {
+              "imt_id": {},
+              "sort": {},
+              "pool_size": {},
+              "feedback_count": {},
+              "valuation": {},
+              "valuation_distribution": {},
+              "feedbacks": {},
+              "host_used": {},
+              "meta": {}
+            }
+          },
+          "annotations": {
+            "title": "WB Reviews by imt_id",
+            "readOnlyHint": true,
+            "destructiveHint": false,
+            "idempotentHint": true,
+            "openWorldHint": true
+          },
+          "_meta": {
+            "fastmcp": {
+              "tags": []
+            }
+          }
+        },
+        {
+          "name": "wb_questions",
+          "title": "WB Buyer Questions by imt_id",
+          "description": "Fetch buyer questions and seller answers by imt_id (root_id from wb_root_info).\n\nAnswers this tool exists for: buyers ask what a listing omits — \"does it fit\na 60cm opening\", \"is the cable included\", \"is this the 10A or the 16A model\" —\nand the seller's reply is often the only public statement of that fact.\nReviews describe the experience of owning the product; questions clarify what\nit actually is.\n\nKeyed by imt_id, exactly like ``wb_reviews``: every colour and size variant\nshares one question pool. Passing an nmId returns an empty pool with no error,\nso resolve the root id via ``wb_root_info`` first.\n\n## Return Format\n\nWbQuestionsResponse: {imt_id, total_available, returned, skip,\nanswered_count, has_more, questions, meta}. Question items carry\nquestion_id, text, date, user, answered, answer_text, answer_date, nm_id.\nAn empty pool is NOT an error — it means nobody has asked yet.\n\n## Error Format\n\nToolError: BadRequestError on a bad limit or skip; RateLimitedError on\nHTTP 429; TransportDownError on network failures, non-200 responses and\nunexpected internal errors; ParserDriftError when a 200 body loses the\ncount key or the questions shape.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "imt_id": {
+                "description": "Root ID (imt_id) from wb_root_info. Questions are pooled per imt_id across every variant, NOT by nmId.",
+                "exclusiveMinimum": 0,
+                "type": "integer"
+              },
+              "limit": {
+                "default": 30,
+                "description": "Max questions to return (1..100). Fetched in pages of 30, which is the upstream cap.",
+                "maximum": 100,
+                "minimum": 1,
+                "type": "integer"
+              },
+              "skip": {
+                "default": 0,
+                "description": "Offset into the question pool, for walking past the first page.",
+                "minimum": 0,
+                "type": "integer"
+              },
+              "answered_only": {
+                "default": false,
+                "description": "Return only questions the seller has answered. Unanswered questions carry no product information.",
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "imt_id"
+            ],
+            "additionalProperties": false
+          },
+          "outputSchema": {
+            "type": "object",
+            "properties": {
+              "imt_id": {},
+              "total_available": {},
+              "returned": {},
+              "skip": {},
+              "answered_count": {},
+              "has_more": {},
+              "questions": {},
+              "meta": {}
+            }
+          },
+          "annotations": {
+            "title": "WB Buyer Questions by imt_id",
+            "readOnlyHint": true,
+            "destructiveHint": false,
+            "idempotentHint": true,
+            "openWorldHint": true
+          },
+          "_meta": {
+            "fastmcp": {
+              "tags": []
+            }
+          }
+        },
+        {
+          "name": "wb_search",
+          "title": "WB Catalog Search",
+          "description": "Search WB catalog by text query.\n\nUses the lightweight `search-goods.wildberries.ru/search` endpoint which\nreturns just product IDs (no PoW protection, very high rate limit). Then\nenriches via `wb_card` for full details.\n\n## Return Format\n\nWbSearchResponse: {query, page, page_size, total_ids, count, items, meta},\nwith items in the same shape as wb_card. Zero matches — or a page past the\nend — returns WbNoResultsResponse {status: \"no_results\", query, page,\ntotal_ids} instead. That is NOT an error.\n\n## Error Format\n\nToolError: BadRequestError on a page outside 1..20; RateLimitedError on\nHTTP 429 from the v9 search endpoint; TransportDownError on unexpected\ninternal errors. Plain transport failures of both search paths degrade to\na no_results response rather than an error.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "query": {
+                "description": "Russian text search query for the WB catalog.",
+                "minLength": 1,
+                "type": "string"
+              },
+              "dest": {
+                "default": "-1257786",
+                "description": "Region ID. Default -1257786 (Moscow). Required for valid prices/stocks.",
+                "type": "string"
+              },
+              "page": {
+                "default": 1,
+                "description": "Page number 1..20 (each page returns ~30 IDs from the long list).",
+                "maximum": 20,
+                "minimum": 1,
+                "type": "integer"
+              }
+            },
+            "required": [
+              "query"
+            ],
+            "additionalProperties": false
+          },
+          "outputSchema": {
+            "type": "object",
+            "properties": {
+              "result": {}
+            }
+          },
+          "annotations": {
+            "title": "WB Catalog Search",
+            "readOnlyHint": true,
+            "destructiveHint": false,
+            "idempotentHint": true,
+            "openWorldHint": true
+          },
+          "_meta": {
+            "fastmcp": {
+              "tags": []
+            }
+          }
+        },
+        {
+          "name": "wb_seller",
+          "title": "WB Seller Legal Info",
+          "description": "Look up the registered legal entity behind a WB seller.\n\nAnswers \"who actually ships this?\" — the question a marketplace listing is\nworst at. Returns the registered name, tax ids (INN/KPP/OGRN) and legal\naddress, which is how you tell an official brand store from a reseller\ntrading under a lookalike name, and how you spot several storefronts sharing\none entity.\n\nChain from `wb_card`: its `supplier_id` field feeds straight into this tool.\n\n## Return Format\n\nWbSellerResponse: {supplier_id, name, full_name, trademark, inn, kpp,\nogrn, legal_address, taxpayer_code, foreign_codes, host_used, meta}.\nforeign_codes carries non-RU registration codes (unp/bin/unn) for EAEU\nsellers.\n\n## Error Format\n\nOn validation or transport/parse failure, raises ToolError with a JSON\nmessage describing the error code and whether it is retryable.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "supplier_id": {
+                "description": "WB supplier id (positive integer). Get it from wb_card's supplier_id field.",
+                "exclusiveMinimum": 0,
+                "type": "integer"
+              }
+            },
+            "required": [
+              "supplier_id"
+            ],
+            "additionalProperties": false
+          },
+          "outputSchema": {
+            "type": "object",
+            "properties": {
+              "supplier_id": {},
+              "name": {},
+              "full_name": {},
+              "trademark": {},
+              "inn": {},
+              "kpp": {},
+              "ogrn": {},
+              "legal_address": {},
+              "taxpayer_code": {},
+              "foreign_codes": {},
+              "host_used": {},
+              "meta": {}
+            }
+          },
+          "annotations": {
+            "title": "WB Seller Legal Info",
+            "readOnlyHint": true,
+            "destructiveHint": false,
+            "idempotentHint": true,
+            "openWorldHint": true
+          },
+          "_meta": {
+            "fastmcp": {
+              "tags": []
+            }
+          }
+        },
+        {
+          "name": "wb_categories",
+          "title": "WB Catalog Categories",
+          "description": "Browse the Wildberries catalog tree.\n\nUse this to discover what exists before searching: `wb_search` needs a query\nstring, but a shopper's question is often \"what categories of humidifiers are\nthere?\". Each node carries WB's own `shard` and `query` selectors, which are\nthe addressing needed to pull a category feed.\n\nThe live menu is ~800 KB, so responses are always a bounded slice — start at\n'top', then expand the branch you care about.\n\n## Return Format\n\nWbCategoriesResponse: {root, max_depth, total_returned, truncated, items,\nhost_used, meta}. Nodes carry id, name, url, shard, query, depth,\nchildren_count, children; shard+query are the selectors\nwb_category_products needs to list a category feed.\n\n## Error Format\n\nOn validation or transport/parse failure, raises ToolError with a JSON\nmessage describing the error code and whether it is retryable.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "root": {
+                "default": "top",
+                "description": "'top' for the top-level sections, or a category name / URL path / id to expand (e.g. 'Электроника', '/catalog/elektronika', '8126').",
+                "maxLength": 200,
+                "type": "string"
+              },
+              "max_depth": {
+                "default": 1,
+                "description": "How many levels below the root to include. 1 = direct children only.",
+                "maximum": 3,
+                "minimum": 1,
+                "type": "integer"
+              }
+            },
+            "additionalProperties": false
+          },
+          "outputSchema": {
+            "type": "object",
+            "properties": {
+              "root": {},
+              "max_depth": {},
+              "total_returned": {},
+              "truncated": {},
+              "items": {},
+              "host_used": {},
+              "meta": {}
+            }
+          },
+          "annotations": {
+            "title": "WB Catalog Categories",
+            "readOnlyHint": true,
+            "destructiveHint": false,
+            "idempotentHint": true,
+            "openWorldHint": true
+          },
+          "_meta": {
+            "fastmcp": {
+              "tags": []
+            }
+          }
+        },
+        {
+          "name": "wb_category_products",
+          "title": "WB Category Product Listing",
+          "description": "List the products in a catalog category, using the shard and query from wb_categories.\n\nThis closes the loop `wb_categories` opens. That tool hands back WB's own\n`shard` and `query` selectors — the address of a category feed — and this is\nthe tool that fetches it. Browsing \"what humidifiers exist\" no longer requires\ninventing a search phrase and hoping WB's relevance ranking agrees with you.\n\nItems come back in the same shape `wb_search` and `wb_card` return, so a\ncategory walk and a text search are directly comparable.\n\n**Not every category has a feed.** WB marks those with the shard\n`blackhole`, and several of its largest sections (smartphones, laptops, TV and\naudio) are among them: they exist as navigation, not as a listable endpoint.\nAsking for one raises a clear error naming the alternative rather than\nreturning an empty list, because an empty list here would read as \"this\ncategory has no products\", which is false.\n\n## Return Format\n\nWbCategoryProductsResponse: {shard, query, page, sort, dest, count,\nhas_more, items, meta}, with items in the same shape as wb_card. has_more\nis inferred from a full page — WB reports no total here.\n\n## Error Format\n\nToolError: BadRequestError on malformed selectors or the unlistable\n'blackhole' shard; NotFoundError on a 404 (stale shard/query pair);\nRateLimitedError on HTTP 429; TransportDownError on network failures,\nnon-200 responses, an HTML wall page from WB's edge, and unexpected internal errors;\nParserDriftError on a non-JSON or mis-shaped body.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "shard": {
+                "description": "WB catalog shard from wb_categories, e.g. 'electronic58'. The literal 'blackhole' means the category has no listable feed.",
+                "maxLength": 120,
+                "type": "string"
+              },
+              "query": {
+                "description": "WB catalog selector from wb_categories, e.g. 'cat=9845' or 'subject=1234'.",
+                "maxLength": 200,
+                "type": "string"
+              },
+              "page": {
+                "default": 1,
+                "description": "Page number. Each page carries up to 100 products.",
+                "maximum": 100,
+                "minimum": 1,
+                "type": "integer"
+              },
+              "sort": {
+                "default": "popular",
+                "description": "Upstream ordering: popular, priceup, pricedown, newly, rate, or benefit.",
+                "type": "string"
+              },
+              "dest": {
+                "default": "",
+                "description": "WB region id. Defaults to WB_DEFAULT_DEST (Moscow). Prices and stock are region-specific.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "shard",
+              "query"
+            ],
+            "additionalProperties": false
+          },
+          "outputSchema": {
+            "type": "object",
+            "properties": {
+              "shard": {},
+              "query": {},
+              "page": {},
+              "sort": {},
+              "dest": {},
+              "count": {},
+              "has_more": {},
+              "items": {},
+              "meta": {}
+            }
+          },
+          "annotations": {
+            "title": "WB Category Product Listing",
+            "readOnlyHint": true,
+            "destructiveHint": false,
+            "idempotentHint": true,
+            "openWorldHint": true
+          },
+          "_meta": {
+            "fastmcp": {
+              "tags": []
+            }
+          }
+        }
+      ]
+    },
+    {
+      "provider": "avito",
+      "tools": [
+        {
+          "name": "avito_search",
+          "title": "Avito Search",
+          "description": "Search Avito listings via the internal js/items API.\n\n## Return Format\n\nAvitoSearchResponse: {status, query, page, location_id, tier_used, count,\ntotal_count, items[], meta}. Items carry item_id, title, price_rub (None\nwhen the ad has no price — never 0), url, location, seller fields.\n\n## Error Format\n\nToolError: BadRequestError on malformed arguments; TransportDownError on\nfirewall blocks (with the captcha/proxy guidance inline); ParserDriftError\nwhen a reached-200 body no longer parses as the expected envelope.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "query": {
+                "description": "Search text, e.g. 'thinkpad x1 carbon'",
+                "maxLength": 200,
+                "minLength": 1,
+                "type": "string"
+              },
+              "page": {
+                "default": 1,
+                "description": "Result page (1-based)",
+                "maximum": 100,
+                "minimum": 1,
+                "type": "integer"
+              },
+              "location_id": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "description": "Avito location id; default AVITO_LOCATION_ID (637640 = Moscow)"
+              },
+              "category_id": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "description": "Optional Avito category id to narrow the search"
+              }
+            },
+            "required": [
+              "query"
+            ],
+            "additionalProperties": false
+          },
+          "outputSchema": {
+            "type": "object",
+            "properties": {
+              "status": {},
+              "query": {},
+              "page": {},
+              "location_id": {},
+              "tier_used": {},
+              "count": {},
+              "total_count": {},
+              "items": {},
+              "_meta": {}
+            }
+          },
+          "annotations": {
+            "title": "Avito Search",
+            "readOnlyHint": true,
+            "destructiveHint": false,
+            "idempotentHint": true,
+            "openWorldHint": true
+          },
+          "_meta": {
+            "fastmcp": {
+              "tags": []
+            }
+          }
+        },
+        {
+          "name": "avito_card",
+          "title": "Avito Item Card",
+          "description": "Fetch one Avito listing by id or URL.\n\n## Return Format\n\nAvitoCardResponse: {status, item_id, title, price_rub, description, location,\nposted_at, views, images, seller, url, tier_used, meta}. price_rub is None\nwhen the ad has no price — never 0.\n\n## Error Format\n\nToolError: BadRequestError when no id can be extracted; NotFoundError on a\n404 (deleted or never existed); TransportDownError on blocks; ParserDriftError\nwhen the envelope changed.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "item_id_or_url": {
+                "description": "Item id, slug path or full avito.ru URL",
+                "maxLength": 300,
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "item_id_or_url"
+            ],
+            "additionalProperties": false
+          },
+          "outputSchema": {
+            "type": "object",
+            "properties": {
+              "status": {},
+              "item_id": {},
+              "title": {},
+              "price_rub": {},
+              "description": {},
+              "location": {},
+              "posted_at": {},
+              "views": {},
+              "images": {},
+              "seller": {},
+              "url": {},
+              "tier_used": {},
+              "_meta": {}
+            }
+          },
+          "annotations": {
+            "title": "Avito Item Card",
+            "readOnlyHint": true,
+            "destructiveHint": false,
+            "idempotentHint": true,
+            "openWorldHint": true
+          },
+          "_meta": {
+            "fastmcp": {
+              "tags": []
+            }
+          }
+        },
+        {
+          "name": "avito_seller",
+          "title": "Avito Seller Profile",
+          "description": "Fetch an Avito seller profile — reputation is the review signal here.\n\nClassifieds have no per-item review pool; the seller's rating, review count\nand active-listing count are what a buyer checks.\n\n## Return Format\n\nAvitoSellerResponse: {status, seller, active_items, tier_used, meta}.\n\n## Error Format\n\nToolError: BadRequestError on empty input; NotFoundError on 404;\nTransportDownError on blocks; ParserDriftError on envelope drift.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "seller_id_or_url": {
+                "description": "Seller id or profile URL from a card/search hit",
+                "maxLength": 300,
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "seller_id_or_url"
+            ],
+            "additionalProperties": false
+          },
+          "outputSchema": {
+            "type": "object",
+            "properties": {
+              "status": {},
+              "seller": {},
+              "active_items": {},
+              "tier_used": {},
+              "_meta": {}
+            }
+          },
+          "annotations": {
+            "title": "Avito Seller Profile",
+            "readOnlyHint": true,
+            "destructiveHint": false,
+            "idempotentHint": true,
+            "openWorldHint": true
+          },
+          "_meta": {
+            "fastmcp": {
+              "tags": []
+            }
+          }
+        }
+      ]
+    },
+    {
+      "provider": "ru-yandex",
+      "tools": [
+        {
+          "name": "yandex_search",
+          "title": "Yandex Market Search",
+          "description": "Search Yandex Market and return products with both prices, ratings and sellers.\n\nYandex Market aggregates many sellers per product, which makes it the best\nsingle source for \"what does this cost right now\" across the Russian market —\nincluding goods Wildberries and Ozon do not carry.\n\nEach result reports `price_rub` (what anyone pays — the price the SERP\nsnippet's cart button charges, cross-verified against product cards) and\n`price_with_plus` (requires a Yandex Plus subscription, typically 25-30%\nlower). Prefer `price_rub` when quoting a price to a person;\n`price_old_rub` is the struck-through reference price and must never be\nquoted as the price.\n\nA search row describes the SERP snippet's offer, which may be a different\nmember of the product family than the offer `yandex_card` for the same\n`product_id` defaults to (live example: search shows REDMOND KM243 sku\n4668084807 while the card for that id defaults to a KM245 offer at another\nprice). The row is SERP-faithful — reconcile it with a card by `sku_id`,\nnot by the product URL.\n\nNote `rating_count` counts star ratings, not written reviews; the written\ncount is available per product via `yandex_card`.\n\n## Return Format\n\nYandexSearchResponse: {query, page, page_count, total_available,\nhas_next_page, returned, items, meta}. Items carry product_id, sku_id,\ntitle, brand, seller, price_rub (everyday — None when absent, never 0),\nprice_with_plus, price_old_rub (struck-through reference), currency,\nrating, rating_count, in_stock, is_express, url, image. Zero results is\nNOT an error — it is reported via meta.warnings. meta.extraction names the\npath: 'ssr' (full widget state), 'zone' (first-screen snippet payloads —\nboth prices, no brand) or 'ld+json' (degraded, Plus price only).\n\n## Error Format\n\nOn validation or transport/parse failure, raises ToolError with a JSON\nmessage describing the error code and whether it is retryable.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "query": {
+                "description": "Free-text search query in Russian, e.g. 'iphone 15' or 'стиральная машина узкая'.",
+                "maxLength": 200,
+                "minLength": 2,
+                "type": "string"
+              },
+              "page": {
+                "default": 1,
+                "description": "Page number, 1-based.",
+                "maximum": 30,
+                "minimum": 1,
+                "type": "integer"
+              },
+              "limit": {
+                "default": 12,
+                "description": "Maximum products to return from the page.",
+                "maximum": 48,
+                "minimum": 1,
+                "type": "integer"
+              }
+            },
+            "required": [
+              "query"
+            ],
+            "additionalProperties": false
+          },
+          "outputSchema": {
+            "type": "object",
+            "properties": {
+              "query": {},
+              "page": {},
+              "page_count": {},
+              "total_available": {},
+              "has_next_page": {},
+              "returned": {},
+              "items": {},
+              "meta": {}
+            }
+          },
+          "annotations": {
+            "title": "Yandex Market Search",
+            "readOnlyHint": true,
+            "destructiveHint": false,
+            "idempotentHint": true,
+            "openWorldHint": true
+          },
+          "_meta": {
+            "fastmcp": {
+              "tags": []
+            }
+          }
+        },
+        {
+          "name": "yandex_card",
+          "title": "Yandex Market Product Card",
+          "description": "Fetch full detail for a Yandex Market product: prices, rating breakdown, reviews.\n\nTwo things here are hard to get anywhere else. The **star distribution**\n(`rating_stars`) shows whether a 4.8 average hides a cluster of one-star\ncomplaints. And **reviews arrive with the card** in one request, complete with\npros, cons and helpfulness votes.\n\nReviews are capped at the ~13 Yandex renders server-side; the remainder load\nthrough an API this connector deliberately does not touch.\n\n## Return Format\n\nYandexCardResponse: {product_id, sku_id, title, brand, seller,\ndescription, image, price_rub, price_with_plus, price_before_discount_rub,\ndiscount_percent, currency, offers_count, rating, rating_count,\nreview_count, rating_stars, reviews, url, meta}. price_rub is None when\nthe page has no usable price — never 0. Review items carry author,\nrating, date, pros, cons, comment, votes_up, votes_down, photos.\n\n## Error Format\n\nOn validation or transport/parse failure, raises ToolError with a JSON\nmessage describing the error code and whether it is retryable.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "product_id": {
+                "description": "Numeric Yandex Market product id — take it from yandex_search results.",
+                "maxLength": 32,
+                "minLength": 1,
+                "type": "string"
+              },
+              "include_reviews": {
+                "default": true,
+                "description": "Include the server-rendered reviews (first ~13).",
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "product_id"
+            ],
+            "additionalProperties": false
+          },
+          "outputSchema": {
+            "type": "object",
+            "properties": {
+              "product_id": {},
+              "sku_id": {},
+              "title": {},
+              "brand": {},
+              "seller": {},
+              "description": {},
+              "image": {},
+              "price_rub": {},
+              "price_with_plus": {},
+              "price_before_discount_rub": {},
+              "discount_percent": {},
+              "currency": {},
+              "offers_count": {},
+              "rating": {},
+              "rating_count": {},
+              "review_count": {},
+              "rating_stars": {},
+              "reviews": {},
+              "url": {},
+              "meta": {}
+            }
+          },
+          "annotations": {
+            "title": "Yandex Market Product Card",
+            "readOnlyHint": true,
+            "destructiveHint": false,
+            "idempotentHint": true,
+            "openWorldHint": true
+          },
+          "_meta": {
+            "fastmcp": {
+              "tags": []
+            }
+          }
+        }
+      ]
+    },
+    {
+      "provider": "ru-ozon",
+      "tools": [
+        {
+          "name": "ozon_card",
+          "title": "Ozon Product Card",
+          "description": "Fetch Ozon product card data via composer-api.bx.\n\nTier-1 (curl_cffi) tried first. Falls back to Tier-2 (Chrome CDP at port\n9222) when Tier-1 hits Cloudflare 403. Tier-2 requires the operator running Chrome\nvia scripts/start_chrome_cdp.ps1 (Windows) or scripts/start_chrome_cdp.sh (Linux/macOS) first.\n\n## Return Format\n\nOzonCardResponse: {status, price, card_price, price_original, is_available,\nrating_score, rating_count, title, seller, characteristics, url, tier_used,\nmeta} on success. Fields are None when the page does not carry them.\n\n## Error Format\n\nRaises ToolError on validation (BadRequestError), transport/block\n(TransportDownError — including the catch-all for unexpected internal\nerrors), or parser drift (ParserDriftError). No-results is NOT an error —\nan empty widgetStates payload returns a healthy response with null fields.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "sku_or_path": {
+                "description": "SKU integer-as-string, full Ozon URL, or /product/<digits>/ path. Other paths are rejected (SSRF prevention).",
+                "type": "string"
+              }
+            },
+            "required": [
+              "sku_or_path"
+            ],
+            "additionalProperties": false
+          },
+          "outputSchema": {
+            "type": "object",
+            "properties": {
+              "status": {},
+              "price": {},
+              "card_price": {},
+              "price_original": {},
+              "is_available": {},
+              "rating_score": {},
+              "rating_count": {},
+              "title": {},
+              "seller": {},
+              "characteristics": {},
+              "url": {},
+              "tier_used": {},
+              "_meta": {}
+            }
+          },
+          "annotations": {
+            "title": "Ozon Product Card",
+            "readOnlyHint": true,
+            "destructiveHint": false,
+            "idempotentHint": true,
+            "openWorldHint": true
+          },
+          "_meta": {
+            "fastmcp": {
+              "tags": []
+            }
+          }
+        },
+        {
+          "name": "ozon_reviews",
+          "title": "Ozon Product Reviews",
+          "description": "Fetch Ozon product review texts + star distribution via composer-api.bx.\n\nTier-1 (curl_cffi) tried first, Tier-2 (Chrome CDP) fallback — same path\nas ozon_card. Returns review texts (comment/positive/negative), per-review\nscore, helpfulness votes, author first name, date, plus the overall star\ndistribution and total count.\n\nPages are walked automatically (30/page) until `limit` texts are collected\nor pages run out, deduplicating by review uuid. Hard cap of 10 pages.\n\n## Reviews are pooled per card family, not per product\n\nOzon shows one shared pool for every variant of a card, and those variants\nare frequently different products — different wattage, different brand. So\n`rating_score` and `distribution` describe the POOL, not the SKU asked for.\nEach review carries `item_id`, the SKU it is really about; `own_reviews`\ncounts the returned reviews whose `item_id` matches `requested_item_id`, and\n`pool_variants` names every SKU in the pool. Filter by `item_id` before\ndrawing any conclusion about a product, and say so when `own_reviews` is 0 —\na headline 4.8 can be borrowed entirely from neighbours.\n\n## Return Format\n\nOzonReviewsResponse: {status, sort, rating_score, reviews_count, distribution,\nreturned, partial, stop_reason, last_error, requested_limit, reviews,\nrequested_item_id, own_reviews, pool_variants, meta}\non success. A later-page failure with reviews already collected is a\nPARTIAL SUCCESS (partial=True, stop_reason set), NOT an error.\n\n## Error Format\n\nRaises ToolError on validation (BadRequestError), transport/block\n(TransportDownError), or parser drift (ParserDriftError) — but ONLY when no\nreviews have been collected yet. Once at least one page yielded reviews, a\nlater-page failure degrades to a partial-success return.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "sku_or_path": {
+                "description": "SKU integer-as-string, full Ozon URL, or /product/<digits>/ path. Normalized to /product/<digits>/reviews/ (SSRF-allowlisted).",
+                "type": "string"
+              },
+              "limit": {
+                "default": 20,
+                "description": "Max review texts to return (1..100). Distribution+total always full.",
+                "type": "integer"
+              },
+              "sort": {
+                "default": "recent",
+                "description": "Review ordering. Aliases: \"recent\"/\"default\" -> newest, \"best\"/\"highest\" -> highest rated first, \"worst\"/\"lowest\"/\"complaints\" -> LOWEST rated first. Raw API values published_at_desc/score_desc/score_asc also accepted.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "sku_or_path"
+            ],
+            "additionalProperties": false
+          },
+          "outputSchema": {
+            "type": "object",
+            "properties": {
+              "status": {},
+              "url": {},
+              "tier_used": {},
+              "sort": {},
+              "rating_score": {},
+              "reviews_count": {},
+              "distribution": {},
+              "pages_fetched": {},
+              "returned": {},
+              "partial": {},
+              "stop_reason": {},
+              "last_error": {},
+              "requested_limit": {},
+              "reviews": {},
+              "requested_item_id": {},
+              "own_reviews": {},
+              "pool_variants": {},
+              "_meta": {}
+            }
+          },
+          "annotations": {
+            "title": "Ozon Product Reviews",
+            "readOnlyHint": true,
+            "destructiveHint": false,
+            "idempotentHint": true,
+            "openWorldHint": true
+          },
+          "_meta": {
+            "fastmcp": {
+              "tags": []
+            }
+          }
+        },
+        {
+          "name": "ozon_search",
+          "title": "Ozon Catalog Search",
+          "description": "Search Ozon catalog. Tier-1 curl_cffi → Tier-2 CDP fallback.\n\nReturns sku/title/price/rating per item. Schema parses Nov 2026\n`tileGridDesktop-*` widgets with `mainState` atom structure.\n\n## Return Format\n\nOzonSearchResponse: {status, query, page, tier_used, count, items, meta} on\nsuccess. Zero matching items is NOT an error — it returns a healthy response\nwith count=0 and empty items.\n\n## Error Format\n\nRaises ToolError on validation (BadRequestError), transport/block\n(TransportDownError), or parser drift (ParserDriftError).",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "query": {
+                "description": "Russian search text.",
+                "type": "string"
+              },
+              "page": {
+                "default": 1,
+                "description": "Result page (1..10).",
+                "type": "integer"
+              }
+            },
+            "required": [
+              "query"
+            ],
+            "additionalProperties": false
+          },
+          "outputSchema": {
+            "type": "object",
+            "properties": {
+              "status": {},
+              "query": {},
+              "page": {},
+              "tier_used": {},
+              "count": {},
+              "items": {},
+              "_meta": {}
+            }
+          },
+          "annotations": {
+            "title": "Ozon Catalog Search",
+            "readOnlyHint": true,
+            "destructiveHint": false,
+            "idempotentHint": true,
+            "openWorldHint": true
+          },
+          "_meta": {
+            "fastmcp": {
+              "tags": []
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
