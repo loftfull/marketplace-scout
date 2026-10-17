@@ -61,3 +61,7 @@ The interface adapts the MIT Tabler 1.6.1 vertical dashboard and core components
 Research exposes 21 selected native operations from complete installed upstream modules: reviews, questions, seller facts, variants, offers, comparisons and WB categories in addition to search/cards. Open an offer's details and choose “Исследовать товар”, or select a source/tool directly. These are labelled observations, not verified prices, and never enter price history. Full source/license/capability map and rejected alternatives: [docs/REUSE.md](docs/REUSE.md).
 
 Native Market/Ozon comparisons have a Tabler table separating ordinary, conditional and crossed-out prices, with seller, rating scope, errors and response-region notes. See the Russian [Candidate comparison transfer report](docs/CANDIDATE_COMPARISON.md): 19 candidates, exact imported revisions, execution paths and distinctions between installed, connected, fixture-tested and live-proven capabilities.
+
+## Source and integration status
+
+The default branch currently contains starter/configuration material. Existing source implementations and their integration gates are listed in [source status](.github/SOURCE_STATUS.md). A source candidate is not a verified release.
