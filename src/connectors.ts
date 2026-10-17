@@ -4,6 +4,7 @@ import { McpClient, toolFailure } from "./adapters/http-mcp.js";
 import { attachNative, nativeCard, normalizeOzonSearch } from "./adapters/native-cards.js";
 import { callOzon } from "./adapters/ozon-runtime.js";
 import { validateOzon } from "./adapters/ozon-validator.js";
+import { scrapyHtmlConnectors } from "./adapters/scrapy-html.js";
 import { searchWb, wbCard } from "./adapters/wildberries.js";
 import { marketCard, searchMarket } from "./adapters/yandex.js";
 import { browserDiscovery, browserRuntime, readCard } from "./browser.js";
@@ -239,3 +240,4 @@ export const connectors: Connector[] = [
   new MarketplaceConnector("avito", "avito"),
   new MarketplaceConnector("wildberries", "wildberries"),
 ];
+export { scrapyHtmlConnectors };

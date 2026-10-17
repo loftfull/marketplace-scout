@@ -13,6 +13,7 @@ npm ci
 npm run runtime:setup
 npm run runtime:ozon
 npm run runtime:yandex
+npm run runtime:scrapy-html
 npm run build
 npm start
 ```
@@ -51,6 +52,8 @@ Market uses the pinned SZhukovWork/yandex-market-mcp search/card tools through g
 City defaults to Voronezh; Moscow and Saint Petersburg are selectable. Selection is a verification requirement, not proof that a marketplace accepted the address. Requested, discovery and card regions remain distinct. Wrong-city prices, unrelated products, Pay-card prices and crossed-out prices cannot become ordinary current prices. WB resolves the selected city's destination before calls; missing mapping stops WB without a Moscow fallback. wb_search accepts that destination as input but does not return it; regional prices must be reread with wb_card and the validated destination.
 
 Native observations carry provider/tool/time, exact-identity checks, separately named ordinary/conditional/reference prices and seller facts. They do not fill independent browser evidence or grant VERIFIED. Contradictory native facts veto verification. Expand “Данные коннектора” or “Вызовы коннекторов” for actual execution diagnostics. Some tools remain uncalled when discovery or seller identification fails; installation does not imply successful live extraction.
+
+The search form defaults to “HTML страниц (без API)” and uses the complete pinned [Scrapy](https://github.com/scrapy/scrapy) 2.19.0 project for public HTML discovery on all four marketplaces. It observes `robots.txt`, uses Scout's fixed-host HTTPS egress, and stops on blocks; discoveries are still independently reopened and remain unverified until card checks pass. Native connectors remain an explicit alternative. See [the 50-repository audit](docs/research/2026-10-14-scraper-repository-audit.md) and [reuse/license map](docs/REUSE.md).
 
 With Scout stopped, `npm run probe:ozon` checks the actual specialized MCP tool contract, makes a separate live search attempt and verifies context cleanup. Evidence and limitations: `docs/evidence/2026-10-01-native-connectors.md`.
 

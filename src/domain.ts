@@ -80,13 +80,25 @@ const norm = (v: unknown) =>
   String(v ?? "")
     .toLowerCase()
     .replace(/[^a-zа-я0-9]+/gi, "");
+const isRedmiBookFamilyModel = (value: unknown) => {
+  const model = String(value ?? "")
+    .trim()
+    .replace(/^redmi\s*book/i, "RedmiBook");
+  return /^redmibook(?:$|\s+(?:pro\s+)?\d{1,2}(?:\s|$))/i.test(model);
+};
 export function match(profile: ProductProfile, offer: Offer) {
   const reasons: string[] = [],
     missing: string[] = [];
   for (const key of ["brand", "model", "year", "cpu", "ramGb", "ssdGb", "gpu"] as const) {
     if (profile[key] === undefined || profile[key] === "") continue;
     if (offer.specs[key] === undefined || offer.specs[key] === "") missing.push(key);
-    else if (norm(profile[key]) !== norm(offer.specs[key])) reasons.push(key);
+    else {
+      const isRedmiBookFamily = key === "model" && norm(profile.model) === "redmibook";
+      const matches = isRedmiBookFamily
+        ? isRedmiBookFamilyModel(offer.specs.model)
+        : norm(profile[key]) === norm(offer.specs[key]);
+      if (!matches) reasons.push(key);
+    }
   }
   return { ok: reasons.length === 0 && missing.length === 0, reasons, missing };
 }

@@ -493,11 +493,14 @@ function renderHistory() {
 $("#f").addEventListener("submit", async (event) => {
   event.preventDefault();
   const city = $("#city").value;
+  const mode = $("#search-mode").value;
   searchPhase = "loading";
   blockedSources = 0;
   $("#summary-title").textContent = "Проверяем предложения";
   $("#summary-copy").textContent =
-    "Ищем товар и повторно открываем карточки. Не закрывайте страницу: результат появится после ответа площадок.";
+    mode === "html"
+      ? "Читаем HTML-страницы площадок через Scrapy и соблюдаем robots.txt. Найденные цены остаются непроверенными до повторного открытия карточки."
+      : "Ищем товар и повторно открываем карточки. Не закрывайте страницу: результат появится после ответа площадок.";
   $("#search-totals").hidden = true;
   $("#source-details").hidden = true;
   $("#search").textContent = "Проверяем…";
@@ -507,13 +510,19 @@ $("#f").addEventListener("submit", async (event) => {
   currentOffers = [];
   $("#results").setAttribute("aria-busy", "true");
   $("#results").replaceChildren(
-    element("div", "empty", "Ищу предложения и повторно открываю карточки…"),
+    element(
+      "div",
+      "empty",
+      mode === "html"
+        ? "Читаю HTML-страницы и проверяю найденные карточки…"
+        : "Ищу предложения и повторно открываю карточки…",
+    ),
   );
   $("#sources").replaceChildren();
   $("#count").textContent = "";
   try {
     const response = await fetch(
-      `/api/search?q=${encodeURIComponent($("#q").value)}&city=${encodeURIComponent(city)}`,
+      `/api/search?q=${encodeURIComponent($("#q").value)}&city=${encodeURIComponent(city)}&mode=${encodeURIComponent(mode)}`,
       {
         signal: AbortSignal.timeout(600000),
       },
@@ -532,6 +541,9 @@ $("#f").addEventListener("submit", async (event) => {
       (source) => source.status === "blocked",
     ).length;
     $("#source-details").hidden = !(data.sourceOutcomes || []).length;
+    $("#source-details").open = (data.sourceOutcomes || []).some(
+      (source) => source.status !== "ok",
+    );
     for (const source of data.sourceOutcomes || []) {
       const col = element("div", "col-md-6 col-xl-3");
       const el = element("div", "card card-body h-100");
@@ -542,6 +554,14 @@ $("#f").addEventListener("submit", async (event) => {
           `${names[source.marketplace] || source.marketplace}: ${source.status === "ok" ? "поиск завершён" : source.status === "blocked" ? "доступ ограничен" : "нет подтверждения"}`,
         ),
       );
+      if (mode === "html")
+        el.append(
+          element(
+            "p",
+            "meta",
+            "Источник — HTML страницы, найденные сведения не подтверждают цену покупки.",
+          ),
+        );
       if (source.stage === "region-resolution")
         el.append(
           element(
@@ -561,6 +581,32 @@ $("#f").addEventListener("submit", async (event) => {
               : "Источник не дал подтверждённых данных. Подробности сохранены в журнале.",
         ),
       );
+      if (source.detail) el.append(element("p", "meta", `Причина: ${source.detail}`));
+      if (source.stage === "circuit-breaker") {
+        const retry = element(
+          "button",
+          "btn btn-outline-primary btn-sm mt-2",
+          "Снять паузу и проверить",
+        );
+        retry.type = "button";
+        retry.addEventListener("click", async () => {
+          retry.disabled = true;
+          try {
+            const resumed = await fetch(
+              `/api/sources/${encodeURIComponent(source.marketplace)}/retry?mode=${encodeURIComponent(mode)}`,
+              {
+                method: "POST",
+              },
+            );
+            if (!resumed.ok) throw new Error("Не удалось снять паузу источника.");
+            $("#f").requestSubmit();
+          } catch (error) {
+            retry.disabled = false;
+            el.append(element("p", "text-danger mt-2", error.message));
+          }
+        });
+        el.append(retry);
+      }
       if (source.tools?.length) {
         const diagnostics = element("details", "reasons");
         diagnostics.append(element("summary", "", "Вызовы коннекторов"));
@@ -627,6 +673,7 @@ function invalidateSearch() {
   );
 }
 $("#city").addEventListener("change", invalidateSearch);
+$("#search-mode").addEventListener("change", invalidateSearch);
 $("#q").addEventListener("input", invalidateSearch);
 for (const id of ["#history-query", "#history-city"])
   $(id).addEventListener("input", () => {

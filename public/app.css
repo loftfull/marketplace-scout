@@ -2,6 +2,14 @@
 .view[hidden] {
   display: none;
 }
+#health {
+  color: #263445;
+  background-color: #e2e8f0;
+}
+[data-bs-theme="dark"] #health {
+  color: #f1f5f9;
+  background-color: #334155;
+}
 /* Refined composition of the existing Tabler sidebar, form and table patterns. */
 :root {
   --tblr-border-radius: 0.75rem;

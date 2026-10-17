@@ -1,6 +1,6 @@
 # Reused terminal and marketplace code
 
-Reviewed 2026-10-01. This is an adaptation of ready components and complete installed upstream modules, not a new marketplace scraper or a new design system. Source installation does not establish live availability.
+Reviewed 2026-10-14. This is an adaptation of ready components and complete installed upstream modules, not a new marketplace scraper or a new design system. Source installation does not establish live availability.
 
 ## Interface and architecture
 
@@ -17,8 +17,11 @@ Existing Fastify API, MCP SDK lifecycle and ru-marketplace shared connector runt
 | [Vladimir-Human/ru-marketplace-mcp](https://github.com/Vladimir-Human/ru-marketplace-mcp), MIT, `c17bd360de60780a9e8d3690288b70181bd07355` | .runtime/ru-marketplace-mcp; frozen workspace packages, shared runtime, models, parsers, cache/error handling. Guarded transport/lifecycle adapters stay outside upstream code. | Ozon primary discovery, Avito card/seller, all eight WB tools, Market exact-variant source images. |
 | [SZhukovWork/yandex-market-mcp](https://github.com/SZhukovWork/yandex-market-mcp), MIT, `92bb4dfbc3b87d0c0f77aa7ede09faed7e661aa7` | .runtime/yandex-market-mcp; whole native search/product/offer/review/question/seller/comparison parser and tools. scripts/yandex-http.py replaces only transport lifecycle. | Main Market discovery/native card; seven research tools. |
 | [SZhukovWork/ozon-mcp](https://github.com/SZhukovWork/ozon-mcp), MIT, `414b3470ee6dd6f3197598b2c3c640d5d1601ef3` | .runtime/ozon-mcp; whole native parser/client/server. scripts/ozon-cdp.py uses owned CDP only, no state import/challenge renewal. | Separate native Ozon validator, nonblocked fallback discovery, four research tools. |
+| [scrapy/scrapy](https://github.com/scrapy/scrapy), BSD-3-Clause, `8026deeaac371a5d9a3edbe4886d58f61139d464` (2.19.0) | Complete upstream Git checkout at `.runtime/external/scrapy/upstream`; isolated Python 3.13 environment with hash-locked dependencies from `scripts/scrapy-runtime.txt`; only local adapter/spider code is maintained in Scout. | Default UI HTML-page discovery for four marketplaces. Robots policy, host allowlist, pinned egress, one-request crawl budget and independent card verification are enforced by the adapter. |
 
-Installation: npm run runtime:setup / runtime:yandex / runtime:ozon. Existing installers enforce pins and security overlays. Clones remain ignored and reproducible; copying them again into src would duplicate code and obscure provenance. No upstream parsing modules were rewritten.
+Installation: npm run runtime:setup / runtime:yandex / runtime:ozon / runtime:scrapy-html. Existing installers enforce pins and security overlays. Clones remain ignored and reproducible; copying them again into src would duplicate code and obscure provenance. No upstream parsing modules were rewritten.
+
+Scrapy's BSD-3-Clause notice is retained at [docs/licenses/Scrapy-BSD-3-Clause.txt](licenses/Scrapy-BSD-3-Clause.txt). Scout's site-specific extraction selectors and egress policy are original integration code, not copied marketplace parsers. See the [repository audit](research/2026-10-14-scraper-repository-audit.md) for the 50-candidate reuse matrix and licensing decisions.
 
 Inventory contains 27 consumer tools; actual tools/list was obtained from six installed servers. [Source inventory](evidence/2026-10-01-terminal-tool-inventory.json) and [actual protocol schemas](evidence/2026-10-01-terminal-tool-contracts.json) support this mapping:
 

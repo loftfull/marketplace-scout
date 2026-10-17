@@ -1,6 +1,5 @@
 import { resolve } from "node:path";
 import type { City } from "../cities.js";
-import { sameCity } from "../cities.js";
 import type { Discovery } from "../connectors.js";
 import type { NativeEvidence, Offer, ProductProfile } from "../domain.js";
 import { match } from "../domain.js";
@@ -26,21 +25,27 @@ const money = (value: unknown) =>
   typeof value === "number" && Number.isFinite(value) && value > 0 ? value : null;
 export function destinationFrom(raw: unknown, city: City): string {
   const row = record(raw);
-  // Never accept an address string copied from our query as proof of mapping.
-  const cityName = row.city ?? row.cityName;
   const latitude = row.latitude,
     longitude = row.longitude;
   if (
-    !sameCity(cityName, city) ||
     typeof latitude !== "number" ||
     typeof longitude !== "number" ||
-    Math.abs(latitude - city.latitude) > 0.3 ||
-    Math.abs(longitude - city.longitude) > 0.3 ||
+    Math.abs(latitude - city.latitude) > 0.0001 ||
+    Math.abs(longitude - city.longitude) > 0.0001 ||
     typeof row.xinfo !== "string"
   )
     throw Error("city_mapping_unconfirmed");
   const values = new URLSearchParams(row.xinfo).getAll("dest");
   if (values.length !== 1 || !/^-?\d{1,12}$/.test(values[0])) throw Error("invalid_destination");
+  const destinations = row.destinations;
+  if (
+    destinations !== undefined &&
+    (!Array.isArray(destinations) ||
+      !destinations.some(
+        (value) => Number.isSafeInteger(value) && Number(value) === Number(values[0]),
+      ))
+  )
+    throw Error("destination_not_in_geo_response");
   return values[0];
 }
 export async function resolveDestination(city: City): Promise<string> {
@@ -160,16 +165,19 @@ export async function searchWb(profile: ProductProfile, city: City): Promise<Dis
       },
     };
   } catch (error) {
+    const status = toolFailure(error);
     return {
       offers: [],
       outcome: {
         marketplace: "wildberries",
-        status: toolFailure(error),
+        status,
         stage,
         detail:
           stage === "region-resolution"
             ? "city_mapping_unconfirmed; no default Moscow fallback"
-            : "wb_search_failed",
+            : status === "blocked"
+              ? "destination_resolved; Wildberries blocked regional search"
+              : "wb_search_failed",
         offersReturned: 0,
       },
     };

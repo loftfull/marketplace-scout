@@ -1,0 +1,31 @@
+{
+  "observedAt": "2026-10-14T01:28:26Z",
+  "query": "Xiaomi RedmiBook 2026 32GB 1TB",
+  "requestedCity": {
+    "id": "voronezh",
+    "name": "Воронеж",
+    "latitude": 51.6608,
+    "longitude": 39.2003
+  },
+  "wildberriesGeo": {
+    "host": "user-geo-data.wildberries.ru",
+    "httpStatus": 200,
+    "responseCityFieldPresent": false,
+    "latitude": 51.6608,
+    "longitude": 39.2003,
+    "dest": "12358283",
+    "destinations": [
+      -1029256,
+      -72181,
+      -1144811,
+      12358283
+    ]
+  },
+  "wbSearch": {
+    "stage": "native-discovery",
+    "status": "blocked",
+    "offersReturned": 0,
+    "detail": "search tool returned blocked; exact upstream status not exposed by the guarded MCP result"
+  },
+  "verification": "No Wildberries candidate or price was observed; this only confirms city-to-destination resolution."
+}

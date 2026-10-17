@@ -5,8 +5,12 @@ import { buildApp } from "./app.js";
 import { browserRuntime } from "./browser.js";
 import { mcp } from "./connectors.js";
 import { imageMcp } from "./images.js";
+import { SourceCircuit } from "./source-circuit.js";
 
-const app = await buildApp();
+const app = await buildApp({
+  sourceCircuit: new SourceCircuit(".runtime/source-circuit.json"),
+  htmlSourceCircuit: new SourceCircuit(".runtime/html-source-circuit.json"),
+});
 app.addHook("onClose", async () => {
   await mcp.close();
   await imageMcp.close();
